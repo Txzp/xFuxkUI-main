@@ -879,7 +879,9 @@ end
 end
 
 for z,A in next,v or{}do
+if A then
 A.Parent=x
+end
 end
 
 if u and u.ThemeTag then

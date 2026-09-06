@@ -519,7 +519,9 @@ function Creator.New(Name, Properties, Children)
 	end
 
 	for _, Child in next, Children or {} do
-		Child.Parent = Object
+		if Child then
+			Child.Parent = Object
+		end
 	end
 
 	if Properties and Properties.ThemeTag then
