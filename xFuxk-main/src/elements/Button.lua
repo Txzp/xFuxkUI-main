@@ -5,8 +5,8 @@ local New = Creator.New
 local Tween = Creator.Tween
 
 function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded, Radius)
-	if type(Title) == "table" and Icon == nil then
-		local Config = Title
+	if type(Title) == "table" and type(Icon) == "table" and Icon.Window then
+		local Config = Icon
 		local Element = {
 			__type = "Button",
 			Title = Config.Title or "Button",

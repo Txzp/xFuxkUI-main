@@ -5664,8 +5664,8 @@ local ac=ab.New
 local ad=ab.Tween
 
 function aa.New(ae,af,ag,ah,ai,aj,ak,al)
-if type(ae)=="table"and af==nil then
-local am=ae
+if type(ae)=="table"and type(af)=="table"and af.Window then
+local am=af
 local an={
 __type="Button",
 Title=am.Title or"Button",
