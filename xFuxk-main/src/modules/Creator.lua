@@ -750,6 +750,7 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 				"Button",
 			},
 		}).IconFrame
+		IconLabel.Name = "ImageLabel"
 		IconLabel.Parent = ImageFrame
 	elseif string.find(Img, "http") and not string.find(Img, "roblox.com") then
 		local FileName = "WindUI/" .. Folder .. "/assets/." .. Type .. "-" .. Name .. ".png"

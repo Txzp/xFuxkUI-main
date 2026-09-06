@@ -1110,6 +1110,7 @@ Colors={
 "Button",
 },
 }.IconFrame
+J.Name="ImageLabel"
 J.Parent=H
 elseif string.find(v,"http")and not string.find(v,"roblox.com")then
 local J="WindUI/"..A.."/assets/."..B.."-"..x..".png"
