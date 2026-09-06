@@ -461,6 +461,30 @@ function TabModule.New(Config, UIScale)
 		Tab
 	)
 
+	function Tab:AddButton(config)
+		return Tab:Button(config)
+	end
+
+	function Tab:AddToggle(config)
+		config = config or {}
+		if config.Value == nil and config.Default ~= nil then
+			config.Value = config.Default
+		end
+		return Tab:Toggle(config)
+	end
+
+	function Tab:AddSlider(config)
+		config = config or {}
+		if config.Value == nil then
+			config.Value = {
+				Min = config.Min,
+				Max = config.Max,
+				Default = config.Default,
+			}
+		end
+		return Tab:Slider(config)
+	end
+
 	function Tab:LockAll()
 		--print("LockAll called, number of elements: " .. #self.Elements)
 		for _, element in next, Window.AllElements do

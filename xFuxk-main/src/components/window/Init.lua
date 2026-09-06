@@ -1585,8 +1585,15 @@ return function(Config)
 	Window.TabModule = TabModule
 
 	function Window:Tab(TabConfig)
+		if typeof(TabConfig) == "string" then
+			TabConfig = { Title = TabConfig }
+		end
 		TabConfig.Parent = Window.UIElements.SideBar.Frame
 		return TabModule.New(TabConfig, Config.WindUI.UIScale)
+	end
+
+	function Window:AddTab(TabConfig)
+		return Window:Tab(TabConfig)
 	end
 
 	function Window:SelectTab(Tab)

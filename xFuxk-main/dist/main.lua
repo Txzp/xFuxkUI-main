@@ -10227,6 +10227,30 @@ ao,
 ap
 )
 
+function ap.AddButton(az,aA)
+return ap:Button(aA)
+end
+
+function ap.AddToggle(az,aA)
+aA=aA or{}
+if aA.Value==nil and aA.Default~=nil then
+aA.Value=aA.Default
+end
+return ap:Toggle(aA)
+end
+
+function ap.AddSlider(az,aA)
+aA=aA or{}
+if aA.Value==nil then
+aA.Value={
+Min=aA.Min,
+Max=aA.Max,
+Default=aA.Default,
+}
+end
+return ap:Slider(aA)
+end
+
 function ap.LockAll(az)
 
 for aA,aB in next,Window.AllElements do
@@ -12732,8 +12756,15 @@ end)
 au.TabModule=B
 
 function au.Tab(C,F)
+if typeof(F)=="string"then
+F={Title=F}
+end
 F.Parent=au.UIElements.SideBar.Frame
 return B.New(F,at.WindUI.UIScale)
+end
+
+function au.AddTab(C,F)
+return au:Tab(F)
 end
 
 function au.SelectTab(C,F)
