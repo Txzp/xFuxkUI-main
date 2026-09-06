@@ -1081,8 +1081,9 @@ end
 function p.Image(v,x,z,A,B,C,F,G)
 A=A or"Temp"
 x=p.SanitizeFilename(x)
+local H
 
-local H=r("Frame",{
+local J=r("Frame",{
 Size=UDim2.new(0,0,0,0),
 BackgroundTransparency=1,
 },{
@@ -1099,10 +1100,11 @@ CornerRadius=UDim.new(0,z),
 }),
 }),
 })
+H=J:FindFirstChildWhichIsA"ImageLabel"
 if p.Icon(v)then
-H.ImageLabel:Destroy()
+H:Destroy()
 
-local J=l.Image{
+local L=l.Image{
 Icon=v,
 Size=UDim2.new(1,0,1,0),
 Colors={
@@ -1110,13 +1112,14 @@ Colors={
 "Button",
 },
 }.IconFrame
-J.Name="ImageLabel"
-J.Parent=H
+L.Name="ImageLabel"
+L.Parent=J
+H=L
 elseif string.find(v,"http")and not string.find(v,"roblox.com")then
-local J="WindUI/"..A.."/assets/."..B.."-"..x..".png"
-local L,M=pcall(function()
+local L="WindUI/"..A.."/assets/."..B.."-"..x..".png"
+local M,N=pcall(function()
 task.spawn(function()
-local L=p.Request
+local M=p.Request
 and p.Request{
 Url=v,
 Method="GET",
@@ -1124,42 +1127,42 @@ Method="GET",
 or{}
 
 if not d:IsStudio()and writefile then
-writefile(J,L)
+writefile(L,M)
 end
 
 
-local M,N=pcall(getcustomasset,J)
-if M then
-H.ImageLabel.Image=N
+local N,O=pcall(getcustomasset,L)
+if N then
+H.Image=O
 else
 warn(
 string.format(
 "[ WindUI.Creator ] Failed to load custom asset '%s': %s",
-J,
-tostring(N)
+L,
+tostring(O)
 )
 )
-H:Destroy()
+J:Destroy()
 
 return
 end
 end)
 end)
-if not L then
+if not M then
 warn(
 "[ WindUI.Creator ]  '"..identifyexecutor()
-or"Studio".."' doesnt support the URL Images. Error: "..M
+or"Studio".."' doesnt support the URL Images. Error: "..N
 )
 
-H:Destroy()
+J:Destroy()
 end
 elseif v==""then
-H.Visible=false
+J.Visible=false
 else
-H.ImageLabel.Image=v
+H.Image=v
 end
 
-return H
+return J
 end
 
 function p.Color3ToHSB(v)

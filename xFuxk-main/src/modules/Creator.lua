@@ -721,6 +721,7 @@ end
 function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, ThemeTagName)
 	Folder = Folder or "Temp"
 	Name = Creator.SanitizeFilename(Name)
+	local ImageObject
 
 	local ImageFrame = New("Frame", {
 		Size = UDim2.new(0, 0, 0, 0),
@@ -739,8 +740,9 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 			}),
 		}),
 	})
+	ImageObject = ImageFrame:FindFirstChildWhichIsA("ImageLabel")
 	if Creator.Icon(Img) then
-		ImageFrame.ImageLabel:Destroy()
+		ImageObject:Destroy()
 
 		local IconLabel = Icons.Image({
 			Icon = Img,
@@ -752,6 +754,7 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 		}).IconFrame
 		IconLabel.Name = "ImageLabel"
 		IconLabel.Parent = ImageFrame
+		ImageObject = IconLabel
 	elseif string.find(Img, "http") and not string.find(Img, "roblox.com") then
 		local FileName = "WindUI/" .. Folder .. "/assets/." .. Type .. "-" .. Name .. ".png"
 		local success, response = pcall(function()
@@ -770,7 +773,7 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 
 				local assetSuccess, asset = pcall(getcustomasset, FileName)
 				if assetSuccess then
-					ImageFrame.ImageLabel.Image = asset
+					ImageObject.Image = asset
 				else
 					warn(
 						string.format(
@@ -796,7 +799,7 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 	elseif Img == "" then
 		ImageFrame.Visible = false
 	else
-		ImageFrame.ImageLabel.Image = Img
+		ImageObject.Image = Img
 	end
 
 	return ImageFrame
