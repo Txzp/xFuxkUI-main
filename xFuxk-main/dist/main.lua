@@ -9932,14 +9932,14 @@ PaddingBottom=UDim.new(0,ap.TabPaddingY),
 
 
 ap.UIElements.ActiveIndicator=ah.NewRoundFrame(ap.UICorner,"Squircle",{
-Size=UDim2.new(0,4,0,16),
-Position=UDim2.new(0.5,0,0.5,0),
-AnchorPoint=Vector2.new(0.5,0.5),
-ImageColor3=Color3.fromRGB(255,255,255),
-Scale=Vector2.new(0,1),
+Size=UDim2.new(0,4,1,-8),
+Position=UDim2.new(0,2,0.5,0),
+AnchorPoint=Vector2.new(0,0.5),
+ImageColor3=Color3.fromRGB(50,150,255),
+ImageTransparency=1,
 LayoutOrder=1,
 ZIndex=10,
-Parent=ap.UIElements.Main.Frame,
+Parent=ap.UIElements.Main,
 })
 
 local ar=0
@@ -10396,7 +10396,7 @@ ImageTransparency="TabIconTransparency",
 end
 
 if aq.UIElements.ActiveIndicator then
-ah.Tween(aq.UIElements.ActiveIndicator,0.2,{Scale=Vector2.new(0,1)}):Play()
+ah.Tween(aq.UIElements.ActiveIndicator,0.15,{ImageTransparency=1}):Play()
 end
 aq.Selected=false
 end
@@ -10419,7 +10419,7 @@ ImageTransparency="TabIconTransparencyActive",
 end
 
 if am.Tabs[ao].UIElements.ActiveIndicator then
-ah.Tween(am.Tabs[ao].UIElements.ActiveIndicator,0.2,{Scale=Vector2.new(1,1)}):Play()
+ah.Tween(am.Tabs[ao].UIElements.ActiveIndicator,0.15,{ImageTransparency=0}):Play()
 end
 am.Tabs[ao].Selected=true
 

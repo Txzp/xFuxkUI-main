@@ -166,14 +166,14 @@ function TabModule.New(Config, UIScale)
 
 	-- AGREGADO POR TZHZK: Frame azul lateral para indicar tab activa
 	Tab.UIElements.ActiveIndicator = Creator.NewRoundFrame(Tab.UICorner, "Squircle", {
-		Size = UDim2.new(0, 4, 0, 16), -- Ancho fijo de 4px, alto fijo
-		Position = UDim2.new(0.5, 0, 0.5, 0), -- Centrado
-		AnchorPoint = Vector2.new(0.5, 0.5),
-		ImageColor3 = Color3.fromRGB(255, 255, 255), -- Blanco
-		Scale = Vector2.new(0, 1), -- Escala X inicial 0
+		Size = UDim2.new(0, 4, 1, -8),
+		Position = UDim2.new(0, 2, 0.5, 0),
+		AnchorPoint = Vector2.new(0, 0.5),
+		ImageColor3 = Color3.fromRGB(50, 150, 255),
+		ImageTransparency = 1,
 		LayoutOrder = 1,
 		ZIndex = 10,
-		Parent = Tab.UIElements.Main.Frame,
+		Parent = Tab.UIElements.Main,
 	})
 
 	local TextOffset = 0
@@ -630,7 +630,7 @@ function TabModule:SelectTab(TabIndex)
 				end
 				-- AGREGADO POR TZHZK: Ocultar indicador en tabs no activas
 				if TabObject.UIElements.ActiveIndicator then
-					Creator.Tween(TabObject.UIElements.ActiveIndicator, 0.2, { Scale = Vector2.new(0, 1) }):Play()
+					Creator.Tween(TabObject.UIElements.ActiveIndicator, 0.15, { ImageTransparency = 1 }):Play()
 				end
 				TabObject.Selected = false
 			end
@@ -653,7 +653,7 @@ function TabModule:SelectTab(TabIndex)
 		end
 		-- AGREGADO POR TZHZK: Mostrar indicador en tab activa
 		if TabModule.Tabs[TabIndex].UIElements.ActiveIndicator then
-			Creator.Tween(TabModule.Tabs[TabIndex].UIElements.ActiveIndicator, 0.2, { Scale = Vector2.new(1, 1) }):Play()
+			Creator.Tween(TabModule.Tabs[TabIndex].UIElements.ActiveIndicator, 0.15, { ImageTransparency = 0 }):Play()
 		end
 		TabModule.Tabs[TabIndex].Selected = true
 
