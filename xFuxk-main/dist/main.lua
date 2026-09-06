@@ -5662,6 +5662,46 @@ local ac=ab.New
 local ad=ab.Tween
 
 function aa.New(ae,af,ag,ah,ai,aj,ak,al)
+if type(ae)=="table"and af==nil then
+local am=ae
+local an={
+__type="Button",
+Title=am.Title or"Button",
+Icon=am.Icon,
+Callback=am.Callback,
+Variant=am.Variant,
+UIElements={},
+}
+
+an.ButtonFrame=a.load'B'{
+Title=an.Title,
+Desc=am.Desc,
+Window=am.Window,
+Parent=am.Parent,
+TextOffset=0,
+Hover=false,
+Tab=am.Tab,
+Index=am.Index,
+ElementTable=an,
+ParentConfig=am,
+}
+
+local ao=a.load'l'.New(
+an.Title,
+an.Icon,
+an.Callback,
+an.Variant,
+an.ButtonFrame.UIElements.Main,
+nil,
+am.Window.NewElements,
+am.Radius
+)
+ao.AnchorPoint=Vector2.new(1,am.Window.NewElements and 0 or 0.5)
+ao.Position=UDim2.new(1,0,am.Window.NewElements and 0 or 0.5,0)
+an.Button=ao
+return an.__type,an
+end
+
 ah=ah or"Primary"
 local am=al or(not ak and 10 or 99)
 local an

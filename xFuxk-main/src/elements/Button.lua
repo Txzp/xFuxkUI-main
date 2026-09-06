@@ -5,6 +5,46 @@ local New = Creator.New
 local Tween = Creator.Tween
 
 function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded, Radius)
+	if type(Title) == "table" and Icon == nil then
+		local Config = Title
+		local Element = {
+			__type = "Button",
+			Title = Config.Title or "Button",
+			Icon = Config.Icon,
+			Callback = Config.Callback,
+			Variant = Config.Variant,
+			UIElements = {},
+		}
+
+		Element.ButtonFrame = require("../components/window/Element")({
+			Title = Element.Title,
+			Desc = Config.Desc,
+			Window = Config.Window,
+			Parent = Config.Parent,
+			TextOffset = 0,
+			Hover = false,
+			Tab = Config.Tab,
+			Index = Config.Index,
+			ElementTable = Element,
+			ParentConfig = Config,
+		})
+
+		local ButtonFrame = require("../components/ui/Button").New(
+			Element.Title,
+			Element.Icon,
+			Element.Callback,
+			Element.Variant,
+			Element.ButtonFrame.UIElements.Main,
+			nil,
+			Config.Window.NewElements,
+			Config.Radius
+		)
+		ButtonFrame.AnchorPoint = Vector2.new(1, Config.Window.NewElements and 0 or 0.5)
+		ButtonFrame.Position = UDim2.new(1, 0, Config.Window.NewElements and 0 or 0.5, 0)
+		Element.Button = ButtonFrame
+		return Element.__type, Element
+	end
+
 	Variant = Variant or "Primary"
 	local Radius = Radius or (not FullRounded and 10 or 99)
 	local IconButtonFrame
