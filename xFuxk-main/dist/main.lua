@@ -10115,6 +10115,9 @@ am.Containers[aq]=ap.UIElements.ContainerFrameCanvas
 am.Tabs[aq]=ap
 
 ap.ContainerFrame=ap.UIElements.ContainerFrameCanvas
+if aq==1 then
+am:SelectTab(aq)
+end
 
 ah.AddSignal(ap.UIElements.Main.MouseButton1Click,function()
 if not ap.Locked then
@@ -13375,6 +13378,8 @@ aa.NotificationGui=ap("ScreenGui",{
 Name="WindUI/Notifications",
 Parent=as,
 IgnoreGuiInset=true,
+DisplayOrder=999999,
+ResetOnSpawn=false,
 })
 aa.DropdownGui=ap("ScreenGui",{
 Name="WindUI/Dropdowns",

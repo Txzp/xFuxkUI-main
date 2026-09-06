@@ -349,6 +349,9 @@ function TabModule.New(Config, UIScale)
 	TabModule.Tabs[TabIndex] = Tab
 
 	Tab.ContainerFrame = Tab.UIElements.ContainerFrameCanvas
+	if TabIndex == 1 then
+		TabModule:SelectTab(TabIndex)
+	end
 
 	Creator.AddSignal(Tab.UIElements.Main.MouseButton1Click, function()
 		if not Tab.Locked then
