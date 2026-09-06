@@ -1,0 +1,18 @@
+{
+    "bundle": {
+        "require_mode": {
+            "name": "path",
+            "module_folder_name": "Init",
+            "sources": {
+                "build": ".",
+                "components": "../src/components",
+                "config": "../src/config",
+                "elements": "../src/elements",
+                "modules": "../src/modules",
+                "src": "../src",
+                "themes": "../src/themes",
+                "utils": "../src/utils"
+            }
+        }
+    }
+}
