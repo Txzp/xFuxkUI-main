@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-09-06  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-09-07  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -6516,6 +6516,7 @@ Position=UDim2.new(1,0,0.5,0),
 AnchorPoint=Vector2.new(0.5,0.5),
 ImageColor3=Color3.fromRGB(255,255,255),
 Name="Thumb",
+},{
 ae.NewRoundFrame(99,"Glass-1",{
 Size=UDim2.new(1,0,1,0),
 ImageColor3=Color3.new(1,1,1),
@@ -13083,15 +13084,15 @@ F=false
 end,
 Variant="Secondary",
 },
+
 {
 Title="Yes, Close",
 Callback=function()
 F=false
 au:Destroy()
 end,
-
 Variant="Primary",
-Color3.fromHex"#c32121"
+Color=Color3.fromHex"#c32121",
 },
 },
 }

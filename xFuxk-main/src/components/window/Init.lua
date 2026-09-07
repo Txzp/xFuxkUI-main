@@ -1867,25 +1867,25 @@ return function(Config)
 				ClickedClose = true
 				--Window:SetToTheCenter()
 Window:Dialog({
-    Title = "Close | xFuxk Hub", -- Título personalizado
-    Content = "Are you sure you want to close the Hub interface?", -- Descripción personalizada
+    Title = "Close | xFuxk Hub",
+    Content = "Are you sure you want to close the Hub interface?",
     Buttons = {
         {
             Title = "Cancel",
             Callback = function()
                 ClickedClose = false
             end,
-            Variant = "Secondary", -- Botón Cancelar normal
+            Variant = "Secondary",
         },
+
         {
-            Title = "Yes, Close", -- Texto del botón cambiado
+            Title = "Yes, Close",
             Callback = function()
                 ClickedClose = false
                 Window:Destroy()
             end,
-            -- Para hacer el botón ROJO, usamos Variant "Danger" si existe, o forzamos color
-            Variant = "Primary", 
-            Color3.fromHex("#c32121")
+            Variant = "Primary",
+            Color = Color3.fromHex("#c32121"),
         },
     },
 })
