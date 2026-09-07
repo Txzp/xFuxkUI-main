@@ -6498,42 +6498,31 @@ ParentConfig=ak,
 
 
 
-
-al.UIElements.SliderIcon=ae.NewRoundFrame(99,"Squircle",{
-ImageTransparency=.95,
-Size=UDim2.new(1,not al.IsTextbox and-aw or(-al.TextBoxWidth-8),0,4),
-AnchorPoint=Vector2.new(0.5,0.5),
-Position=UDim2.new(0.5,0,0.5,0),
-Name="Frame",
-ThemeTag={
-ImageColor3="Text",
-},
-},{
-
 ae.NewRoundFrame(99,"Squircle",{
 Name="Frame",
 Size=UDim2.new(ar,0,1,0),
 ImageTransparency=.1,
-
-ImageColor3=Color3.fromRGB(0,255,106),
+ImageColor3=Color3.fromHex"#217DC3",
 },{
 
 ae.NewRoundFrame(99,"Squircle",{
-Size=UDim2.new(0,ak.Window.NewElements and(al.ThumbSize*2)or(al.ThumbSize+2),0,ak.Window.NewElements and(al.ThumbSize+4)or(al.ThumbSize+2)),
+Size=UDim2.new(
+0,
+ak.Window.NewElements and(al.ThumbSize*2)or(al.ThumbSize+2),
+0,
+ak.Window.NewElements and(al.ThumbSize+4)or(al.ThumbSize+2)
+),
 Position=UDim2.new(1,0,0.5,0),
 AnchorPoint=Vector2.new(0.5,0.5),
-
 ImageColor3=Color3.fromRGB(255,255,255),
 Name="Thumb",
-},{
 ae.NewRoundFrame(99,"Glass-1",{
 Size=UDim2.new(1,0,1,0),
 ImageColor3=Color3.new(1,1,1),
 Name="Highlight",
 ImageTransparency=.6,
 }),
-})
-})
+}),
 })
 
 
@@ -13084,8 +13073,8 @@ if not au.IgnoreAlerts then
 F=true
 
 au:Dialog{
-Title="Close | AstrasHub",
-Content="Are you sure you want to close the AstrasHub interface?",
+Title="Close | xFuxk Hub",
+Content="Are you sure you want to close the Hub interface?",
 Buttons={
 {
 Title="Cancel",
@@ -13095,14 +13084,14 @@ end,
 Variant="Secondary",
 },
 {
-Title="Confirm",
+Title="Yes, Close",
 Callback=function()
 F=false
 au:Destroy()
 end,
 
 Variant="Primary",
-Color=Color3.fromRGB(255,60,60),
+Color3.fromHex"#c32121"
 },
 },
 }

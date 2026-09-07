@@ -1867,8 +1867,8 @@ return function(Config)
 				ClickedClose = true
 				--Window:SetToTheCenter()
 Window:Dialog({
-    Title = "Close | AstrasHub", -- Título personalizado
-    Content = "Are you sure you want to close the AstrasHub interface?", -- Descripción personalizada
+    Title = "Close | xFuxk Hub", -- Título personalizado
+    Content = "Are you sure you want to close the Hub interface?", -- Descripción personalizada
     Buttons = {
         {
             Title = "Cancel",
@@ -1878,14 +1878,14 @@ Window:Dialog({
             Variant = "Secondary", -- Botón Cancelar normal
         },
         {
-            Title = "Confirm", -- Texto del botón cambiado
+            Title = "Yes, Close", -- Texto del botón cambiado
             Callback = function()
                 ClickedClose = false
                 Window:Destroy()
             end,
             -- Para hacer el botón ROJO, usamos Variant "Danger" si existe, o forzamos color
             Variant = "Primary", 
-            Color = Color3.fromRGB(255, 60, 60), -- Rojo brillante personalizado
+            Color3.fromHex("#c32121")
         },
     },
 })

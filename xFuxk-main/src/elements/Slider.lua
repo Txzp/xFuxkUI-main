@@ -111,46 +111,35 @@ function Element:New(Config)
         ParentConfig = Config,
     })
     
-    -- ==========================================
-    -- CAMBIO DE COLOR AQUÍ: BARRA VERDE
-    -- ==========================================
-    
-    Slider.UIElements.SliderIcon = Creator.NewRoundFrame(99, "Squircle", {
-        ImageTransparency = .95,
-        Size = UDim2.new(1, not Slider.IsTextbox and -TotalSliderWidth or (-Slider.TextBoxWidth-8), 0, 4),
-        AnchorPoint = Vector2.new(0.5,0.5),
-        Position = UDim2.new(0.5,0,0.5,0),
-        Name = "Frame",
-        ThemeTag = {
-            ImageColor3 = "Text", -- El fondo sigue siendo del tema (gris oscuro/negro)
-        },
-    }, {
-        -- ESTA ES LA PARTE QUE SE LLENA (ANTES ERA AZUL POR "Slider")
-        Creator.NewRoundFrame(99, "Squircle", {
-            Name = "Frame",
-            Size = UDim2.new(delta, 0, 1, 0),
-            ImageTransparency = .1,
-            -- CAMBIADO A VERDE NEÓN DIRECTO
-            ImageColor3 = Color3.fromRGB(0, 255, 106), 
-        }, {
-            -- La bolita (Thumb)
-            Creator.NewRoundFrame(99, "Squircle", {
-                Size = UDim2.new(0, Config.Window.NewElements and (Slider.ThumbSize*2) or (Slider.ThumbSize+2), 0, Config.Window.NewElements and (Slider.ThumbSize+4) or (Slider.ThumbSize+2)),
-                Position = UDim2.new(1, 0, 0.5, 0),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                -- Bolita blanca para contraste
-                ImageColor3 = Color3.fromRGB(255, 255, 255),
-                Name = "Thumb",
-            }, {
-                Creator.NewRoundFrame(99, "Glass-1", {
-                    Size = UDim2.new(1,0,1,0),
-                    ImageColor3 = Color3.new(1,1,1),
-                    Name = "Highlight",
-                    ImageTransparency = .6,
-                }),
-            })
-        })
-    })
+-- ==========================================
+-- colores en la barra
+-- ==========================================
+Creator.NewRoundFrame(99, "Squircle", {
+    Name = "Frame",
+    Size = UDim2.new(delta, 0, 1, 0),
+    ImageTransparency = .1,
+    ImageColor3 = Color3.fromHex("#217DC3"),
+}, {
+    -- La bolita (Thumb)
+    Creator.NewRoundFrame(99, "Squircle", {
+        Size = UDim2.new(
+            0,
+            Config.Window.NewElements and (Slider.ThumbSize * 2) or (Slider.ThumbSize + 2),
+            0,
+            Config.Window.NewElements and (Slider.ThumbSize + 4) or (Slider.ThumbSize + 2)
+        ),
+        Position = UDim2.new(1, 0, 0.5, 0),
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        ImageColor3 = Color3.fromRGB(255, 255, 255),
+        Name = "Thumb",
+        Creator.NewRoundFrame(99, "Glass-1", {
+            Size = UDim2.new(1, 0, 1, 0),
+            ImageColor3 = Color3.new(1, 1, 1),
+            Name = "Highlight",
+            ImageTransparency = .6,
+        }),
+    }),
+})
     
     -- ==========================================
     -- FIN DEL CAMBIO DE COLOR
