@@ -6,11 +6,32 @@
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/xFuxkUI-main/main/xFuxk-main/dist/main.lua?t=" .. os.time()))()
 
 -- 2. Crear la ventana principal
+
 local Window = WindUI:CreateWindow({
     Title = "xFuxh - Ejemplo",
     Icon = "rocket",
     Theme = "Dark",
     Size = UDim2.fromOffset(450, 400),
+
+    OpenButton = {
+        Enabled = true,
+        OnlyMobile = false,
+        Draggable = true,
+        OnlyIcon = false,
+        Scale = 1,
+    },
+})
+
+Window:Tag({
+    Title = "v1.0.0",
+    Icon = "github",
+    Color = Color3.fromHex("#000000"),
+    Border = true,
+})
+
+Intro.Show({
+    Duration = 3.5,
+    Title = "Loading xFuxk",
 })
 
 -- ============================================================
@@ -18,9 +39,15 @@ local Window = WindUI:CreateWindow({
 -- ============================================================
 
 -- Tab 1: Main (icono "house")
-local MainTab = Window:Tab({
+local Section = Window:Section({
+    Title = "Gameplay",
+    Icon = "gamepad-2",
+    Opened = true,
+})
+
+local MainTab = Section:Tab({
     Title = "Main",
-    Icon = "house"
+    Icon = "house",
 })
 
 -- Tab 2: Visuals (icono "eye")
