@@ -7,7 +7,7 @@ return function(WindUI, Creator)
 			Outline = Color3.fromHex("#FFFFFF"),
 			Text = Color3.fromHex("#FFFFFF"),
 			Placeholder = Color3.fromHex("#7a7a7a"),
-			Background = Color3.fromHex("#000000"),
+			Background = Color3.fromHex("#988c8c"),
 			Button = Color3.fromHex("#52525b"),
 			Icon = Color3.fromHex("#a1a1aa"),
 			Toggle = Color3.fromHex("#33C759"),
