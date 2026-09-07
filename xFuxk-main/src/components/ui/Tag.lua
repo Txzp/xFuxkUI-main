@@ -72,7 +72,7 @@ function Tag:New(TagConfig, Parent)
 			ThemeTag = {
 				ImageColor3 = "White",
 			},
-			ImageTransparency = 0.75,
+			ImageTransparency = 0.55,
 		}),
 		New("Frame", {
 			Size = UDim2.new(0, 0, 1, 0),

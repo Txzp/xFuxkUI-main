@@ -3040,6 +3040,179 @@ end
 
 return aa end function a.p()
 
+local aa=game:GetService"Players"
+local ab=game:GetService"TweenService"
+
+local ac=aa.LocalPlayer
+
+local ad={}
+
+local function Tween(ae,af,ag,ah,ai)
+local aj=TweenInfo.new(
+af,
+ah or Enum.EasingStyle.Quint,
+ai or Enum.EasingDirection.Out
+)
+
+return ab:Create(ae,aj,ag)
+
+end
+
+function ad.Show(ae)
+ae=ae or{}
+
+local af=ae.Duration or 3.5
+local ag=ae.Title or"Loading xFuxk"
+
+
+if ad.Gui then
+ad.Gui:Destroy()
+ad.Gui=nil
+end
+
+local ah=ac:WaitForChild"PlayerGui"
+
+local ai=Instance.new"ScreenGui"
+ai.Name="xFuxkIntro"
+ai.IgnoreGuiInset=true
+ai.ResetOnSpawn=false
+ai.DisplayOrder=999999
+ai.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
+ai.Parent=ah
+
+ad.Gui=ai
+
+local aj=Instance.new"Frame"
+aj.Name="Container"
+aj.AnchorPoint=Vector2.new(0.5,0.5)
+aj.Position=UDim2.new(0.5,0,0.5,0)
+aj.Size=UDim2.fromOffset(270,80)
+aj.BackgroundTransparency=1
+aj.Parent=ai
+
+
+local ak=Instance.new"TextLabel"
+ak.Name="Title"
+ak.BackgroundTransparency=1
+ak.AnchorPoint=Vector2.new(0,0.5)
+ak.Position=UDim2.new(0,-25,0,20)
+ak.Size=UDim2.fromOffset(205,28)
+ak.Font=Enum.Font.GothamSemibold
+ak.Text=ag
+ak.TextColor3=Color3.fromRGB(255,255,255)
+ak.TextSize=18
+ak.TextTransparency=1
+ak.TextXAlignment=Enum.TextXAlignment.Left
+ak.Parent=aj
+
+local al=Instance.new"TextLabel"
+al.Name="DisplayName"
+al.BackgroundTransparency=1
+al.AnchorPoint=Vector2.new(0,0.5)
+al.Position=UDim2.new(0,-25,0,47)
+al.Size=UDim2.fromOffset(205,24)
+al.Font=Enum.Font.Gotham
+al.Text="@"..ac.DisplayName
+al.TextColor3=Color3.fromRGB(255,255,255)
+al.TextSize=14
+al.TextTransparency=1
+al.TextXAlignment=Enum.TextXAlignment.Left
+al.Parent=aj
+
+
+local am=Instance.new"ImageLabel"
+am.Name="Avatar"
+am.BackgroundTransparency=1
+am.AnchorPoint=Vector2.new(1,0.5)
+am.Position=UDim2.new(1,25,0.5,0)
+am.Size=UDim2.fromOffset(58,58)
+am.ImageTransparency=1
+am.Parent=aj
+
+local an=Instance.new"UICorner"
+an.CornerRadius=UDim.new(1,0)
+an.Parent=am
+
+
+task.spawn(function()
+local ao,ap=pcall(function()
+return aa:GetUserThumbnailAsync(
+ac.UserId,
+Enum.ThumbnailType.HeadShot,
+Enum.ThumbnailSize.Size100x100
+)
+end)
+
+if ao and ad.Gui==ai then
+am.Image=ap
+end
+end)
+
+
+ak.Position=UDim2.new(0,-40,0,20)
+al.Position=UDim2.new(0,-40,0,47)
+am.Position=UDim2.new(1,40,0.5,0)
+
+
+Tween(ak,0.45,{
+Position=UDim2.new(0,0,0,20),
+TextTransparency=0,
+}):Play()
+
+Tween(al,0.45,{
+Position=UDim2.new(0,0,0,47),
+TextTransparency=0.15,
+}):Play()
+
+Tween(am,0.45,{
+Position=UDim2.new(1,0,0.5,0),
+ImageTransparency=0,
+}):Play()
+
+
+task.delay(af,function()
+if ad.Gui~=ai then
+return
+end
+
+
+Tween(ak,0.4,{
+Position=UDim2.new(0,-25,0,20),
+TextTransparency=1,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
+
+Tween(al,0.4,{
+Position=UDim2.new(0,-25,0,47),
+TextTransparency=1,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
+
+local ao=Tween(am,0.4,{
+Position=UDim2.new(1,25,0.5,0),
+ImageTransparency=1,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.In)
+
+ao:Play()
+
+ao.Completed:Wait()
+
+if ad.Gui==ai then
+ai:Destroy()
+ad.Gui=nil
+end
+end)
+
+end
+
+function ad.Hide()
+if not ad.Gui then
+return
+end
+
+ad.Gui:Destroy()
+ad.Gui=nil
+end
+
+return ad end function a.q()
 
 
 
@@ -3060,7 +3233,7 @@ local ab=aa(game:GetService"Workspace").CurrentCamera.ViewportSize.Y
 return map(ab,0,2560,8,56)
 end
 
-return{viewportPointToWorld,getOffset}end function a.q()
+return{viewportPointToWorld,getOffset}end function a.r()
 
 
 
@@ -3071,7 +3244,7 @@ local ab=a.load'c'
 local ac=ab.New
 
 
-local ad,ae=unpack(a.load'p')
+local ad,ae=unpack(a.load'q')
 local af=Instance.new("Folder",aa(game:GetService"Workspace").CurrentCamera)
 
 
@@ -3207,11 +3380,11 @@ ah.Frame=ak
 ah.Model=aj
 
 return ah
-end end function a.r()
+end end function a.s()
 
 
 local aa=a.load'c'
-local ab=a.load'q'
+local ab=a.load'r'
 
 local ac=aa.New
 
@@ -3331,7 +3504,7 @@ ae.SetVisibility=af.SetVisibility
 end
 
 return ae,af
-end end function a.s()
+end end function a.t()
 
 
 
@@ -3339,9 +3512,9 @@ local aa=(cloneref or clonereference or function(aa)return aa end)
 
 
 local ab={
-AcrylicBlur=a.load'q',
+AcrylicBlur=a.load'r',
 
-AcrylicPaint=a.load'r',
+AcrylicPaint=a.load's',
 }
 
 function ab.init()
@@ -3388,7 +3561,7 @@ registerDefaults()
 ab.Enable()
 end
 
-return ab end function a.t()
+return ab end function a.u()
 
 local aa={}
 
@@ -3583,7 +3756,7 @@ ai:Open()
 return ag
 end
 
-return aa end function a.u()
+return aa end function a.v()
 return function(aa,ab)
 return{
 Dark={
@@ -3614,7 +3787,7 @@ ElementBorderTransparency=0.5,
 
 
 }
-end end function a.v()
+end end function a.w()
 local aa={}
 
 local ab=a.load'c'
@@ -3716,7 +3889,7 @@ al,
 return am
 end
 
-return aa end function a.w()
+return aa end function a.x()
 
 local aa={}
 
@@ -3893,7 +4066,7 @@ return ak
 end
 
 
-return aa end function a.x()
+return aa end function a.y()
 local aa={}
 
 local ab=a.load'c'
@@ -3968,7 +4141,7 @@ Size=UDim2.new(1,0,1,0),
 ThemeTag={
 ImageColor3="White",
 },
-ImageTransparency=0.75,
+ImageTransparency=0.55,
 }),
 ac("Frame",{
 Size=UDim2.new(0,0,1,0),
@@ -4058,7 +4231,7 @@ end)
 return ah
 end
 
-return aa end function a.y()
+return aa end function a.z()
 
 local aa=(cloneref or clonereference or function(aa)return aa end)
 
@@ -4439,7 +4612,7 @@ function ae.GetConfig(af,ag)
 return ae.Configs[ag]
 end
 
-return ae end function a.z()
+return ae end function a.A()
 local aa={}
 
 local ab=a.load'c'
@@ -4712,7 +4885,7 @@ end
 
 
 
-return aa end function a.A()
+return aa end function a.B()
 local aa={}
 
 local ab=a.load'c'
@@ -4874,7 +5047,7 @@ end
 
 
 
-return aa end function a.B()
+return aa end function a.C()
 game:GetService"ReplicatedStorage"
 local aa=a.load'c'
 local ab=aa.New
@@ -5606,7 +5779,7 @@ end
 
 
 return ag
-end end function a.C()
+end end function a.D()
 
 local aa=a.load'c'
 local ab=aa.New
@@ -5628,7 +5801,7 @@ Desc=af.Desc or nil,
 
 Locked=af.Locked or false,
 }
-local ah=a.load'B'(af)
+local ah=a.load'C'(af)
 
 ag.ParagraphFrame=ah
 if af.Buttons and#af.Buttons>0 then
@@ -5656,7 +5829,7 @@ return ag.__type,ag
 
 end
 
-return ac end function a.D()
+return ac end function a.E()
 local aa={}
 
 local ab=a.load'c'
@@ -5675,7 +5848,7 @@ Variant=am.Variant,
 UIElements={},
 }
 
-an.ButtonFrame=a.load'B'{
+an.ButtonFrame=a.load'C'{
 Title=an.Title,
 Desc=am.Desc,
 Window=am.Window,
@@ -5821,7 +5994,7 @@ end)
 return ao
 end
 
-return aa end function a.E()
+return aa end function a.F()
 
 local aa={}
 
@@ -6164,7 +6337,7 @@ end
 return ap,am
 end
 
-return aa end function a.F()
+return aa end function a.G()
 local aa={}
 
 local ab=a.load'c'local ac=
@@ -6264,13 +6437,13 @@ return an,ak
 end
 
 
-return aa end function a.G()
+return aa end function a.H()
 local aa=a.load'c'local ab=
 aa.New local ac=
 aa.Tween
 
-local ad=a.load'E'.New
-local ae=a.load'F'.New
+local ad=a.load'F'.New
+local ae=a.load'G'.New
 
 local af={}
 
@@ -6288,7 +6461,7 @@ Type=ah.Type or"Toggle",
 Callback=ah.Callback or function()end,
 UIElements={}
 }
-ai.ToggleFrame=a.load'B'{
+ai.ToggleFrame=a.load'C'{
 Title=ai.Title,
 Desc=ai.Desc,
 
@@ -6381,7 +6554,7 @@ end
 return ai.__type,ai
 end
 
-return af end function a.H()
+return af end function a.I()
 local aa=(cloneref or clonereference or function(aa)return aa end)
 
 local ac=aa(game:GetService"UserInputService")
@@ -6482,7 +6655,7 @@ av.Size=UDim2.new(0,al.IconSize,0,al.IconSize)
 aw=aw+al.IconSize-2
 end
 end
-al.SliderFrame=a.load'B'{
+al.SliderFrame=a.load'C'{
 Title=al.Title,
 Desc=al.Desc,
 Parent=ak.Parent,
@@ -6576,7 +6749,7 @@ Visible=al.IsTextbox,
 
 local ax
 if al.IsTooltip then
-ax=a.load'A'.New(ap,al.UIElements.SliderIcon.Frame.Thumb,true,"Secondary","Small",false)
+ax=a.load'B'.New(ap,al.UIElements.SliderIcon.Frame.Thumb,true,"Secondary","Small",false)
 ax.Container.AnchorPoint=Vector2.new(0.5,1)
 ax.Container.Position=UDim2.new(0.5,0,0,-8)
 end
@@ -6721,7 +6894,7 @@ end)
 return al.__type,al
 end
 
-return ah end function a.I()
+return ah end function a.J()
 
 local aa=(cloneref or clonereference or function(aa)return aa end)
 
@@ -6736,7 +6909,7 @@ UICorner=6,
 UIPadding=8,
 }
 
-local ah=a.load'v'.New
+local ah=a.load'w'.New
 
 function ag.New(ai,aj)
 local function NormalizeKeyCode(ak)
@@ -6764,7 +6937,7 @@ UIElements={},
 
 local al=true
 
-ak.KeybindFrame=a.load'B'{
+ak.KeybindFrame=a.load'C'{
 Title=ak.Title,
 Desc=ak.Desc,
 Parent=aj.Parent,
@@ -6883,7 +7056,7 @@ end)
 return ak.__type,ak
 end
 
-return ag end function a.J()
+return ag end function a.K()
 local aa=a.load'c'
 local ac=aa.New local ad=
 aa.Tween
@@ -6917,7 +7090,7 @@ Width=150,
 
 local ak=true
 
-aj.InputFrame=a.load'B'{
+aj.InputFrame=a.load'C'{
 Title=aj.Title,
 Desc=aj.Desc,
 Parent=ai.Parent,
@@ -6993,7 +7166,7 @@ end
 return aj.__type,aj
 end
 
-return ae end function a.K()
+return ae end function a.L()
 local aa=a.load'c'
 local ac=aa.New
 
@@ -7020,7 +7193,7 @@ ah
 return"Divider",{__type="Divider",ElementFrame=ai}
 end
 
-return ae end function a.L()
+return ae end function a.M()
 local aa={}
 
 local ac=(cloneref or clonereference or function(ac)
@@ -7545,7 +7718,7 @@ end
 
 RecalculateCanvasSize()
 RecalculateListSize()
-else a.load'K'
+else a.load'L'
 :New{Parent=an.UIElements.Menu.Frame.ScrollingFrame}
 end
 end
@@ -7682,7 +7855,7 @@ UpdatePosition
 return ar
 end
 
-return aa end function a.M()
+return aa end function a.N()
 
 local aa=(cloneref or clonereference or function(aa)
 return aa
@@ -7696,9 +7869,9 @@ local ae=a.load'c'
 local af=ae.New local ag=
 ae.Tween
 
-local ah=a.load'v'.New local ai=a.load'm'
+local ah=a.load'w'.New local ai=a.load'm'
 .New
-local aj=a.load'L'.New local ak=
+local aj=a.load'M'.New local ak=
 
 workspace.CurrentCamera
 
@@ -7744,7 +7917,7 @@ end
 
 local ap=true
 
-ao.DropdownFrame=a.load'B'{
+ao.DropdownFrame=a.load'C'{
 Title=ao.Title,
 Desc=ao.Desc,
 Parent=an.Parent,
@@ -7815,7 +7988,7 @@ end
 return ao.__type,ao
 end
 
-return al end function a.N()
+return al end function a.O()
 
 
 
@@ -7988,14 +8161,14 @@ end
 return table.concat(ar)
 end
 
-return aa end function a.O()
+return aa end function a.P()
 local aa={}
 
 local ae=a.load'c'
 local af=ae.New
 local ah=ae.Tween
 
-local aj=a.load'N'
+local aj=a.load'O'
 
 function aa.New(ak,al,am,an,ao)
 local ap={
@@ -8198,12 +8371,12 @@ return ap
 end
 
 
-return aa end function a.P()
+return aa end function a.Q()
 local aa=a.load'c'local ae=
 aa.New
 
 
-local af=a.load'O'
+local af=a.load'P'
 
 local ah={}
 
@@ -8265,7 +8438,7 @@ al.ElementFrame=an.CodeFrame
 return al.__type,al
 end
 
-return ah end function a.Q()
+return ah end function a.R()
 local aa=a.load'c'
 local ae=aa.New local af=
 aa.Tween
@@ -8909,7 +9082,7 @@ local av=true
 
 
 
-au.ColorpickerFrame=a.load'B'{
+au.ColorpickerFrame=a.load'C'{
 Title=au.Title,
 Desc=au.Desc,
 Parent=at.Parent,
@@ -8977,7 +9150,7 @@ end)
 return au.__type,au
 end
 
-return ar end function a.R()
+return ar end function a.S()
 local aa=a.load'c'
 local ae=aa.New
 local af=aa.Tween
@@ -9306,7 +9479,7 @@ end)
 return al.__type,al
 end
 
-return ah end function a.S()
+return ah end function a.T()
 
 local aa=a.load'c'
 local ae=aa.New
@@ -9323,7 +9496,7 @@ BackgroundTransparency=1,
 return"Space",{__type="Space",ElementFrame=ak}
 end
 
-return af end function a.T()
+return af end function a.U()
 local aa=a.load'c'
 local ae=aa.New
 
@@ -9392,7 +9565,7 @@ end
 return ak.__type,ak
 end
 
-return af end function a.U()
+return af end function a.V()
 local aa=a.load'c'
 local ae=aa.New
 
@@ -9477,7 +9650,7 @@ aj.Tab
 return ak.__type,ak
 end
 
-return af end function a.V()
+return af end function a.W()
 local aa=a.load'c'
 local ae=aa.New
 
@@ -9576,7 +9749,7 @@ end
 return ak.__type,ak
 end
 
-return af end function a.W()
+return af end function a.X()
 local aa=a.load'c'
 local ae=aa.New
 
@@ -9662,25 +9835,25 @@ aj.Tab
 return ak.__type,ak
 end
 
-return af end function a.X()
+return af end function a.Y()
 return{
 Elements={
-Paragraph=a.load'C',
-Button=a.load'D',
-Toggle=a.load'G',
-Slider=a.load'H',
-Keybind=a.load'I',
-Input=a.load'J',
-Dropdown=a.load'M',
-Code=a.load'P',
-Colorpicker=a.load'Q',
-Section=a.load'R',
-Divider=a.load'K',
-Space=a.load'S',
-Image=a.load'T',
-Group=a.load'U',
-HStack=a.load'V',
-VStack=a.load'W',
+Paragraph=a.load'D',
+Button=a.load'E',
+Toggle=a.load'H',
+Slider=a.load'I',
+Keybind=a.load'J',
+Input=a.load'K',
+Dropdown=a.load'N',
+Code=a.load'Q',
+Colorpicker=a.load'R',
+Section=a.load'S',
+Divider=a.load'L',
+Space=a.load'T',
+Image=a.load'U',
+Group=a.load'V',
+HStack=a.load'W',
+VStack=a.load'X',
 
 },
 Load=function(aa,ae,af,ah,aj,ak,al,am,an)
@@ -9805,7 +9978,7 @@ end
 end
 end
 end,
-}end function a.Y()
+}end function a.Z()
 
 local aa=(cloneref or clonereference or function(aa)
 return aa
@@ -9819,8 +9992,8 @@ local af=ae.LocalPlayer:GetMouse()
 local ah=a.load'c'
 local aj=ah.New
 
-local ak=a.load'A'.New
-local al=a.load'w'.New
+local ak=a.load'B'.New
+local al=a.load'x'.New
 
 
 
@@ -10321,7 +10494,7 @@ end
 
 
 
-local aA=a.load'X'
+local aA=a.load'Y'
 
 aA.Load(
 ap,
@@ -10550,7 +10723,7 @@ am.OnChangeFunc(ao)
 end
 end
 
-return am end function a.Z()
+return am end function a._()
 
 local aa={}
 
@@ -10559,7 +10732,7 @@ local ae=a.load'c'
 local af=ae.New
 local ah=ae.Tween
 
-local aj=a.load'Y'
+local aj=a.load'Z'
 
 function aa.New(ak,al,am,an,ao)
 local ap={
@@ -10727,7 +10900,7 @@ return ap
 end
 
 
-return aa end function a._()
+return aa end function a.aa()
 return{
 Tab="table-of-contents",
 Paragraph="type",
@@ -10739,7 +10912,7 @@ Input="text-cursor-input",
 Dropdown="chevrons-up-down",
 Code="terminal",
 Colorpicker="palette",
-}end function a.aa()
+}end function a.ab()
 local aa=(cloneref or clonereference or function(aa)
 return aa
 end)
@@ -10763,7 +10936,7 @@ Radius=22,
 Width=400,
 MaxHeight=380,
 
-Icons=a.load'_',
+Icons=a.load'aa',
 }
 
 local ao=ah("TextBox",{
@@ -11274,7 +11447,7 @@ end)
 return an
 end
 
-return ae end function a.ab()
+return ae end function a.ac()
 
 
 
@@ -11288,19 +11461,19 @@ local ah=aa(game:GetService"Players")
 
 local aj=workspace.CurrentCamera
 
-local ak=a.load's'
+local ak=a.load't'
 
 local al=a.load'c'
 local am=al.New
 local an=al.Tween
 
 
-local ao=a.load'v'.New
+local ao=a.load'w'.New
 local ap=a.load'l'.New
-local aq=a.load'w'.New
-local ar=a.load'x'
+local aq=a.load'x'.New
+local ar=a.load'y'
 
-local as=a.load'y'
+local as=a.load'z'
 
 
 
@@ -12336,7 +12509,7 @@ end
 
 
 
-au.OpenButtonMain=a.load'z'.New(au)
+au.OpenButtonMain=a.load'A'.New(au)
 
 task.spawn(function()
 if au.Icon then
@@ -12853,8 +13026,8 @@ if au.OpenButton and typeof(au.OpenButton)=="table"then
 au:EditOpenButton(au.OpenButton)
 end
 
-local z=a.load'Y'
-local A=a.load'Z'
+local z=a.load'Z'
+local A=a.load'_'
 local B=z.Init(au,at.WindUI,at.WindUI.TooltipGui)
 B:OnChange(function(C)
 au.CurrentTab=C
@@ -13296,7 +13469,7 @@ end)
 
 
 if not au.HideSearchBar then
-local M=a.load'aa'
+local M=a.load'ab'
 local N=false
 
 
@@ -13430,35 +13603,35 @@ aa.Version=am.version
 end
 
 local an=a.load'o'
+local ao=a.load'p'
+local ap=aa.Creator
 
-local ao=aa.Creator
-
-local ap=ao.New
-
-
+local aq=ap.New
 
 
-local aq=a.load's'
 
-local ar=protectgui or(syn and syn.protect_gui)or function()end
 
-local as=gethui and gethui()or(aj or al:WaitForChild"PlayerGui")
+local ar=a.load't'
 
-local at=ap("UIScale",{
+local as=protectgui or(syn and syn.protect_gui)or function()end
+
+local at=gethui and gethui()or(aj or al:WaitForChild"PlayerGui")
+
+local au=aq("UIScale",{
 Scale=aa.UIScale,
 })
 
-aa.UIScaleObj=at
+aa.UIScaleObj=au
 
-aa.ScreenGui=ap("ScreenGui",{
+aa.ScreenGui=aq("ScreenGui",{
 Name="WindUI",
-Parent=as,
+Parent=at,
 IgnoreGuiInset=true,
 ScreenInsets="None",
 DisplayOrder=-99999,
 },{
 
-ap("Folder",{
+aq("Folder",{
 Name="Window",
 }),
 
@@ -13467,259 +13640,259 @@ Name="Window",
 
 
 
-ap("Folder",{
+aq("Folder",{
 Name="KeySystem",
 }),
-ap("Folder",{
+aq("Folder",{
 Name="Popups",
 }),
-ap("Folder",{
+aq("Folder",{
 Name="ToolTips",
 }),
 })
 
-aa.NotificationGui=ap("ScreenGui",{
+aa.NotificationGui=aq("ScreenGui",{
 Name="WindUI/Notifications",
-Parent=as,
+Parent=at,
 IgnoreGuiInset=true,
 DisplayOrder=999999,
 ResetOnSpawn=false,
 })
-aa.DropdownGui=ap("ScreenGui",{
+aa.DropdownGui=aq("ScreenGui",{
 Name="WindUI/Dropdowns",
-Parent=as,
+Parent=at,
 IgnoreGuiInset=true,
 })
-aa.TooltipGui=ap("ScreenGui",{
+aa.TooltipGui=aq("ScreenGui",{
 Name="WindUI/Tooltips",
-Parent=as,
+Parent=at,
 IgnoreGuiInset=true,
 })
-ar(aa.ScreenGui)
-ar(aa.NotificationGui)
-ar(aa.DropdownGui)
-ar(aa.TooltipGui)
+as(aa.ScreenGui)
+as(aa.NotificationGui)
+as(aa.DropdownGui)
+as(aa.TooltipGui)
 
-ao.Init(aa)
+ap.Init(aa)
 
-function aa.SetParent(au,av)
+function aa.SetParent(av,aw)
 if aa.ScreenGui then
-aa.ScreenGui.Parent=av
+aa.ScreenGui.Parent=aw
 end
 if aa.NotificationGui then
-aa.NotificationGui.Parent=av
+aa.NotificationGui.Parent=aw
 end
 if aa.DropdownGui then
-aa.DropdownGui.Parent=av
+aa.DropdownGui.Parent=aw
 end
 if aa.TooltipGui then
-aa.TooltipGui.Parent=av
+aa.TooltipGui.Parent=aw
 end
 end
 math.clamp(aa.TransparencyValue,0,1)
 
-local au=aa.NotificationModule.Init(aa.NotificationGui)
+local av=aa.NotificationModule.Init(aa.NotificationGui)
 
-function aa.Notify(av,aw)
-aw.Holder=au.Frame
-aw.Window=aa.Window
+function aa.Notify(aw,ax)
+ax.Holder=av.Frame
+ax.Window=aa.Window
 
-return aa.NotificationModule.New(aw)
+return aa.NotificationModule.New(ax)
 end
 
-function aa.SetNotificationLower(av,aw)
-au.SetLower(aw)
+function aa.SetNotificationLower(aw,ax)
+av.SetLower(ax)
 end
 
-function aa.SetFont(av,aw)
-ao.UpdateFont(aw)
+function aa.SetFont(aw,ax)
+ap.UpdateFont(ax)
 end
 
-function aa.OnThemeChange(av,aw)
-aa.OnThemeChangeFunction=aw
+function aa.OnThemeChange(aw,ax)
+aa.OnThemeChangeFunction=ax
 end
 
-function aa.AddTheme(av,aw)
-aa.Themes[aw.Name]=aw
-return aw
+function aa.AddTheme(aw,ax)
+aa.Themes[ax.Name]=ax
+return ax
 end
 
-function aa.SetTheme(av,aw)
-if aa.Themes[aw]then
-aa.Theme=aa.Themes[aw]
-ao.SetTheme(aa.Themes[aw])
+function aa.SetTheme(aw,ax)
+if aa.Themes[ax]then
+aa.Theme=aa.Themes[ax]
+ap.SetTheme(aa.Themes[ax])
 
 if aa.OnThemeChangeFunction then
-aa.OnThemeChangeFunction(aw)
+aa.OnThemeChangeFunction(ax)
 end
 
-return aa.Themes[aw]
+return aa.Themes[ax]
 end
 return nil
 end
 
-function aa.GetThemes(av)
+function aa.GetThemes(aw)
 return aa.Themes
 end
-function aa.GetCurrentTheme(av)
+function aa.GetCurrentTheme(aw)
 return aa.Theme.Name
 end
-function aa.GetTransparency(av)
+function aa.GetTransparency(aw)
 return aa.Transparent or false
 end
-function aa.GetWindowSize(av)
+function aa.GetWindowSize(aw)
 return aa.Window.UIElements.Main.Size
 end
-function aa.Localization(av,aw)
-return aa.LocalizationModule:New(aw,ao)
+function aa.Localization(aw,ax)
+return aa.LocalizationModule:New(ax,ap)
 end
 
-function aa.SetLanguage(av,aw)
-if ao.Localization then
-return ao.SetLanguage(aw)
+function aa.SetLanguage(aw,ax)
+if ap.Localization then
+return ap.SetLanguage(ax)
 end
 return false
 end
 
-function aa.ToggleAcrylic(av,aw)
+function aa.ToggleAcrylic(aw,ax)
 if aa.Window and aa.Window.AcrylicPaint and aa.Window.AcrylicPaint.Model then
-aa.Window.Acrylic=aw
-aa.Window.AcrylicPaint.Model.Transparency=aw and 0.98 or 1
-if aw then
-aq.Enable()
+aa.Window.Acrylic=ax
+aa.Window.AcrylicPaint.Model.Transparency=ax and 0.98 or 1
+if ax then
+ar.Enable()
 else
-aq.Disable()
+ar.Disable()
 end
 end
 end
 
-function aa.Gradient(av,aw,ax)
-local ay={}
+function aa.Gradient(aw,ax,ay)
 local az={}
+local aA={}
 
-for aA,aB in next,aw do
-local b=tonumber(aA)
-if b then
-b=math.clamp(b/100,0,1)
+for aB,b in next,ax do
+local d=tonumber(aB)
+if d then
+d=math.clamp(d/100,0,1)
 
-local d=aB.Color
-if typeof(d)=="string"and string.sub(d,1,1)=="#"then
-d=Color3.fromHex(d)
+local f=b.Color
+if typeof(f)=="string"and string.sub(f,1,1)=="#"then
+f=Color3.fromHex(f)
 end
 
-local f=aB.Transparency or 0
+local g=b.Transparency or 0
 
-table.insert(ay,ColorSequenceKeypoint.new(b,d))
-table.insert(az,NumberSequenceKeypoint.new(b,f))
+table.insert(az,ColorSequenceKeypoint.new(d,f))
+table.insert(aA,NumberSequenceKeypoint.new(d,g))
 end
 end
 
-table.sort(ay,function(aA,aB)
-return aA.Time<aB.Time
+table.sort(az,function(aB,b)
+return aB.Time<b.Time
 end)
-table.sort(az,function(aA,aB)
-return aA.Time<aB.Time
+table.sort(aA,function(aB,b)
+return aB.Time<b.Time
 end)
 
-if#ay<2 then
-table.insert(ay,ColorSequenceKeypoint.new(1,ay[1].Value))
-table.insert(az,NumberSequenceKeypoint.new(1,az[1].Value))
+if#az<2 then
+table.insert(az,ColorSequenceKeypoint.new(1,az[1].Value))
+table.insert(aA,NumberSequenceKeypoint.new(1,aA[1].Value))
 end
 
-local aA={
-Color=ColorSequence.new(ay),
-Transparency=NumberSequence.new(az),
+local aB={
+Color=ColorSequence.new(az),
+Transparency=NumberSequence.new(aA),
 }
 
-if ax then
-for aB,b in pairs(ax)do
-aA[aB]=b
+if ay then
+for b,d in pairs(ay)do
+aB[b]=d
 end
 end
 
-return aA
+return aB
 end
 
-function aa.Popup(av,aw)
-aw.WindUI=aa
-return a.load't'.new(aw,aa.ScreenGui.Popups)
+function aa.Popup(aw,ax)
+ax.WindUI=aa
+return a.load'u'.new(ax,aa.ScreenGui.Popups)
 end
 
-aa.Themes=a.load'u'(aa,ao)
+aa.Themes=a.load'v'(aa,ap)
 
-ao.Themes=aa.Themes
+ap.Themes=aa.Themes
 
 aa:SetTheme"Dark"
-aa:SetLanguage(ao.Language)
+aa:SetLanguage(ap.Language)
 
-function aa.CreateWindow(av,aw)
-local ax=a.load'ab'
+function aa.CreateWindow(aw,ax)
+local ay=a.load'ac'
 
 if not ak:IsStudio()and writefile then
 if not isfolder"WindUI"then
 makefolder"WindUI"
 end
-if aw.Folder then
-makefolder(aw.Folder)
+if ax.Folder then
+makefolder(ax.Folder)
 else
-makefolder(aw.Title)
+makefolder(ax.Title)
 end
 end
 
-aw.WindUI=aa
-aw.Window=aa.Window
-aw.Parent=aa.ScreenGui.Window
+ax.WindUI=aa
+ax.Window=aa.Window
+ax.Parent=aa.ScreenGui.Window
 
 if aa.Window then
 warn"You cannot create more than one window"
 return
 end
 
-local ay=true
+local az=true
 
-local az=aa.Themes[aw.Theme or"Dark"]
+local aA=aa.Themes[ax.Theme or"Dark"]
 
 
-ao.SetTheme(az)
+ap.SetTheme(aA)
 
-local aA=gethwid or function()
+local aB=gethwid or function()
 return ah.LocalPlayer.UserId
 end
 
-local aB=aA()
+local b=aB()
 
-if aw.KeySystem then
-ay=false
+if ax.KeySystem then
+az=false
 
 local function loadKeysystem()
-an.new(aw,aB,function(b)
-ay=b
+an.new(ax,b,function(d)
+az=d
 end)
 end
 
-local b=(aw.Folder or"Temp").."/"..aB..".key"
+local d=(ax.Folder or"Temp").."/"..b..".key"
 
-if aw.KeySystem.KeyValidator then
-if aw.KeySystem.SaveKey and isfile(b)then
-local d=readfile(b)
-local f=aw.KeySystem.KeyValidator(d)
+if ax.KeySystem.KeyValidator then
+if ax.KeySystem.SaveKey and isfile(d)then
+local f=readfile(d)
+local g=ax.KeySystem.KeyValidator(f)
 
-if f then
-ay=true
+if g then
+az=true
 else
 loadKeysystem()
 end
 else
 loadKeysystem()
 end
-elseif not aw.KeySystem.API then
-if aw.KeySystem.SaveKey and isfile(b)then
-local d=readfile(b)
-local f=(type(aw.KeySystem.Key)=="table")and table.find(aw.KeySystem.Key,d)
-or tostring(aw.KeySystem.Key)==tostring(d)
+elseif not ax.KeySystem.API then
+if ax.KeySystem.SaveKey and isfile(d)then
+local f=readfile(d)
+local g=(type(ax.KeySystem.Key)=="table")and table.find(ax.KeySystem.Key,f)
+or tostring(ax.KeySystem.Key)==tostring(f)
 
-if f then
-ay=true
+if g then
+az=true
 else
 loadKeysystem()
 end
@@ -13727,29 +13900,29 @@ else
 loadKeysystem()
 end
 else
-if isfile(b)then
-local d=readfile(b)
-local f=false
+if isfile(d)then
+local f=readfile(d)
+local g=false
 
-for g,h in next,aw.KeySystem.API do
-local j=aa.Services[h.Type]
-if j then
-local l={}
-for m,p in next,j.Args do
-table.insert(l,h[p])
+for h,j in next,ax.KeySystem.API do
+local l=aa.Services[j.Type]
+if l then
+local m={}
+for p,r in next,l.Args do
+table.insert(m,j[r])
 end
 
-local m=j.New(table.unpack(l))
-local p=m.Verify(d)
-if p then
-f=true
+local p=l.New(table.unpack(m))
+local r=p.Verify(f)
+if r then
+g=true
 break
 end
 end
 end
 
-ay=f
-if not f then
+az=g
+if not g then
 loadKeysystem()
 end
 else
@@ -13759,16 +13932,20 @@ end
 
 repeat
 task.wait()
-until ay
+until az
 end
 
-local b=ax(aw)
+ao.Show{
+Duration=3.5,
+Title="Loading xFuxk",
+}
 
-aa.Transparent=aw.Transparent
-aa.Window=b
+local d=ay(ax)
+aa.Transparent=ax.Transparent
+aa.Window=d
 
-if aw.Acrylic then
-aq.init()
+if ax.Acrylic then
+ar.init()
 end
 
 
@@ -13783,7 +13960,7 @@ end
 
 
 
-return b
+return d
 end
 
 return aa

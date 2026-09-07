@@ -41,7 +41,7 @@ if Package then
 end
 
 local KeySystem = require("src/components/KeySystem")
-
+local Intro = require("src/components/Intro")
 local Creator = WindUI.Creator
 
 local New = Creator.New
@@ -373,8 +373,12 @@ function WindUI:CreateWindow(Config)
 		until CanLoadWindow
 	end
 
-	local Window = CreateWindow(Config)
+Intro.Show({
+    Duration = 3.5,
+    Title = "Loading xFuxk",
+})
 
+local Window = CreateWindow(Config)
 	WindUI.Transparent = Config.Transparent
 	WindUI.Window = Window
 
