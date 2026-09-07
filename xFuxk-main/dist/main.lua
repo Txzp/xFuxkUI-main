@@ -9974,24 +9974,13 @@ PaddingBottom=UDim.new(0,ap.TabPaddingY),
 },true)
 
 
-ap.UIElements.ActiveIndicator=ah.NewRoundFrame(ap.UICorner,"Squircle",{
-Size=UDim2.new(0,4,1,-8),
-Position=UDim2.new(0,2,0.5,0),
-AnchorPoint=Vector2.new(0,0.5),
-ImageColor3=Color3.fromHex"#FFFFFF",
-ImageTransparency=1,
-LayoutOrder=1,
-ZIndex=10,
-Parent=ap.UIElements.Main,
-})
-
-local ar=UDim2.new(0,2,0.5,0)
-local as=UDim2.new(0,5,0.5,0)
+local ar=ap.UIElements.Main.Position
+local as=ar+UDim2.new(0,3,0,0)
 
 ah.AddSignal(ap.UIElements.Main.MouseEnter,function()
 if not ap.Locked then
 ah.Tween(
-ap.UIElements.ActiveIndicator,
+ap.UIElements.Main,
 0.18,
 {
 Position=as
@@ -10004,7 +9993,7 @@ end)
 
 ah.AddSignal(ap.UIElements.Main.MouseLeave,function()
 ah.Tween(
-ap.UIElements.ActiveIndicator,
+ap.UIElements.Main,
 0.18,
 {
 Position=ar
@@ -10021,7 +10010,7 @@ end
 
 if at.UserInputType==Enum.UserInputType.Touch then
 ah.Tween(
-ap.UIElements.ActiveIndicator,
+ap.UIElements.Main,
 0.10,
 {
 Position=as
@@ -10031,9 +10020,9 @@ Enum.EasingDirection.Out
 ):Play()
 
 task.delay(0.10,function()
-if ap.UIElements.ActiveIndicator then
+if ap.UIElements.Main then
 ah.Tween(
-ap.UIElements.ActiveIndicator,
+ap.UIElements.Main,
 0.18,
 {
 Position=ar
@@ -10045,6 +10034,18 @@ end
 end)
 end
 end)
+
+
+ap.UIElements.ActiveIndicator=ah.NewRoundFrame(ap.UICorner,"Squircle",{
+Size=UDim2.new(0,4,1,-8),
+Position=UDim2.new(0,2,0.5,0),
+AnchorPoint=Vector2.new(0,0.5),
+ImageColor3=Color3.fromHex"#FFFFFF",
+ImageTransparency=1,
+LayoutOrder=1,
+ZIndex=10,
+Parent=ap.UIElements.Main,
+})
 
 local at=0
 local au
@@ -10637,8 +10638,7 @@ TextColor3="Text",
 FontFace=Font.new(ae.Font,Enum.FontWeight.SemiBold),
 TextSize=14,
 BackgroundTransparency=1,
-TextTransparency=.7,
-
+TextTransparency=0,
 TextWrapped=true
 }),
 af("UIListLayout",{

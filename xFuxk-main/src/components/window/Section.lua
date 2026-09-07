@@ -67,27 +67,26 @@ function Section.New(SectionConfig, Parent, Folder, UIScale, Window)
             Text = "",
         }, {
             IconFrame,
-            New("TextLabel", {
-                Text = SectionModule.Title,
-                TextXAlignment = "Left",
-                Size = UDim2.new(
-                    1, 
-                    IconFrame and (-SectionModule.IconSize-10)*2
-                        or (-SectionModule.IconSize-10),
-                        
-                    1,
-                    0
-                ),
-                ThemeTag = {
-                    TextColor3 = "Text",
-                },
-                FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
-                TextSize = 14,
-                BackgroundTransparency = 1,
-                TextTransparency = .7,
-                --TextTruncate = "AtEnd",
-                TextWrapped = true
-            }),
+New("TextLabel", {
+    Text = SectionModule.Title,
+    TextXAlignment = "Left",
+    Size = UDim2.new(
+        1,
+        IconFrame and (-SectionModule.IconSize-10)*2
+            or (-SectionModule.IconSize-10),
+
+        1,
+        0
+    ),
+    ThemeTag = {
+        TextColor3 = "Text",
+    },
+    FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
+    TextSize = 14,
+    BackgroundTransparency = 1,
+    TextTransparency = 0,
+    TextWrapped = true
+}),
             New("UIListLayout", {
                 FillDirection = "Horizontal",
                 VerticalAlignment = "Center",

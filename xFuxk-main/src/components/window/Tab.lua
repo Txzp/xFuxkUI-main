@@ -164,28 +164,17 @@ function TabModule.New(Config, UIScale)
 		}),
 	}, true)
 
--- AGREGADO POR TZHZK: Frame blanco lateral para indicar tab activa 
-Tab.UIElements.ActiveIndicator = Creator.NewRoundFrame(Tab.UICorner, "Squircle", { 
-    Size = UDim2.new(0, 4, 1, -8), 
-    Position = UDim2.new(0, 2, 0.5, 0), 
-    AnchorPoint = Vector2.new(0, 0.5), 
-    ImageColor3 = Color3.fromHex("#FFFFFF"), 
-    ImageTransparency = 1, 
-    LayoutOrder = 1, 
-    ZIndex = 10, 
-    Parent = Tab.UIElements.Main, 
-})
--- Animación suave del indicador al pasar el cursor / tocar en móvil
-local IndicatorNormalPosition = UDim2.new(0, 2, 0.5, 0)
-local IndicatorHoverPosition = UDim2.new(0, 5, 0.5, 0)
+-- ANIMACIÓN SUAVE DE LA TAB
+local TabNormalPosition = Tab.UIElements.Main.Position
+local TabHoverPosition = TabNormalPosition + UDim2.new(0, 3, 0, 0)
 
 Creator.AddSignal(Tab.UIElements.Main.MouseEnter, function()
 	if not Tab.Locked then
 		Creator.Tween(
-			Tab.UIElements.ActiveIndicator,
+			Tab.UIElements.Main,
 			0.18,
 			{
-				Position = IndicatorHoverPosition
+				Position = TabHoverPosition
 			},
 			Enum.EasingStyle.Quint,
 			Enum.EasingDirection.Out
@@ -195,10 +184,10 @@ end)
 
 Creator.AddSignal(Tab.UIElements.Main.MouseLeave, function()
 	Creator.Tween(
-		Tab.UIElements.ActiveIndicator,
+		Tab.UIElements.Main,
 		0.18,
 		{
-			Position = IndicatorNormalPosition
+			Position = TabNormalPosition
 		},
 		Enum.EasingStyle.Quint,
 		Enum.EasingDirection.Out
@@ -212,22 +201,22 @@ Creator.AddSignal(Tab.UIElements.Main.InputBegan, function(Input)
 
 	if Input.UserInputType == Enum.UserInputType.Touch then
 		Creator.Tween(
-			Tab.UIElements.ActiveIndicator,
+			Tab.UIElements.Main,
 			0.10,
 			{
-				Position = IndicatorHoverPosition
+				Position = TabHoverPosition
 			},
 			Enum.EasingStyle.Quint,
 			Enum.EasingDirection.Out
 		):Play()
 
 		task.delay(0.10, function()
-			if Tab.UIElements.ActiveIndicator then
+			if Tab.UIElements.Main then
 				Creator.Tween(
-					Tab.UIElements.ActiveIndicator,
+					Tab.UIElements.Main,
 					0.18,
 					{
-						Position = IndicatorNormalPosition
+						Position = TabNormalPosition
 					},
 					Enum.EasingStyle.Quint,
 					Enum.EasingDirection.Out
@@ -236,6 +225,18 @@ Creator.AddSignal(Tab.UIElements.Main.InputBegan, function(Input)
 		end)
 	end
 end)
+
+-- AGREGADO POR TZHZK: Frame blanco lateral para indicar tab activa 
+Tab.UIElements.ActiveIndicator = Creator.NewRoundFrame(Tab.UICorner, "Squircle", { 
+    Size = UDim2.new(0, 4, 1, -8), 
+    Position = UDim2.new(0, 2, 0.5, 0), 
+    AnchorPoint = Vector2.new(0, 0.5), 
+    ImageColor3 = Color3.fromHex("#FFFFFF"), 
+    ImageTransparency = 1, 
+    LayoutOrder = 1, 
+    ZIndex = 10, 
+    Parent = Tab.UIElements.Main, 
+})
 
 	local TextOffset = 0
 	local Icon
