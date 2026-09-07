@@ -501,26 +501,27 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 							Dropdown.Value = TabMain.Original
 						end
 						Callback()
-				DropdownModule:Close(true)
-				end)
-			end
-		elseif Type == "Menu" then
-			if not TabMain.Locked then
-				Creator.AddSignal(TabMain.UIElements.TabItem.MouseEnter, function()
-					Tween(TabMain.UIElements.TabItem, 0.08, { ImageTransparency = 0.95 }):Play()
-				end)
-				Creator.AddSignal(TabMain.UIElements.TabItem.InputEnded, function()
-					Tween(TabMain.UIElements.TabItem, 0.08, { ImageTransparency = 1 }):Play()
-				end)
-				Creator.AddSignal(TabMain.UIElements.TabItem.MouseButton1Click, function()
-					if TabMain.Locked then
-						return
+					end)
+				elseif Type == "Menu" then
+					if not TabMain.Locked then
+						Creator.AddSignal(TabMain.UIElements.TabItem.MouseEnter, function()
+							Tween(TabMain.UIElements.TabItem, 0.08, { ImageTransparency = 0.95 }):Play()
+						end)
+						Creator.AddSignal(TabMain.UIElements.TabItem.InputEnded, function()
+							Tween(TabMain.UIElements.TabItem, 0.08, { ImageTransparency = 1 }):Play()
+						end)
 					end
-					Callback(Tab.Callback or function() end)
-					DropdownModule:Close(true)
-					RecalculateCanvasSize()
-					RecalculateListSize()
-				end)
+					Creator.AddSignal(TabMain.UIElements.TabItem.MouseButton1Click, function()
+						if TabMain.Locked then
+							return
+						end
+						Callback(Tab.Callback or function() end)
+						DropdownModule:Close(true)
+					end)
+				end
+
+				RecalculateCanvasSize()
+				RecalculateListSize()
 			else
 				require("../../elements/Divider"):New({ Parent = Dropdown.UIElements.Menu.Frame.ScrollingFrame })
 			end
@@ -656,8 +657,6 @@ function DropdownModule:Close(immediate)
 	)
 
 	return DropdownModule
-end
-
 end
 
 return DropdownMenu

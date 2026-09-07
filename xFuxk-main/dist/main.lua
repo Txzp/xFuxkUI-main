@@ -5698,6 +5698,8 @@ nil,
 am.Window.NewElements,
 am.Radius
 )
+ao.Size=UDim2.new(0,0,0,38)
+ao.AutomaticSize="X"
 ao.AnchorPoint=Vector2.new(1,am.Window.NewElements and 0 or 0.5)
 ao.Position=UDim2.new(1,0,am.Window.NewElements and 0 or 0.5,0)
 an.Button=ao
@@ -7522,26 +7524,27 @@ end
 an.Value=ax.Original
 end
 Callback()
-ar:Close(true)
+end)
+elseif aq=="Menu"then
+if not ax.Locked then
+aj.AddSignal(ax.UIElements.TabItem.MouseEnter,function()
+al(ax.UIElements.TabItem,0.08,{ImageTransparency=0.95}):Play()
+end)
+aj.AddSignal(ax.UIElements.TabItem.InputEnded,function()
+al(ax.UIElements.TabItem,0.08,{ImageTransparency=1}):Play()
 end)
 end
-elseif aq=="Menu"then
-if not TabMain.Locked then
-aj.AddSignal(TabMain.UIElements.TabItem.MouseEnter,function()
-al(TabMain.UIElements.TabItem,0.08,{ImageTransparency=0.95}):Play()
-end)
-aj.AddSignal(TabMain.UIElements.TabItem.InputEnded,function()
-al(TabMain.UIElements.TabItem,0.08,{ImageTransparency=1}):Play()
-end)
-aj.AddSignal(TabMain.UIElements.TabItem.MouseButton1Click,function()
-if TabMain.Locked then
+aj.AddSignal(ax.UIElements.TabItem.MouseButton1Click,function()
+if ax.Locked then
 return
 end
 Callback(aw.Callback or function()end)
 ar:Close(true)
+end)
+end
+
 RecalculateCanvasSize()
 RecalculateListSize()
-end)
 else a.load'K'
 :New{Parent=an.UIElements.Menu.Frame.ScrollingFrame}
 end
@@ -7569,9 +7572,9 @@ end
 
 ar:Refresh(an.Values)
 
-function ar.Select(av,aw)
-if aw then
-an.Value=aw
+function ar.Select(at,au)
+if au then
+an.Value=au
 else
 if an.Multi then
 an.Value={}
@@ -7585,7 +7588,7 @@ end
 RecalculateListSize()
 RecalculateCanvasSize()
 
-function ar.Open(av)
+function ar.Open(at)
 if ap then
 an.UIElements.Menu.Visible=true
 an.UIElements.MenuCanvas.Visible=true
@@ -7605,10 +7608,10 @@ UpdatePosition()
 end
 end
 
-function ar.Close(av,aw)
+function ar.Close(at,au)
 an.Opened=false
 
-if aw then
+if au then
 an.UIElements.Menu.Visible=false
 an.UIElements.MenuCanvas.Visible=false
 an.UIElements.MenuCanvas.Active=false
@@ -7642,29 +7645,29 @@ ar:Open()
 end
 )
 
-aj.AddSignal(ae.InputBegan,function(av)
+aj.AddSignal(ae.InputBegan,function(at)
 if
-av.UserInputType==Enum.UserInputType.MouseButton1
-or av.UserInputType==Enum.UserInputType.Touch
+at.UserInputType==Enum.UserInputType.MouseButton1
+or at.UserInputType==Enum.UserInputType.Touch
 then
-local aw=an.UIElements.MenuCanvas
-local ax,ay=aw.AbsolutePosition,aw.AbsoluteSize
+local au=an.UIElements.MenuCanvas
+local av,aw=au.AbsolutePosition,au.AbsoluteSize
 
-local az=an.UIElements.Dropdown or an.DropdownFrame.UIElements.Main
-local aA=az.AbsolutePosition
-local aB=az.AbsoluteSize
+local ax=an.UIElements.Dropdown or an.DropdownFrame.UIElements.Main
+local ay=ax.AbsolutePosition
+local az=ax.AbsoluteSize
 
-local b=af.X>=aA.X
-and af.X<=aA.X+aB.X
-and af.Y>=aA.Y
-and af.Y<=aA.Y+aB.Y
+local aA=af.X>=ay.X
+and af.X<=ay.X+az.X
+and af.Y>=ay.Y
+and af.Y<=ay.Y+az.Y
 
-local d=af.X>=ax.X
-and af.X<=ax.X+ay.X
-and af.Y>=ax.Y
-and af.Y<=ax.Y+ay.Y
+local aB=af.X>=av.X
+and af.X<=av.X+aw.X
+and af.Y>=av.Y
+and af.Y<=av.Y+aw.Y
 
-if am.Window.CanDropdown and an.Opened and not b and not d then
+if am.Window.CanDropdown and an.Opened and not aA and not aB then
 ar:Close()
 end
 end
@@ -7677,8 +7680,6 @@ UpdatePosition
 )
 
 return ar
-end
-
 end
 
 return aa end function a.M()

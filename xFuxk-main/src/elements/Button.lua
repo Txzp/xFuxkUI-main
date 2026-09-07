@@ -39,6 +39,8 @@ function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded,
 			Config.Window.NewElements,
 			Config.Radius
 		)
+		ButtonFrame.Size = UDim2.new(0, 0, 0, 38)
+		ButtonFrame.AutomaticSize = "X"
 		ButtonFrame.AnchorPoint = Vector2.new(1, Config.Window.NewElements and 0 or 0.5)
 		ButtonFrame.Position = UDim2.new(1, 0, Config.Window.NewElements and 0 or 0.5, 0)
 		Element.Button = ButtonFrame
