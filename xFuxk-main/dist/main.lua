@@ -9978,19 +9978,80 @@ ap.UIElements.ActiveIndicator=ah.NewRoundFrame(ap.UICorner,"Squircle",{
 Size=UDim2.new(0,4,1,-8),
 Position=UDim2.new(0,2,0.5,0),
 AnchorPoint=Vector2.new(0,0.5),
-ImageColor3=Color3.fromRGB(50,150,255),
+ImageColor3=Color3.fromHex"#FFFFFF",
 ImageTransparency=1,
 LayoutOrder=1,
 ZIndex=10,
 Parent=ap.UIElements.Main,
 })
 
-local ar=0
-local as
-local at
+local ar=UDim2.new(0,2,0.5,0)
+local as=UDim2.new(0,5,0.5,0)
+
+ah.AddSignal(ap.UIElements.Main.MouseEnter,function()
+if not ap.Locked then
+ah.Tween(
+ap.UIElements.ActiveIndicator,
+0.18,
+{
+Position=as
+},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.Out
+):Play()
+end
+end)
+
+ah.AddSignal(ap.UIElements.Main.MouseLeave,function()
+ah.Tween(
+ap.UIElements.ActiveIndicator,
+0.18,
+{
+Position=ar
+},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.Out
+):Play()
+end)
+
+ah.AddSignal(ap.UIElements.Main.InputBegan,function(at)
+if ap.Locked then
+return
+end
+
+if at.UserInputType==Enum.UserInputType.Touch then
+ah.Tween(
+ap.UIElements.ActiveIndicator,
+0.10,
+{
+Position=as
+},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.Out
+):Play()
+
+task.delay(0.10,function()
+if ap.UIElements.ActiveIndicator then
+ah.Tween(
+ap.UIElements.ActiveIndicator,
+0.18,
+{
+Position=ar
+},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.Out
+):Play()
+end
+end)
+end
+end)
+
+local at=0
+local au
+local av
 
 if ap.Icon then
-as=ah.Image(
+au=ah.Image(
 ap.Icon,
 ap.Icon..":"..ap.Title,
 0,
@@ -10000,16 +10061,16 @@ ap.IconColor and false or true,
 ap.IconThemed,
 "TabIcon"
 )
-as.Size=UDim2.new(0,16,0,16)
+au.Size=UDim2.new(0,16,0,16)
 if ap.IconColor then
-as.ImageLabel.ImageColor3=ap.IconColor
+au.ImageLabel.ImageColor3=ap.IconColor
 end
 if not ap.IconShape then
-as.Parent=ap.UIElements.Main.Frame
-ap.UIElements.Icon=as
-as.ImageLabel.ImageTransparency=not ap.Locked and 0 or 0.7
-ar=-18-(Window.UIPadding/2)
-ap.UIElements.Main.Frame.TextLabel.Size=UDim2.new(1,ar,0,0)
+au.Parent=ap.UIElements.Main.Frame
+ap.UIElements.Icon=au
+au.ImageLabel.ImageTransparency=not ap.Locked and 0 or 0.7
+at=-18-(Window.UIPadding/2)
+ap.UIElements.Main.Frame.TextLabel.Size=UDim2.new(1,at,0,0)
 elseif ap.IconColor then
 ah.NewRoundFrame(
 ap.IconShape~="Circle"and(ap.UICorner+5-(2+(Window.UIPadding/4)))or 9999,
@@ -10020,7 +10081,7 @@ ImageColor3=ap.IconColor,
 Parent=ap.UIElements.Main.Frame,
 },
 {
-as,
+au,
 ah.NewRoundFrame(
 ap.IconShape~="Circle"and(ap.UICorner+5-(2+(Window.UIPadding/4)))or 9999,
 "Glass-1.4",
@@ -10050,19 +10111,19 @@ Name="Outline",
 ),
 }
 )
-as.AnchorPoint=Vector2.new(0.5,0.5)
-as.Position=UDim2.new(0.5,0,0.5,0)
-as.ImageLabel.ImageTransparency=0
-as.ImageLabel.ImageColor3=ah.GetTextColorForHSB(ap.IconColor,0.68)
-ar=-28-(Window.UIPadding/2)
-ap.UIElements.Main.Frame.TextLabel.Size=UDim2.new(1,ar,0,0)
+au.AnchorPoint=Vector2.new(0.5,0.5)
+au.Position=UDim2.new(0.5,0,0.5,0)
+au.ImageLabel.ImageTransparency=0
+au.ImageLabel.ImageColor3=ah.GetTextColorForHSB(ap.IconColor,0.68)
+at=-28-(Window.UIPadding/2)
+ap.UIElements.Main.Frame.TextLabel.Size=UDim2.new(1,at,0,0)
 end
 
-at=
+av=
 ah.Image(ap.Icon,ap.Icon..":"..ap.Title,0,Window.Folder,ap.__type,true,ap.IconThemed)
-at.Size=UDim2.new(0,16,0,16)
-at.ImageLabel.ImageTransparency=not ap.Locked and 0 or 0.7
-ar=-30
+av.Size=UDim2.new(0,16,0,16)
+av.ImageLabel.ImageTransparency=not ap.Locked and 0 or 0.7
+at=-30
 
 
 
@@ -10112,7 +10173,7 @@ BackgroundTransparency=1,
 Visible=ap.ShowTabTitle or false,
 Name="TabTitle",
 },{
-at,
+av,
 aj("TextLabel",{
 Text=ap.Title,
 ThemeTag={
@@ -10172,30 +10233,30 @@ if Window.ScrollBarEnabled then
 al(ap.UIElements.ContainerFrame,ap.UIElements.ContainerFrameCanvas,Window,3)
 end
 
-local au
-local av
 local aw
-local ax=false
+local ax
+local ay
+local az=false
 
 
 if ap.Desc then
 ah.AddSignal(ap.UIElements.Main.InputBegan,function()
-ax=true
-av=task.spawn(function()
+az=true
+ax=task.spawn(function()
 task.wait(0.35)
-if ax and not au then
-au=ak(ap.Desc,am.ToolTipParent,true)
-au.Container.AnchorPoint=Vector2.new(0.5,0.5)
+if az and not aw then
+aw=ak(ap.Desc,am.ToolTipParent,true)
+aw.Container.AnchorPoint=Vector2.new(0.5,0.5)
 
 local function updatePosition()
-if au then
-au.Container.Position=UDim2.new(0,af.X,0,af.Y-4)
+if aw then
+aw.Container.Position=UDim2.new(0,af.X,0,af.Y-4)
 end
 end
 
 updatePosition()
-aw=af.Move:Connect(updatePosition)
-au:Open()
+ay=af.Move:Connect(updatePosition)
+aw:Open()
 end
 end)
 end)
@@ -10211,18 +10272,18 @@ end
 end)
 ah.AddSignal(ap.UIElements.Main.InputEnded,function()
 if ap.Desc then
-ax=false
-if av then
-task.cancel(av)
-av=nil
+az=false
+if ax then
+task.cancel(ax)
+ax=nil
+end
+if ay then
+ay:Disconnect()
+ay=nil
 end
 if aw then
-aw:Disconnect()
+aw:Close()
 aw=nil
-end
-if au then
-au:Close()
-au=nil
 end
 end
 
@@ -10233,13 +10294,13 @@ ImageTransparency="TabBorderTransparency",
 end
 end)
 
-function ap.ScrollToTheElement(ay,az)
+function ap.ScrollToTheElement(aA,aB)
 ap.UIElements.ContainerFrame.ScrollingEnabled=false
 
 ah.Tween(ap.UIElements.ContainerFrame,0.45,{
 CanvasPosition=Vector2.new(
 0,
-ap.Elements[az].ElementFrame.AbsolutePosition.Y
+ap.Elements[aB].ElementFrame.AbsolutePosition.Y
 -ap.UIElements.ContainerFrame.AbsolutePosition.Y
 -ap.UIElements.ContainerFrame.UIPadding.PaddingTop.Offset
 ),
@@ -10248,8 +10309,8 @@ ap.Elements[az].ElementFrame.AbsolutePosition.Y
 task.spawn(function()
 task.wait(0.48)
 
-if ap.Elements[az].Highlight then
-ap.Elements[az]:Highlight()
+if ap.Elements[aB].Highlight then
+ap.Elements[aB]:Highlight()
 end
 ap.UIElements.ContainerFrame.ScrollingEnabled=true
 end)
@@ -10259,96 +10320,96 @@ end
 
 
 
-local ay=a.load'X'
+local aA=a.load'X'
 
-ay.Load(
+aA.Load(
 ap,
 ap.UIElements.ContainerFrame,
-ay.Elements,
+aA.Elements,
 Window,
 WindUI,
 nil,
-ay,
+aA,
 ao,
 ap
 )
 
-function ap.AddButton(az,aA)
-return ap:Button(aA)
+function ap.AddButton(aB,b)
+return ap:Button(b)
 end
 
-function ap.AddToggle(az,aA)
-aA=aA or{}
-if aA.Value==nil and aA.Default~=nil then
-aA.Value=aA.Default
+function ap.AddToggle(aB,b)
+b=b or{}
+if b.Value==nil and b.Default~=nil then
+b.Value=b.Default
 end
-return ap:Toggle(aA)
+return ap:Toggle(b)
 end
 
-function ap.AddSlider(az,aA)
-aA=aA or{}
-if aA.Value==nil then
-aA.Value={
-Min=aA.Min,
-Max=aA.Max,
-Default=aA.Default,
+function ap.AddSlider(aB,b)
+b=b or{}
+if b.Value==nil then
+b.Value={
+Min=b.Min,
+Max=b.Max,
+Default=b.Default,
 }
 end
-return ap:Slider(aA)
+return ap:Slider(b)
 end
 
-function ap.LockAll(az)
+function ap.LockAll(aB)
 
-for aA,aB in next,Window.AllElements do
-if aB.Tab and aB.Tab.Index and aB.Tab.Index==ap.Index and aB.Lock then
-aB:Lock()
+for b,d in next,Window.AllElements do
+if d.Tab and d.Tab.Index and d.Tab.Index==ap.Index and d.Lock then
+d:Lock()
 end
 end
 end
-function ap.UnlockAll(az)
-for aA,aB in next,Window.AllElements do
-if aB.Tab and aB.Tab.Index and aB.Tab.Index==ap.Index and aB.Unlock then
-aB:Unlock()
+function ap.UnlockAll(aB)
+for b,d in next,Window.AllElements do
+if d.Tab and d.Tab.Index and d.Tab.Index==ap.Index and d.Unlock then
+d:Unlock()
 end
 end
 end
-function ap.GetLocked(az)
-local aA={}
+function ap.GetLocked(aB)
+local b={}
 
-for aB,b in next,Window.AllElements do
-if b.Tab and b.Tab.Index and b.Tab.Index==ap.Index and b.Locked==true then
-table.insert(aA,b)
-end
-end
-
-return aA
-end
-function ap.GetUnlocked(az)
-local aA={}
-
-for aB,b in next,Window.AllElements do
-if b.Tab and b.Tab.Index and b.Tab.Index==ap.Index and b.Locked==false then
-table.insert(aA,b)
+for d,f in next,Window.AllElements do
+if f.Tab and f.Tab.Index and f.Tab.Index==ap.Index and f.Locked==true then
+table.insert(b,f)
 end
 end
 
-return aA
+return b
+end
+function ap.GetUnlocked(aB)
+local b={}
+
+for d,f in next,Window.AllElements do
+if f.Tab and f.Tab.Index and f.Tab.Index==ap.Index and f.Locked==false then
+table.insert(b,f)
+end
 end
 
-function ap.Select(az)
+return b
+end
+
+function ap.Select(aB)
 return am:SelectTab(ap.Index)
 end
 
 task.spawn(function()
-local az
+local aB
 if ap.CustomEmptyPage.Icon then
-az=
+aB=
 ah.Image(ap.CustomEmptyPage.Icon,ap.CustomEmptyPage.Icon,0,"Temp","EmptyPage",true)
-az.Size=
+aB.Size=
 UDim2.fromOffset(ap.CustomEmptyPage.IconSize or 48,ap.CustomEmptyPage.IconSize or 48)
 end
 
-local aA=aj("Frame",{
+local b=aj("Frame",{
 BackgroundTransparency=1,
 Size=UDim2.new(1,0,1,-Window.UIElements.Main.Main.Topbar.AbsoluteSize.Y),
 Parent=ap.UIElements.ContainerFrame,
@@ -10371,7 +10432,7 @@ FillDirection="Vertical",
 
 
 
-az,
+aB,
 ap.CustomEmptyPage.Title
 and aj("TextLabel",{
 AutomaticSize="XY",
@@ -10404,10 +10465,10 @@ or nil,
 
 
 
-local aB
-aB=ah.AddSignal(ap.UIElements.ContainerFrame.ChildAdded,function()
-aA.Visible=false
-aB:Disconnect()
+local d
+d=ah.AddSignal(ap.UIElements.ContainerFrame.ChildAdded,function()
+b.Visible=false
+d:Disconnect()
 end)
 end)
 
