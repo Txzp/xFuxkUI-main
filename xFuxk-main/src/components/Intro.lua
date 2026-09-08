@@ -4,6 +4,7 @@ local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
 local Intro = {}
+Intro.IsPlaying = false
 
 local function Tween(Object, Duration, Properties, EasingStyle, EasingDirection)
 local TweenInfoObject = TweenInfo.new(
@@ -21,6 +22,7 @@ Config = Config or {}
 
 local Duration = Config.Duration or 3.5
 local Title = Config.Title or "Loading xFuxk"
+Intro.IsPlaying = true
 
 -- Evita crear otra intro encima de una existente
 if Intro.Gui then
@@ -156,9 +158,16 @@ task.delay(Duration, function()
 	if Intro.Gui == Gui then
 		Gui:Destroy()
 		Intro.Gui = nil
+		Intro.IsPlaying = false
 	end
 end)
 
+end
+
+function Intro.Wait()
+	while Intro.IsPlaying do
+		task.wait()
+	end
 end
 
 function Intro.Hide()
@@ -168,6 +177,7 @@ function Intro.Hide()
 
 	Intro.Gui:Destroy()
 	Intro.Gui = nil
+	Intro.IsPlaying = false
 end
 
 return Intro

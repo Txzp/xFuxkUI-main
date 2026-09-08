@@ -378,6 +378,7 @@ Intro.Show({
     Duration = 3.5,
     Title = "Loading xFuxk",
 })
+Intro.Wait()
 
 local Window = CreateWindow(Config)
 	WindUI.Transparent = Config.Transparent

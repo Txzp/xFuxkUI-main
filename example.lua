@@ -29,11 +29,6 @@ Window:Tag({
     Border = true,
 })
 
-WindUI.Intro.Show({
-    Duration = 3.5,
-    Title = "Loading xFuxk",
-})
-
 -- ============================================================
 -- 3. CREAR TABS (CADA TAB ES UNA SECCIÓN INDEPENDIENTE)
 -- ============================================================

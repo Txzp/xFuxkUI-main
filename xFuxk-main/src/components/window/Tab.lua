@@ -164,6 +164,11 @@ function TabModule.New(Config, UIScale)
 		}),
 	}, true)
 
+local TabPressScale = New("UIScale", {
+	Scale = 1,
+	Parent = Tab.UIElements.Main,
+})
+
 -- ANIMACIÓN SUAVE DE LA TAB
 local TabNormalPosition = Tab.UIElements.Main.Position
 local TabHoverPosition = TabNormalPosition + UDim2.new(0, 3, 0, 0)
@@ -199,36 +204,15 @@ Creator.AddSignal(Tab.UIElements.Main.InputBegan, function(Input)
 		return
 	end
 
-	if Input.UserInputType == Enum.UserInputType.Touch then
-		Creator.Tween(
-			Tab.UIElements.Main,
-			0.10,
-			{
-				Position = TabHoverPosition
-			},
-			Enum.EasingStyle.Quint,
-			Enum.EasingDirection.Out
-		):Play()
-
-		task.delay(0.10, function()
-			if Tab.UIElements.Main then
-				Creator.Tween(
-					Tab.UIElements.Main,
-					0.18,
-					{
-						Position = TabNormalPosition
-					},
-					Enum.EasingStyle.Quint,
-					Enum.EasingDirection.Out
-				):Play()
-			end
-		end)
+	if Input.UserInputType == Enum.UserInputType.Touch
+		or Input.UserInputType == Enum.UserInputType.MouseButton1 then
+		Creator.Tween(TabPressScale, 0.1, { Scale = 0.97 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 	end
 end)
 
 -- AGREGADO POR TZHZK: Frame blanco lateral para indicar tab activa 
 Tab.UIElements.ActiveIndicator = Creator.NewRoundFrame(Tab.UICorner, "Squircle", { 
-    Size = UDim2.new(0, 4, 1, -8), 
+	Size = UDim2.new(0, 0, 1, -8),
     Position = UDim2.new(0, 2, 0.5, 0), 
     AnchorPoint = Vector2.new(0, 0.5), 
     ImageColor3 = Color3.fromHex("#FFFFFF"), 
@@ -462,7 +446,7 @@ Tab.UIElements.ActiveIndicator = Creator.NewRoundFrame(Tab.UICorner, "Squircle",
 			}, 0.1)
 		end
 	end)
-	Creator.AddSignal(Tab.UIElements.Main.InputEnded, function()
+	Creator.AddSignal(Tab.UIElements.Main.InputEnded, function(Input)
 		if Tab.Desc then
 			IsHovering = false
 			if hoverTimer then
@@ -483,6 +467,11 @@ Tab.UIElements.ActiveIndicator = Creator.NewRoundFrame(Tab.UICorner, "Squircle",
 			Creator.SetThemeTag(Tab.UIElements.Main.Frame, {
 				ImageTransparency = "TabBorderTransparency",
 			}, 0.1)
+		end
+
+		if Input.UserInputType == Enum.UserInputType.Touch
+			or Input.UserInputType == Enum.UserInputType.MouseButton1 then
+			Creator.Tween(TabPressScale, 0.16, { Scale = 1 }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
 		end
 	end)
 
@@ -695,7 +684,10 @@ function TabModule:SelectTab(TabIndex)
 				end
 				-- AGREGADO POR TZHZK: Ocultar indicador en tabs no activas
 				if TabObject.UIElements.ActiveIndicator then
-					Creator.Tween(TabObject.UIElements.ActiveIndicator, 0.15, { ImageTransparency = 1 }):Play()
+					Creator.Tween(TabObject.UIElements.ActiveIndicator, 0.2, {
+						Size = UDim2.new(0, 0, 1, -8),
+						ImageTransparency = 1,
+					}, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
 				end
 				TabObject.Selected = false
 			end
@@ -718,7 +710,10 @@ function TabModule:SelectTab(TabIndex)
 		end
 		-- AGREGADO POR TZHZK: Mostrar indicador en tab activa
 		if TabModule.Tabs[TabIndex].UIElements.ActiveIndicator then
-			Creator.Tween(TabModule.Tabs[TabIndex].UIElements.ActiveIndicator, 0.15, { ImageTransparency = 0 }):Play()
+			Creator.Tween(TabModule.Tabs[TabIndex].UIElements.ActiveIndicator, 0.2, {
+				Size = UDim2.new(0, 4, 1, -8),
+				ImageTransparency = 0,
+			}, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
 		end
 		TabModule.Tabs[TabIndex].Selected = true
 
