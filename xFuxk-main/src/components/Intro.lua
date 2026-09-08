@@ -192,19 +192,19 @@ end)
 end
 
 function Intro.Wait()
-while Intro.IsPlaying do
-	task.wait()
-end
+	while Intro.IsPlaying do
+		task.wait()
+	end
 end
 
 function Intro.Hide()
-if not Intro.Gui then
-	return
-end
+	if not Intro.Gui then
+		return
+	end
 
-Intro.Gui:Destroy()
-Intro.Gui = nil
-Intro.IsPlaying = false
+	Intro.Gui:Destroy()
+	Intro.Gui = nil
+	Intro.IsPlaying = false
 end
 
 return Intro
