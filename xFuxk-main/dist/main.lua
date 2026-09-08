@@ -3045,20 +3045,18 @@ local ab=game:GetService"TweenService"
 
 local ac=aa.LocalPlayer
 
-local ad={
-IsPlaying=false,
-}
+local ad={}
+ad.IsPlaying=false
 
 local function Tween(ae,af,ag,ah,ai)
-return ab:Create(
-ae,
-TweenInfo.new(
+local aj=TweenInfo.new(
 af,
 ah or Enum.EasingStyle.Quint,
 ai or Enum.EasingDirection.Out
-),
-ag
 )
+
+return ab:Create(ae,aj,ag)
+
 end
 
 function ad.Show(ae)
@@ -3066,86 +3064,91 @@ ae=ae or{}
 
 local af=ae.Duration or 3.5
 local ag=ae.Title or"Loading xFuxk"
-local ah=ae.Subtitle or"Key System"
+ad.IsPlaying=true
+
 
 if ad.Gui then
 ad.Gui:Destroy()
+ad.Gui=nil
 end
 
-ad.IsPlaying=true
+local ah=ac:WaitForChild"PlayerGui"
 
-local ai=ac:WaitForChild"PlayerGui"
-local aj=Instance.new"ScreenGui"
-aj.Name="xFuxkIntro"
-aj.IgnoreGuiInset=true
-aj.ResetOnSpawn=false
-aj.DisplayOrder=999999
-aj.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
+local ai=Instance.new"ScreenGui"
+ai.Name="xFuxkIntro"
+ai.IgnoreGuiInset=true
+ai.ResetOnSpawn=false
+ai.DisplayOrder=999999
+ai.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
+ai.Parent=ah
+
+ad.Gui=ai
+
+local aj=Instance.new"Frame"
+aj.Name="Container"
+aj.AnchorPoint=Vector2.new(0.5,0.5)
+aj.Position=UDim2.new(0.5,0,0.5,0)
+aj.Size=UDim2.fromOffset(330,100)
+aj.BackgroundColor3=Color3.fromRGB(8,8,10)
+aj.BackgroundTransparency=1
 aj.Parent=ai
-ad.Gui=aj
 
-local ak=Instance.new"Frame"
-ak.Name="Container"
-ak.AnchorPoint=Vector2.new(0.5,0.5)
-ak.Position=UDim2.new(0.5,0,0.5,0)
-ak.Size=UDim2.fromOffset(430,150)
-ak.BackgroundColor3=Color3.fromRGB(8,8,10)
-ak.BackgroundTransparency=1
+local ak=Instance.new"UICorner"
+ak.CornerRadius=UDim.new(0,14)
 ak.Parent=aj
 
-local al=Instance.new"UICorner"
-al.CornerRadius=UDim.new(0,18)
-al.Parent=ak
+local al=Instance.new"UIStroke"
+al.Color=Color3.fromRGB(255,255,255)
+al.Thickness=1
+al.Transparency=1
+al.Parent=aj
 
-local am=Instance.new"UIStroke"
-am.Color=Color3.fromRGB(255,255,255)
-am.Thickness=1
-am.Transparency=1
-am.Parent=ak
 
-local an=Instance.new"ImageLabel"
-an.Name="Avatar"
-an.AnchorPoint=Vector2.new(0,0.5)
-an.Position=UDim2.new(0,8,0.5,0)
-an.Size=UDim2.fromOffset(82,82)
+local am=Instance.new"TextLabel"
+am.Name="Title"
+am.BackgroundTransparency=1
+am.AnchorPoint=Vector2.new(0,0.5)
+am.Position=UDim2.new(0,-40,0,28)
+am.Size=UDim2.fromOffset(240,28)
+am.Font=Enum.Font.GothamSemibold
+am.Text=ag
+am.TextColor3=Color3.fromRGB(255,255,255)
+am.TextSize=18
+am.TextTransparency=1
+am.TextXAlignment=Enum.TextXAlignment.Left
+am.Parent=aj
+
+local an=Instance.new"TextLabel"
+an.Name="DisplayName"
 an.BackgroundTransparency=1
-an.ImageTransparency=1
-an.Parent=ak
+an.AnchorPoint=Vector2.new(0,0.5)
+an.Position=UDim2.new(0,-40,0,62)
+an.Size=UDim2.fromOffset(240,24)
+an.Font=Enum.Font.Gotham
+an.Text="Key System"
+an.TextColor3=Color3.fromRGB(255,255,255)
+an.TextSize=14
+an.TextTransparency=1
+an.TextXAlignment=Enum.TextXAlignment.Left
+an.Parent=aj
 
-local ao=Instance.new"UICorner"
-ao.CornerRadius=UDim.new(1,0)
-ao.Parent=an
 
-local ap=Instance.new"TextLabel"
-ap.Name="Title"
-ap.AnchorPoint=Vector2.new(0,0.5)
-ap.Position=UDim2.new(0,92,0,62)
-ap.Size=UDim2.fromOffset(310,32)
-ap.BackgroundTransparency=1
-ap.Font=Enum.Font.GothamSemibold
-ap.Text=ag
-ap.TextColor3=Color3.fromRGB(255,255,255)
-ap.TextSize=20
-ap.TextTransparency=1
-ap.TextXAlignment=Enum.TextXAlignment.Left
-ap.Parent=ak
+local ao=Instance.new"ImageLabel"
+ao.Name="Avatar"
+ao.BackgroundTransparency=1
+ao.AnchorPoint=Vector2.new(0,0.5)
+ao.Position=UDim2.new(0,-28,0.5,0)
+ao.Size=UDim2.fromOffset(58,58)
+ao.ImageTransparency=1
+ao.Parent=aj
 
-local aq=Instance.new"TextLabel"
-aq.Name="Subtitle"
-aq.AnchorPoint=Vector2.new(0,0.5)
-aq.Position=UDim2.new(0,92,0,102)
-aq.Size=UDim2.fromOffset(310,24)
-aq.BackgroundTransparency=1
-aq.Font=Enum.Font.Gotham
-aq.Text=ah
-aq.TextColor3=Color3.fromRGB(255,255,255)
-aq.TextSize=14
-aq.TextTransparency=1
-aq.TextXAlignment=Enum.TextXAlignment.Left
-aq.Parent=ak
+local ap=Instance.new"UICorner"
+ap.CornerRadius=UDim.new(1,0)
+ap.Parent=ao
+
 
 task.spawn(function()
-local ar,as=pcall(function()
+local aq,ar=pcall(function()
 return aa:GetUserThumbnailAsync(
 ac.UserId,
 Enum.ThumbnailType.HeadShot,
@@ -3153,54 +3156,81 @@ Enum.ThumbnailSize.Size100x100
 )
 end)
 
-if ar and ad.Gui==aj then
-an.Image=as
+if aq and ad.Gui==ai then
+ao.Image=ar
 end
 end)
 
-Tween(ak,0.45,{BackgroundTransparency=0.08}):Play()
-Tween(am,0.45,{Transparency=0.78}):Play()
-Tween(an,0.45,{
-Position=UDim2.new(0,28,0.5,0),
-ImageTransparency=0,
+
+am.Position=UDim2.new(0,-40,0,28)
+an.Position=UDim2.new(0,-40,0,62)
+ao.Position=UDim2.new(0,-28,0.5,0)
+
+
+Tween(aj,0.45,{
+BackgroundTransparency=0.08,
 }):Play()
-Tween(ap,0.45,{
-Position=UDim2.new(0,122,0,62),
+
+Tween(al,0.45,{
+Transparency=0.78,
+}):Play()
+
+Tween(am,0.45,{
+Position=UDim2.new(0,82,0,28),
 TextTransparency=0,
 }):Play()
-Tween(aq,0.45,{
-Position=UDim2.new(0,122,0,102),
+
+Tween(an,0.45,{
+Position=UDim2.new(0,82,0,62),
 TextTransparency=0.15,
 }):Play()
 
+Tween(ao,0.45,{
+Position=UDim2.new(0,12,0.5,0),
+ImageTransparency=0,
+}):Play()
+
+
 task.delay(af,function()
-if ad.Gui~=aj then
+if ad.Gui~=ai then
 return
 end
 
-Tween(ak,0.4,{BackgroundTransparency=1},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
-Tween(am,0.4,{Transparency=1},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
-Tween(an,0.4,{
-Position=UDim2.new(0,8,0.5,0),
-ImageTransparency=1,
-},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
-Tween(ap,0.4,{
-Position=UDim2.new(0,92,0,62),
-TextTransparency=1,
-},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
-local ar=Tween(aq,0.4,{
-Position=UDim2.new(0,92,0,102),
-TextTransparency=1,
-},Enum.EasingStyle.Quint,Enum.EasingDirection.In)
-ar:Play()
-ar.Completed:Wait()
 
-if ad.Gui==aj then
-aj:Destroy()
+Tween(aj,0.4,{
+BackgroundTransparency=1,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
+
+Tween(al,0.4,{
+Transparency=1,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
+
+Tween(am,0.4,{
+Position=UDim2.new(0,42,0,28),
+TextTransparency=1,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
+
+Tween(an,0.4,{
+Position=UDim2.new(0,42,0,62),
+TextTransparency=1,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
+
+local aq=Tween(ao,0.4,{
+Position=UDim2.new(0,-28,0.5,0),
+ImageTransparency=1,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.In)
+
+aq:Play()
+
+aq.Completed:Wait()
+
+if ad.Gui==ai then
+ai:Destroy()
 ad.Gui=nil
 ad.IsPlaying=false
 end
 end)
+
 end
 
 function ad.Wait()
@@ -3210,10 +3240,12 @@ end
 end
 
 function ad.Hide()
-if ad.Gui then
+if not ad.Gui then
+return
+end
+
 ad.Gui:Destroy()
 ad.Gui=nil
-end
 ad.IsPlaying=false
 end
 
