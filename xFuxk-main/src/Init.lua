@@ -269,10 +269,8 @@ function WindUI:CreateWindow(Config)
 
 	Intro.Show({
 		Duration = 3.5,
-		Title = (Config.KeySystem and Config.KeySystem.Title) or Config.Title or "Loading xFuxk",
-		Subtitle = "Key System",
+		Title = Config.Title or "Loading xFuxk",
 	})
-	Intro.Wait()
 
 	if not RunService:IsStudio() and writefile then
 		if not isfolder("WindUI") then
@@ -311,6 +309,7 @@ function WindUI:CreateWindow(Config)
 		CanLoadWindow = false
 
 		local function loadKeysystem()
+			Intro.Wait()
 			KeySystem.new(Config, Filename, function(c)
 				CanLoadWindow = c
 			end)
@@ -381,6 +380,7 @@ function WindUI:CreateWindow(Config)
 		until CanLoadWindow
 	end
 
+	Intro.Wait()
 	Config.OpenOnCreate = false
 local Window = CreateWindow(Config)
 	WindUI.Transparent = Config.Transparent

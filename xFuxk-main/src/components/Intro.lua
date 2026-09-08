@@ -48,7 +48,7 @@ Container.AnchorPoint = Vector2.new(0.5, 0.5)
 Container.Position = UDim2.new(0.5, 0, 0.5, 0)
 Container.Size = UDim2.fromOffset(330, 100)
 Container.BackgroundColor3 = Color3.fromRGB(8, 8, 10)
-Container.BackgroundTransparency = 1
+Container.BackgroundTransparency = 0.08
 Container.Parent = Gui
 
 local ContainerCorner = Instance.new("UICorner")
@@ -58,7 +58,7 @@ ContainerCorner.Parent = Container
 local ContainerStroke = Instance.new("UIStroke")
 ContainerStroke.Color = Color3.fromRGB(255, 255, 255)
 ContainerStroke.Thickness = 1
-ContainerStroke.Transparency = 1
+ContainerStroke.Transparency = 0.78
 ContainerStroke.Parent = Container
 
 -- Texto
@@ -72,7 +72,7 @@ TitleLabel.Font = Enum.Font.GothamSemibold
 TitleLabel.Text = Title
 TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 TitleLabel.TextSize = 18
-TitleLabel.TextTransparency = 1
+TitleLabel.TextTransparency = 0
 TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 TitleLabel.Parent = Container
 
@@ -83,10 +83,10 @@ DisplayName.AnchorPoint = Vector2.new(0, 0.5)
 DisplayName.Position = UDim2.new(0, -40, 0, 62)
 DisplayName.Size = UDim2.fromOffset(240, 24)
 DisplayName.Font = Enum.Font.Gotham
-DisplayName.Text = "Key System"
+DisplayName.Text = "@" .. LocalPlayer.DisplayName
 DisplayName.TextColor3 = Color3.fromRGB(255, 255, 255)
 DisplayName.TextSize = 14
-DisplayName.TextTransparency = 1
+DisplayName.TextTransparency = 0.15
 DisplayName.TextXAlignment = Enum.TextXAlignment.Left
 DisplayName.Parent = Container
 
@@ -97,7 +97,7 @@ Avatar.BackgroundTransparency = 1
 Avatar.AnchorPoint = Vector2.new(0, 0.5)
 Avatar.Position = UDim2.new(0, -28, 0.5, 0)
 Avatar.Size = UDim2.fromOffset(58, 58)
-Avatar.ImageTransparency = 1
+Avatar.ImageTransparency = 0
 Avatar.Parent = Container
 
 local AvatarCorner = Instance.new("UICorner")
@@ -125,27 +125,16 @@ DisplayName.Position = UDim2.new(0, -40, 0, 62)
 Avatar.Position = UDim2.new(0, -28, 0.5, 0)
 
 -- Entrada
-Tween(Container, 0.45, {
-	BackgroundTransparency = 0.08,
-}):Play()
-
-Tween(ContainerStroke, 0.45, {
-	Transparency = 0.78,
-}):Play()
-
 Tween(TitleLabel, 0.45, {
 	Position = UDim2.new(0, 82, 0, 28),
-	TextTransparency = 0,
 }):Play()
 
 Tween(DisplayName, 0.45, {
 	Position = UDim2.new(0, 82, 0, 62),
-	TextTransparency = 0.15,
 }):Play()
 
 Tween(Avatar, 0.45, {
 	Position = UDim2.new(0, 12, 0.5, 0),
-	ImageTransparency = 0,
 }):Play()
 
 -- Duración total de la intro

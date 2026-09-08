@@ -2236,12 +2236,10 @@ Parent=aq,
 
 ab.AddSignal(aq.MouseEnter,function()
 ad(ar,0.14,{Scale=1.025},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
-ad(aq,0.14,{Position=UDim2.new(0,2,0,0)},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 ad(aq.Frame,0.12,{ImageTransparency=0.95}):Play()
 end)
 ab.AddSignal(aq.MouseLeave,function()
 ad(ar,0.18,{Scale=1},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
-ad(aq,0.18,{Position=UDim2.new(0,0,0,0)},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 ad(aq.Frame,0.16,{ImageTransparency=1}):Play()
 end)
 ab.AddSignal(aq.MouseButton1Up,function()
@@ -3122,7 +3120,7 @@ aj.AnchorPoint=Vector2.new(0.5,0.5)
 aj.Position=UDim2.new(0.5,0,0.5,0)
 aj.Size=UDim2.fromOffset(330,100)
 aj.BackgroundColor3=Color3.fromRGB(8,8,10)
-aj.BackgroundTransparency=1
+aj.BackgroundTransparency=0.08
 aj.Parent=ai
 
 local ak=Instance.new"UICorner"
@@ -3132,7 +3130,7 @@ ak.Parent=aj
 local al=Instance.new"UIStroke"
 al.Color=Color3.fromRGB(255,255,255)
 al.Thickness=1
-al.Transparency=1
+al.Transparency=0.78
 al.Parent=aj
 
 
@@ -3146,7 +3144,7 @@ am.Font=Enum.Font.GothamSemibold
 am.Text=ag
 am.TextColor3=Color3.fromRGB(255,255,255)
 am.TextSize=18
-am.TextTransparency=1
+am.TextTransparency=0
 am.TextXAlignment=Enum.TextXAlignment.Left
 am.Parent=aj
 
@@ -3157,10 +3155,10 @@ an.AnchorPoint=Vector2.new(0,0.5)
 an.Position=UDim2.new(0,-40,0,62)
 an.Size=UDim2.fromOffset(240,24)
 an.Font=Enum.Font.Gotham
-an.Text="Key System"
+an.Text="@"..ac.DisplayName
 an.TextColor3=Color3.fromRGB(255,255,255)
 an.TextSize=14
-an.TextTransparency=1
+an.TextTransparency=0.15
 an.TextXAlignment=Enum.TextXAlignment.Left
 an.Parent=aj
 
@@ -3171,7 +3169,7 @@ ao.BackgroundTransparency=1
 ao.AnchorPoint=Vector2.new(0,0.5)
 ao.Position=UDim2.new(0,-28,0.5,0)
 ao.Size=UDim2.fromOffset(58,58)
-ao.ImageTransparency=1
+ao.ImageTransparency=0
 ao.Parent=aj
 
 local ap=Instance.new"UICorner"
@@ -3199,27 +3197,16 @@ an.Position=UDim2.new(0,-40,0,62)
 ao.Position=UDim2.new(0,-28,0.5,0)
 
 
-Tween(aj,0.45,{
-BackgroundTransparency=0.08,
-}):Play()
-
-Tween(al,0.45,{
-Transparency=0.78,
-}):Play()
-
 Tween(am,0.45,{
 Position=UDim2.new(0,82,0,28),
-TextTransparency=0,
 }):Play()
 
 Tween(an,0.45,{
 Position=UDim2.new(0,82,0,62),
-TextTransparency=0.15,
 }):Play()
 
 Tween(ao,0.45,{
 Position=UDim2.new(0,12,0.5,0),
-ImageTransparency=0,
 }):Play()
 
 
@@ -13954,10 +13941,8 @@ local ay=a.load'ac'
 
 ao.Show{
 Duration=3.5,
-Title=(ax.KeySystem and ax.KeySystem.Title)or ax.Title or"Loading xFuxk",
-Subtitle="Key System",
+Title=ax.Title or"Loading xFuxk",
 }
-ao.Wait()
 
 if not ak:IsStudio()and writefile then
 if not isfolder"WindUI"then
@@ -13996,6 +13981,7 @@ if ax.KeySystem then
 az=false
 
 local function loadKeysystem()
+ao.Wait()
 an.new(ax,b,function(d)
 az=d
 end)
@@ -14066,6 +14052,7 @@ task.wait()
 until az
 end
 
+ao.Wait()
 ax.OpenOnCreate=false
 local d=ay(ax)
 aa.Transparent=ax.Transparent
