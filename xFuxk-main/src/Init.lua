@@ -42,6 +42,7 @@ end
 
 local KeySystem = require("src/components/KeySystem")
 local Intro = require("src/components/Intro")
+WindUI.Intro = Intro
 local Creator = WindUI.Creator
 
 local New = Creator.New

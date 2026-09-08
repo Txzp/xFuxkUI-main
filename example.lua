@@ -29,7 +29,7 @@ Window:Tag({
     Border = true,
 })
 
-Intro.Show({
+WindUI.Intro.Show({
     Duration = 3.5,
     Title = "Loading xFuxk",
 })
