@@ -390,6 +390,10 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 					},
 					true
 				)
+				TabMain.UIElements.HoverScale = New("UIScale", {
+					Scale = 1,
+					Parent = TabMain.UIElements.TabItem,
+				})
 
 				if TabMain.Locked then
 					TabMain.UIElements.TabItem.Frame.Title.TextLabel.TextTransparency = 0.6
@@ -443,6 +447,22 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 				DropdownModule:Display()
 
 				if Type == "Dropdown" then
+					if not TabMain.Locked then
+						Creator.AddSignal(TabMain.UIElements.TabItem.MouseEnter, function()
+							Tween(TabMain.UIElements.HoverScale, 0.12, { Scale = 0.98 }):Play()
+							Tween(TabMain.UIElements.TabItem, 0.12, {
+								Position = UDim2.new(0, 3, 0, 0),
+								ImageTransparency = 0.95,
+							}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+						end)
+						Creator.AddSignal(TabMain.UIElements.TabItem.MouseLeave, function()
+							Tween(TabMain.UIElements.HoverScale, 0.16, { Scale = 1 }):Play()
+							Tween(TabMain.UIElements.TabItem, 0.16, {
+								Position = UDim2.new(0, 0, 0, 0),
+								ImageTransparency = TabMain.Selected and 0.95 or 1,
+							}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+						end)
+					end
 					Creator.AddSignal(TabMain.UIElements.TabItem.MouseButton1Click, function()
 						if TabMain.Locked then
 							return
@@ -492,6 +512,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 								TabPisun.Selected = false
 							end
 							TabMain.Selected = true
+							Tween(TabMain.UIElements.HoverScale, 0.1, { Scale = 0.97 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 							Tween(TabMain.UIElements.TabItem, 0.1, { ImageTransparency = 0.95 }):Play()
 							Tween(TabMain.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 0.75 }):Play()
 							Tween(TabMain.UIElements.TabItem.Frame.Title.TextLabel, 0.1, { TextTransparency = 0 }):Play()
@@ -501,20 +522,32 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 							Dropdown.Value = TabMain.Original
 						end
 						Callback()
+						if not Dropdown.Multi then
+							DropdownModule:Close()
+						end
 					end)
 				elseif Type == "Menu" then
 					if not TabMain.Locked then
 						Creator.AddSignal(TabMain.UIElements.TabItem.MouseEnter, function()
-							Tween(TabMain.UIElements.TabItem, 0.08, { ImageTransparency = 0.95 }):Play()
+							Tween(TabMain.UIElements.HoverScale, 0.12, { Scale = 0.98 }):Play()
+							Tween(TabMain.UIElements.TabItem, 0.12, {
+								Position = UDim2.new(0, 3, 0, 0),
+								ImageTransparency = 0.95,
+							}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 						end)
 						Creator.AddSignal(TabMain.UIElements.TabItem.InputEnded, function()
-							Tween(TabMain.UIElements.TabItem, 0.08, { ImageTransparency = 1 }):Play()
+							Tween(TabMain.UIElements.HoverScale, 0.16, { Scale = 1 }):Play()
+							Tween(TabMain.UIElements.TabItem, 0.16, {
+								Position = UDim2.new(0, 0, 0, 0),
+								ImageTransparency = 1,
+							}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 						end)
 					end
 					Creator.AddSignal(TabMain.UIElements.TabItem.MouseButton1Click, function()
 						if TabMain.Locked then
 							return
 						end
+						Tween(TabMain.UIElements.HoverScale, 0.1, { Scale = 0.97 }):Play()
 						Callback(Tab.Callback or function() end)
 						DropdownModule:Close(true)
 					end)

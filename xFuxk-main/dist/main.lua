@@ -7596,6 +7596,10 @@ FillDirection="Vertical",
 },
 true
 )
+ax.UIElements.HoverScale=ak("UIScale",{
+Scale=1,
+Parent=ax.UIElements.TabItem,
+})
 
 if ax.Locked then
 ax.UIElements.TabItem.Frame.Title.TextLabel.TextTransparency=0.6
@@ -7649,6 +7653,22 @@ an.Tabs[av]=ax
 ar:Display()
 
 if aq=="Dropdown"then
+if not ax.Locked then
+aj.AddSignal(ax.UIElements.TabItem.MouseEnter,function()
+al(ax.UIElements.HoverScale,0.12,{Scale=0.98}):Play()
+al(ax.UIElements.TabItem,0.12,{
+Position=UDim2.new(0,3,0,0),
+ImageTransparency=0.95,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+end)
+aj.AddSignal(ax.UIElements.TabItem.MouseLeave,function()
+al(ax.UIElements.HoverScale,0.16,{Scale=1}):Play()
+al(ax.UIElements.TabItem,0.16,{
+Position=UDim2.new(0,0,0,0),
+ImageTransparency=ax.Selected and 0.95 or 1,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+end)
+end
 aj.AddSignal(ax.UIElements.TabItem.MouseButton1Click,function()
 if ax.Locked then
 return
@@ -7698,6 +7718,7 @@ end
 aA.Selected=false
 end
 ax.Selected=true
+al(ax.UIElements.HoverScale,0.1,{Scale=0.97},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 al(ax.UIElements.TabItem,0.1,{ImageTransparency=0.95}):Play()
 al(ax.UIElements.TabItem.Highlight,0.1,{ImageTransparency=0.75}):Play()
 al(ax.UIElements.TabItem.Frame.Title.TextLabel,0.1,{TextTransparency=0}):Play()
@@ -7707,20 +7728,32 @@ end
 an.Value=ax.Original
 end
 Callback()
+if not an.Multi then
+ar:Close()
+end
 end)
 elseif aq=="Menu"then
 if not ax.Locked then
 aj.AddSignal(ax.UIElements.TabItem.MouseEnter,function()
-al(ax.UIElements.TabItem,0.08,{ImageTransparency=0.95}):Play()
+al(ax.UIElements.HoverScale,0.12,{Scale=0.98}):Play()
+al(ax.UIElements.TabItem,0.12,{
+Position=UDim2.new(0,3,0,0),
+ImageTransparency=0.95,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end)
 aj.AddSignal(ax.UIElements.TabItem.InputEnded,function()
-al(ax.UIElements.TabItem,0.08,{ImageTransparency=1}):Play()
+al(ax.UIElements.HoverScale,0.16,{Scale=1}):Play()
+al(ax.UIElements.TabItem,0.16,{
+Position=UDim2.new(0,0,0,0),
+ImageTransparency=1,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end)
 end
 aj.AddSignal(ax.UIElements.TabItem.MouseButton1Click,function()
 if ax.Locked then
 return
 end
+al(ax.UIElements.HoverScale,0.1,{Scale=0.97}):Play()
 Callback(aw.Callback or function()end)
 ar:Close(true)
 end)
