@@ -1254,6 +1254,16 @@ return function(Config)
 
 	function Window:Open()
 		task.spawn(function()
+			if not Window.UIElements.RevealScale then
+				Window.UIElements.RevealScale = New("UIScale", {
+					Scale = 0.96,
+					Parent = Window.UIElements.Main,
+				})
+			end
+			Tween(Window.UIElements.RevealScale, 0.45, {
+				Scale = 1,
+			}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+
 			if Window.OnOpenCallback then
 				task.spawn(function()
 					Creator.SafeCallback(Window.OnOpenCallback)
@@ -1350,6 +1360,12 @@ return function(Config)
 
 		Window.CanDropdown = false
 		Window.Closed = true
+
+		if Window.UIElements.RevealScale then
+			Tween(Window.UIElements.RevealScale, 0.32, {
+				Scale = 0.96,
+			}, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
+		end
 
 		if Window.OpenButtonMain and not Window.IsPC and Window.IsOpenButtonEnabled then
 			Window.OpenButtonMain:Visible(true)

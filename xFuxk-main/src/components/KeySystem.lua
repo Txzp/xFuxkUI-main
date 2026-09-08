@@ -76,6 +76,7 @@ function KeySystem.new(Config, Filename, func, keyValidator)
 		AutomaticSize = "Y",
 		Size = UDim2.new(1, 0, 0, 0),
 		BackgroundTransparency = 1,
+		Active = true,
 	}, {
 		-- New("UIListLayout", {
 		--     Padding = UDim.new(0,9),
@@ -186,13 +187,36 @@ function KeySystem.new(Config, Filename, func, keyValidator)
 		}),
 	})
 
+	local KeyDialogScale = New("UIScale", {
+		Scale = 1,
+		Parent = KeyDialog.UIElements.MainContainer,
+	})
+
+	local KeyDialogDragging = Creator.Drag(KeyDialog.UIElements.MainContainer, { TitleContainer })
+	local KeyDialogClosing = false
+
+	local function CloseKeyDialog()
+		if KeyDialogClosing then
+			return
+		end
+		KeyDialogClosing = true
+		KeyDialogDragging:Set(false)
+		Tween(KeyDialogScale, 0.24, { Scale = 0.94 }, Enum.EasingStyle.Quint, Enum.EasingDirection.In):Play()
+		Tween(KeyDialog.UIElements.MainContainer, 0.24, { ImageTransparency = 1 }, Enum.EasingStyle.Quint, Enum.EasingDirection.In):Play()
+		task.delay(0.24, function()
+			if KeyDialog.UIElements.MainContainer then
+				KeyDialog:Close()()
+			end
+		end)
+	end
+
 	-- for _, values in next, KeySystemButtons do
 	--     CreateButton(values.Title, values.Icon, values.Callback, values.Variant)
 	-- end
 
 	local ExitButton = CreateButton("Exit", "log-out", function()
-		KeyDialog:Close()()
-	end, "Primary", ButtonsContainer.Frame, nil, nil, nil, Color3.fromRGB(190, 92, 92))
+		CloseKeyDialog()
+	end, "Primary", ButtonsContainer.Frame, nil, nil, nil, Color3.fromRGB(220, 78, 78))
 
 	if ThumbnailFrame then
 		ExitButton.Parent = ThumbnailFrame
@@ -425,7 +449,7 @@ function KeySystem.new(Config, Filename, func, keyValidator)
 	end
 
 	local function handleSuccess(key)
-		KeyDialog:Close()()
+		CloseKeyDialog()
 		writefile((Config.Folder or "Temp") .. "/" .. Filename .. ".key", tostring(key))
 		task.wait(0.4)
 		func(true)
@@ -442,7 +466,7 @@ function KeySystem.new(Config, Filename, func, keyValidator)
 				if Config.KeySystem.SaveKey then
 					handleSuccess(key)
 				else
-					KeyDialog:Close()()
+					CloseKeyDialog()
 					task.wait(0.4)
 					func(true)
 				end
@@ -461,7 +485,7 @@ function KeySystem.new(Config, Filename, func, keyValidator)
 				if Config.KeySystem.SaveKey then
 					handleSuccess(key)
 				else
-					KeyDialog:Close()()
+					CloseKeyDialog()
 					task.wait(0.4)
 					func(true)
 				end
@@ -487,7 +511,7 @@ function KeySystem.new(Config, Filename, func, keyValidator)
 				})
 			end
 		end
-	end, "Primary", ButtonsContainer, nil, nil, nil, Color3.fromRGB(104, 168, 126))
+	end, "Primary", ButtonsContainer, nil, nil, nil, Color3.fromRGB(70, 190, 105))
 
 	SubmitButton.AnchorPoint = Vector2.new(1, 0.5)
 	SubmitButton.Position = UDim2.new(1, 0, 0.5, 0)
