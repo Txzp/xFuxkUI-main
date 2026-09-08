@@ -390,6 +390,10 @@ Tab.UIElements.ActiveIndicator = Creator.NewRoundFrame(Tab.UICorner, "Squircle",
 			Visible = Tab.ShowTabTitle or false,
 		}),
 	})
+	Tab.UIElements.ContainerRevealScale = New("UIScale", {
+		Scale = 1,
+		Parent = Tab.UIElements.ContainerFrameCanvas,
+	})
 
 	TabModule.Containers[TabIndex] = Tab.UIElements.ContainerFrameCanvas
 	TabModule.Tabs[TabIndex] = Tab
@@ -719,17 +723,21 @@ function TabModule:SelectTab(TabIndex)
 
 		task.spawn(function()
 			for _, ContainerObject in next, TabModule.Containers do
-				ContainerObject.AnchorPoint = Vector2.new(0, 0.05)
+				ContainerObject.AnchorPoint = Vector2.new(0, 0)
+				ContainerObject.Position = UDim2.new(0, 0, 0, 12)
 				ContainerObject.Visible = false
 			end
-			TabModule.Containers[TabIndex].Visible = true
-			local TweenService = game:GetService("TweenService")
+			local Container = TabModule.Containers[TabIndex]
+			local SelectedTab = TabModule.Tabs[TabIndex]
+			Container.Visible = true
+			SelectedTab.UIElements.ContainerRevealScale.Scale = 0.985
 
-			local tweenInfo = TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
-			local tween = TweenService:Create(TabModule.Containers[TabIndex], tweenInfo, {
-				AnchorPoint = Vector2.new(0, 0),
-			})
-			tween:Play()
+			Creator.Tween(Container, 0.28, {
+				Position = UDim2.new(0, 0, 0, 0),
+			}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+			Creator.Tween(SelectedTab.UIElements.ContainerRevealScale, 0.28, {
+				Scale = 1,
+			}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 		end)
 
 		TabModule.OnChangeFunc(TabIndex)

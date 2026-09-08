@@ -10382,6 +10382,10 @@ Position=UDim2.new(0,0,0,((Window.UIPadding*2.4)+12)),
 Visible=ap.ShowTabTitle or false,
 }),
 })
+ap.UIElements.ContainerRevealScale=aj("UIScale",{
+Scale=1,
+Parent=ap.UIElements.ContainerFrameCanvas,
+})
 
 am.Containers[aq]=ap.UIElements.ContainerFrameCanvas
 am.Tabs[aq]=ap
@@ -10711,17 +10715,21 @@ am.Tabs[ao].Selected=true
 
 task.spawn(function()
 for ap,aq in next,am.Containers do
-aq.AnchorPoint=Vector2.new(0,0.05)
+aq.AnchorPoint=Vector2.new(0,0)
+aq.Position=UDim2.new(0,0,0,12)
 aq.Visible=false
 end
-am.Containers[ao].Visible=true
-local ap=game:GetService"TweenService"
+local ap=am.Containers[ao]
+local aq=am.Tabs[ao]
+ap.Visible=true
+aq.UIElements.ContainerRevealScale.Scale=0.985
 
-local aq=TweenInfo.new(0.15,Enum.EasingStyle.Quart,Enum.EasingDirection.Out)
-local ar=ap:Create(am.Containers[ao],aq,{
-AnchorPoint=Vector2.new(0,0),
-})
-ar:Play()
+ah.Tween(ap,0.28,{
+Position=UDim2.new(0,0,0,0),
+},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+ah.Tween(aq.UIElements.ContainerRevealScale,0.28,{
+Scale=1,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end)
 
 am.OnChangeFunc(ao)
@@ -13020,7 +13028,9 @@ end)
 
 task.spawn(function()
 
+if at.OpenOnCreate~=false then
 au:Open()
+end
 end)
 
 function au.EditOpenButton(z,A)
@@ -13834,6 +13844,11 @@ aa:SetLanguage(ap.Language)
 function aa.CreateWindow(aw,ax)
 local ay=a.load'ac'
 
+ao.Show{
+Duration=3.5,
+Title="Loading xFuxk",
+}
+
 if not ak:IsStudio()and writefile then
 if not isfolder"WindUI"then
 makefolder"WindUI"
@@ -13941,15 +13956,12 @@ task.wait()
 until az
 end
 
-ao.Show{
-Duration=3.5,
-Title="Loading xFuxk",
-}
-ao.Wait()
-
+ax.OpenOnCreate=false
 local d=ay(ax)
 aa.Transparent=ax.Transparent
 aa.Window=d
+ao.Wait()
+d:Open()
 
 if ax.Acrylic then
 ar.init()

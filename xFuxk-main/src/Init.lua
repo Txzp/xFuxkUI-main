@@ -267,6 +267,11 @@ WindUI:SetLanguage(Creator.Language)
 function WindUI:CreateWindow(Config)
 	local CreateWindow = require("src/components/window/Init")
 
+	Intro.Show({
+		Duration = 3.5,
+		Title = "Loading xFuxk",
+	})
+
 	if not RunService:IsStudio() and writefile then
 		if not isfolder("WindUI") then
 			makefolder("WindUI")
@@ -374,15 +379,12 @@ function WindUI:CreateWindow(Config)
 		until CanLoadWindow
 	end
 
-Intro.Show({
-    Duration = 3.5,
-    Title = "Loading xFuxk",
-})
-Intro.Wait()
-
+	Config.OpenOnCreate = false
 local Window = CreateWindow(Config)
 	WindUI.Transparent = Config.Transparent
 	WindUI.Window = Window
+	Intro.Wait()
+	Window:Open()
 
 	if Config.Acrylic then
 		Acrylic.init()

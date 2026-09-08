@@ -1564,7 +1564,9 @@ return function(Config)
 
 	task.spawn(function()
 		--task.wait(1.38583)
-		Window:Open()
+		if Config.OpenOnCreate ~= false then
+			Window:Open()
+		end
 	end)
 
 	function Window:EditOpenButton(OpenButtonConfig)
