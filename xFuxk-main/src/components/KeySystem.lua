@@ -192,7 +192,7 @@ function KeySystem.new(Config, Filename, func, keyValidator)
 
 	local ExitButton = CreateButton("Exit", "log-out", function()
 		KeyDialog:Close()()
-	end, "Tertiary", ButtonsContainer.Frame)
+	end, "Primary", ButtonsContainer.Frame, nil, nil, nil, Color3.fromRGB(190, 92, 92))
 
 	if ThumbnailFrame then
 		ExitButton.Parent = ThumbnailFrame
@@ -487,7 +487,7 @@ function KeySystem.new(Config, Filename, func, keyValidator)
 				})
 			end
 		end
-	end, "Primary", ButtonsContainer)
+	end, "Primary", ButtonsContainer, nil, nil, nil, Color3.fromRGB(104, 168, 126))
 
 	SubmitButton.AnchorPoint = Vector2.new(1, 0.5)
 	SubmitButton.Position = UDim2.new(1, 0, 0.5, 0)

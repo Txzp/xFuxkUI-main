@@ -269,8 +269,10 @@ function WindUI:CreateWindow(Config)
 
 	Intro.Show({
 		Duration = 3.5,
-		Title = "Loading xFuxk",
+		Title = (Config.KeySystem and Config.KeySystem.Title) or Config.Title or "Loading xFuxk",
+		Subtitle = "Key System",
 	})
+	Intro.Wait()
 
 	if not RunService:IsStudio() and writefile then
 		if not isfolder("WindUI") then
@@ -383,7 +385,6 @@ function WindUI:CreateWindow(Config)
 local Window = CreateWindow(Config)
 	WindUI.Transparent = Config.Transparent
 	WindUI.Window = Window
-	Intro.Wait()
 	Window:Open()
 
 	if Config.Acrylic then

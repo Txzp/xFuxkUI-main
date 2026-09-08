@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-09-07  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-09-08  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -2726,7 +2726,7 @@ PaddingBottom=UDim.new(0,16),
 
 local az=ae("Exit","log-out",function()
 al:Close()()
-end,"Tertiary",ax.Frame)
+end,"Primary",ax.Frame,nil,nil,nil,Color3.fromRGB(190,92,92))
 
 if ay then
 az.Parent=ay
@@ -3021,7 +3021,7 @@ Icon="triangle-alert",
 }
 end
 end
-end,"Primary",ax)
+end,"Primary",ax,nil,nil,nil,Color3.fromRGB(104,168,126))
 
 aA.AnchorPoint=Vector2.new(1,0.5)
 aA.Position=UDim2.new(1,0,0.5,0)
@@ -3045,18 +3045,20 @@ local ab=game:GetService"TweenService"
 
 local ac=aa.LocalPlayer
 
-local ad={}
-ad.IsPlaying=false
+local ad={
+IsPlaying=false,
+}
 
 local function Tween(ae,af,ag,ah,ai)
-local aj=TweenInfo.new(
+return ab:Create(
+ae,
+TweenInfo.new(
 af,
 ah or Enum.EasingStyle.Quint,
 ai or Enum.EasingDirection.Out
+),
+ag
 )
-
-return ab:Create(ae,aj,ag)
-
 end
 
 function ad.Show(ae)
@@ -3064,80 +3066,86 @@ ae=ae or{}
 
 local af=ae.Duration or 3.5
 local ag=ae.Title or"Loading xFuxk"
-ad.IsPlaying=true
-
+local ah=ae.Subtitle or"Key System"
 
 if ad.Gui then
 ad.Gui:Destroy()
-ad.Gui=nil
 end
 
-local ah=ac:WaitForChild"PlayerGui"
+ad.IsPlaying=true
 
-local ai=Instance.new"ScreenGui"
-ai.Name="xFuxkIntro"
-ai.IgnoreGuiInset=true
-ai.ResetOnSpawn=false
-ai.DisplayOrder=999999
-ai.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
-ai.Parent=ah
-
-ad.Gui=ai
-
-local aj=Instance.new"Frame"
-aj.Name="Container"
-aj.AnchorPoint=Vector2.new(0.5,0.5)
-aj.Position=UDim2.new(0.5,0,0.5,0)
-aj.Size=UDim2.fromOffset(270,80)
-aj.BackgroundTransparency=1
+local ai=ac:WaitForChild"PlayerGui"
+local aj=Instance.new"ScreenGui"
+aj.Name="xFuxkIntro"
+aj.IgnoreGuiInset=true
+aj.ResetOnSpawn=false
+aj.DisplayOrder=999999
+aj.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
 aj.Parent=ai
+ad.Gui=aj
 
-
-local ak=Instance.new"TextLabel"
-ak.Name="Title"
+local ak=Instance.new"Frame"
+ak.Name="Container"
+ak.AnchorPoint=Vector2.new(0.5,0.5)
+ak.Position=UDim2.new(0.5,0,0.5,0)
+ak.Size=UDim2.fromOffset(430,150)
+ak.BackgroundColor3=Color3.fromRGB(8,8,10)
 ak.BackgroundTransparency=1
-ak.AnchorPoint=Vector2.new(0,0.5)
-ak.Position=UDim2.new(0,-25,0,20)
-ak.Size=UDim2.fromOffset(205,28)
-ak.Font=Enum.Font.GothamSemibold
-ak.Text=ag
-ak.TextColor3=Color3.fromRGB(255,255,255)
-ak.TextSize=18
-ak.TextTransparency=1
-ak.TextXAlignment=Enum.TextXAlignment.Left
 ak.Parent=aj
 
-local al=Instance.new"TextLabel"
-al.Name="DisplayName"
-al.BackgroundTransparency=1
-al.AnchorPoint=Vector2.new(0,0.5)
-al.Position=UDim2.new(0,-25,0,47)
-al.Size=UDim2.fromOffset(205,24)
-al.Font=Enum.Font.Gotham
-al.Text="@"..ac.DisplayName
-al.TextColor3=Color3.fromRGB(255,255,255)
-al.TextSize=14
-al.TextTransparency=1
-al.TextXAlignment=Enum.TextXAlignment.Left
-al.Parent=aj
+local al=Instance.new"UICorner"
+al.CornerRadius=UDim.new(0,18)
+al.Parent=ak
 
+local am=Instance.new"UIStroke"
+am.Color=Color3.fromRGB(255,255,255)
+am.Thickness=1
+am.Transparency=1
+am.Parent=ak
 
-local am=Instance.new"ImageLabel"
-am.Name="Avatar"
-am.BackgroundTransparency=1
-am.AnchorPoint=Vector2.new(1,0.5)
-am.Position=UDim2.new(1,25,0.5,0)
-am.Size=UDim2.fromOffset(58,58)
-am.ImageTransparency=1
-am.Parent=aj
+local an=Instance.new"ImageLabel"
+an.Name="Avatar"
+an.AnchorPoint=Vector2.new(0,0.5)
+an.Position=UDim2.new(0,8,0.5,0)
+an.Size=UDim2.fromOffset(82,82)
+an.BackgroundTransparency=1
+an.ImageTransparency=1
+an.Parent=ak
 
-local an=Instance.new"UICorner"
-an.CornerRadius=UDim.new(1,0)
-an.Parent=am
+local ao=Instance.new"UICorner"
+ao.CornerRadius=UDim.new(1,0)
+ao.Parent=an
 
+local ap=Instance.new"TextLabel"
+ap.Name="Title"
+ap.AnchorPoint=Vector2.new(0,0.5)
+ap.Position=UDim2.new(0,92,0,62)
+ap.Size=UDim2.fromOffset(310,32)
+ap.BackgroundTransparency=1
+ap.Font=Enum.Font.GothamSemibold
+ap.Text=ag
+ap.TextColor3=Color3.fromRGB(255,255,255)
+ap.TextSize=20
+ap.TextTransparency=1
+ap.TextXAlignment=Enum.TextXAlignment.Left
+ap.Parent=ak
+
+local aq=Instance.new"TextLabel"
+aq.Name="Subtitle"
+aq.AnchorPoint=Vector2.new(0,0.5)
+aq.Position=UDim2.new(0,92,0,102)
+aq.Size=UDim2.fromOffset(310,24)
+aq.BackgroundTransparency=1
+aq.Font=Enum.Font.Gotham
+aq.Text=ah
+aq.TextColor3=Color3.fromRGB(255,255,255)
+aq.TextSize=14
+aq.TextTransparency=1
+aq.TextXAlignment=Enum.TextXAlignment.Left
+aq.Parent=ak
 
 task.spawn(function()
-local ao,ap=pcall(function()
+local ar,as=pcall(function()
 return aa:GetUserThumbnailAsync(
 ac.UserId,
 Enum.ThumbnailType.HeadShot,
@@ -3145,65 +3153,54 @@ Enum.ThumbnailSize.Size100x100
 )
 end)
 
-if ao and ad.Gui==ai then
-am.Image=ap
+if ar and ad.Gui==aj then
+an.Image=as
 end
 end)
 
-
-ak.Position=UDim2.new(0,-40,0,20)
-al.Position=UDim2.new(0,-40,0,47)
-am.Position=UDim2.new(1,40,0.5,0)
-
-
-Tween(ak,0.45,{
-Position=UDim2.new(0,0,0,20),
+Tween(ak,0.45,{BackgroundTransparency=0.08}):Play()
+Tween(am,0.45,{Transparency=0.78}):Play()
+Tween(an,0.45,{
+Position=UDim2.new(0,28,0.5,0),
+ImageTransparency=0,
+}):Play()
+Tween(ap,0.45,{
+Position=UDim2.new(0,122,0,62),
 TextTransparency=0,
 }):Play()
-
-Tween(al,0.45,{
-Position=UDim2.new(0,0,0,47),
+Tween(aq,0.45,{
+Position=UDim2.new(0,122,0,102),
 TextTransparency=0.15,
 }):Play()
 
-Tween(am,0.45,{
-Position=UDim2.new(1,0,0.5,0),
-ImageTransparency=0,
-}):Play()
-
-
 task.delay(af,function()
-if ad.Gui~=ai then
+if ad.Gui~=aj then
 return
 end
 
-
-Tween(ak,0.4,{
-Position=UDim2.new(0,-25,0,20),
-TextTransparency=1,
-},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
-
-Tween(al,0.4,{
-Position=UDim2.new(0,-25,0,47),
-TextTransparency=1,
-},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
-
-local ao=Tween(am,0.4,{
-Position=UDim2.new(1,25,0.5,0),
+Tween(ak,0.4,{BackgroundTransparency=1},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
+Tween(am,0.4,{Transparency=1},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
+Tween(an,0.4,{
+Position=UDim2.new(0,8,0.5,0),
 ImageTransparency=1,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
+Tween(ap,0.4,{
+Position=UDim2.new(0,92,0,62),
+TextTransparency=1,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
+local ar=Tween(aq,0.4,{
+Position=UDim2.new(0,92,0,102),
+TextTransparency=1,
 },Enum.EasingStyle.Quint,Enum.EasingDirection.In)
+ar:Play()
+ar.Completed:Wait()
 
-ao:Play()
-
-ao.Completed:Wait()
-
-if ad.Gui==ai then
-ai:Destroy()
+if ad.Gui==aj then
+aj:Destroy()
 ad.Gui=nil
 ad.IsPlaying=false
 end
 end)
-
 end
 
 function ad.Wait()
@@ -3213,16 +3210,15 @@ end
 end
 
 function ad.Hide()
-if not ad.Gui then
-return
-end
-
+if ad.Gui then
 ad.Gui:Destroy()
 ad.Gui=nil
+end
 ad.IsPlaying=false
 end
 
 return ad end function a.q()
+
 
 
 
@@ -13879,8 +13875,10 @@ local ay=a.load'ac'
 
 ao.Show{
 Duration=3.5,
-Title="Loading xFuxk",
+Title=(ax.KeySystem and ax.KeySystem.Title)or ax.Title or"Loading xFuxk",
+Subtitle="Key System",
 }
+ao.Wait()
 
 if not ak:IsStudio()and writefile then
 if not isfolder"WindUI"then
@@ -13993,7 +13991,6 @@ ax.OpenOnCreate=false
 local d=ay(ax)
 aa.Transparent=ax.Transparent
 aa.Window=d
-ao.Wait()
 d:Open()
 
 if ax.Acrylic then
