@@ -155,7 +155,7 @@ function ConfigManager:CreateConfig(configFilename, autoload)
     end
     
     function ConfigModule:SetAsCurrent()
-        Window:SetCurrentConfig(ConfigModule)
+        Window.CurrentConfig = ConfigModule
     end
     
     function ConfigModule:Register(Name, Element)

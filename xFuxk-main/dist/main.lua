@@ -2153,7 +2153,39 @@ return[[
         "concurrently": "^9.2.0"
     }
 }
-]]end function a.l()local aa={}local ab=a.load'c'local ac=ab.New local ad=ab.Tween function aa.New(ae,af,ag,ah,ai,aj,ak,al,am)ah=ah or"Primary"local an=al or(not ak and 10 or 99)local ao=am or(ae=="Confirm"and Color3.fromRGB(255,60,60))local ap if af and af~=""then ap=ac("ImageLabel",{Image=ab.Icon(af)[1],ImageRectSize=ab.Icon(af)[2].ImageRectSize,ImageRectOffset=ab.Icon(af)[2].ImageRectPosition,Size=UDim2.new(0,21,0,21),BackgroundTransparency=1,ImageColor3=ah=="White"and Color3.new(0,0,0)or nil,ImageTransparency=ah=="White"and 0.4 or 0,ThemeTag={ImageColor3=ah~="White"and"Icon"or nil,},})end local aq=ac("TextButton",{Size=UDim2.new(0,0,1,0),AutomaticSize="X",Parent=ai,BackgroundTransparency=1,
+]]end function a.l()
+
+local aa={}
+
+local ab=a.load'c'
+local ac=ab.New
+local ad=ab.Tween
+
+function aa.New(ae,af,ag,ah,ai,aj,ak,al,am)
+ah=ah or"Primary"
+local an=al or(not ak and 10 or 99)
+local ao=am or(ae=="Confirm"and Color3.fromRGB(255,60,60))
+local ap
+if af and af~=""then
+ap=ac("ImageLabel",{
+Image=ab.Icon(af)[1],
+ImageRectSize=ab.Icon(af)[2].ImageRectSize,
+ImageRectOffset=ab.Icon(af)[2].ImageRectPosition,
+Size=UDim2.new(0,21,0,21),
+BackgroundTransparency=1,
+ImageColor3=ah=="White"and Color3.new(0,0,0)or nil,
+ImageTransparency=ah=="White"and 0.4 or 0,
+ThemeTag={
+ImageColor3=ah~="White"and"Icon"or nil,
+},
+})
+end
+
+local aq=ac("TextButton",{
+Size=UDim2.new(0,0,1,0),
+AutomaticSize="X",
+Parent=ai,
+BackgroundTransparency=1,
 },{
 ab.NewRoundFrame(an,"Squircle",{
 ThemeTag={
@@ -4446,7 +4478,7 @@ return false,"No config file is selected"
 end
 
 function ai.SetAsCurrent(aj)
-ad:SetCurrentConfig(ai)
+ad.CurrentConfig=ai
 end
 
 function ai.Register(aj,ak,al)
