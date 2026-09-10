@@ -34,13 +34,18 @@ return {
 				config.ElementsModule = ElementsModule
 
 				local elementInstance, content = module:New(config)
+				local DataKey = config.Flag
+				if not DataKey and Window.DataSave then
+					DataKey = "__auto_" .. tostring(config.GlobalIndex) .. "_" .. tostring(content.__type)
+					content.__dataKey = DataKey
+				end
 
-				if config.Flag and typeof(config.Flag) == "string" then
+				if DataKey and typeof(DataKey) == "string" then
 					if Window.CurrentConfig then
-						Window.CurrentConfig:Register(config.Flag, content)
+						Window.CurrentConfig:Register(DataKey, content)
 
-						if Window.PendingConfigData and Window.PendingConfigData[config.Flag] then
-							local data = Window.PendingConfigData[config.Flag]
+						if Window.PendingConfigData and Window.PendingConfigData[DataKey] then
+							local data = Window.PendingConfigData[DataKey]
 
 							local ConfigManager = Window.ConfigManager
 							if ConfigManager.Parser[data.__type] then
@@ -50,11 +55,11 @@ return {
 									end)
 
 									if success then
-										Window.PendingConfigData[config.Flag] = nil
+										Window.PendingConfigData[DataKey] = nil
 									else
 										warn(
 											"[ WindUI ] Failed to apply pending config for '"
-												.. config.Flag
+													.. DataKey
 												.. "': "
 												.. tostring(err)
 										)
@@ -64,7 +69,7 @@ return {
 						end
 					else
 						Window.PendingFlags = Window.PendingFlags or {}
-						Window.PendingFlags[config.Flag] = content
+						Window.PendingFlags[DataKey] = content
 					end
 				end
 

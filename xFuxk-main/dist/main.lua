@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-09-08  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-09-09  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -4518,6 +4518,8 @@ __custom={}
 }
 al=am
 end
+
+ad.PendingConfigData=al.__elements or{}
 
 if ad.PendingFlags then
 for am,an in next,ad.PendingFlags do
@@ -9961,29 +9963,34 @@ ar.UIScale=am
 ar.ElementsModule=al local
 
 as, at=ap:New(ar)
+local au=ar.Flag
+if not au and ah.DataSave then
+au="__auto_"..tostring(ar.GlobalIndex).."_"..tostring(at.__type)
+at.__dataKey=au
+end
 
-if ar.Flag and typeof(ar.Flag)=="string"then
+if au and typeof(au)=="string"then
 if ah.CurrentConfig then
-ah.CurrentConfig:Register(ar.Flag,at)
+ah.CurrentConfig:Register(au,at)
 
-if ah.PendingConfigData and ah.PendingConfigData[ar.Flag]then
-local au=ah.PendingConfigData[ar.Flag]
+if ah.PendingConfigData and ah.PendingConfigData[au]then
+local av=ah.PendingConfigData[au]
 
-local av=ah.ConfigManager
-if av.Parser[au.__type]then
+local aw=ah.ConfigManager
+if aw.Parser[av.__type]then
 task.defer(function()
-local aw,ax=pcall(function()
-av.Parser[au.__type].Load(at,au)
+local ax,ay=pcall(function()
+aw.Parser[av.__type].Load(at,av)
 end)
 
-if aw then
-ah.PendingConfigData[ar.Flag]=nil
+if ax then
+ah.PendingConfigData[au]=nil
 else
 warn(
 "[ WindUI ] Failed to apply pending config for '"
-..ar.Flag
+..au
 .."': "
-..tostring(ax)
+..tostring(ay)
 )
 end
 end)
@@ -9991,37 +9998,37 @@ end
 end
 else
 ah.PendingFlags=ah.PendingFlags or{}
-ah.PendingFlags[ar.Flag]=at
+ah.PendingFlags[au]=at
 end
 end
 
-local au
-for av,aw in next,at do
-if typeof(aw)=="table"and av~="ElementFrame"and av:match"Frame$"then
-au=aw
+local av
+for aw,ax in next,at do
+if typeof(ax)=="table"and aw~="ElementFrame"and aw:match"Frame$"then
+av=ax
 break
 end
 end
 
-if au then
-at.ElementFrame=au.UIElements.Main
-function at.SetTitle(av,aw)
-return au.SetTitle and au:SetTitle(aw)
+if av then
+at.ElementFrame=av.UIElements.Main
+function at.SetTitle(aw,ax)
+return av.SetTitle and av:SetTitle(ax)
 end
-function at.SetDesc(av,aw)
-return au.SetDesc and au:SetDesc(aw)
+function at.SetDesc(aw,ax)
+return av.SetDesc and av:SetDesc(ax)
 end
-function at.SetImage(av,aw,ax)
-return au.SetImage and au:SetImage(aw,ax)
+function at.SetImage(aw,ax,ay)
+return av.SetImage and av:SetImage(ax,ay)
 end
-function at.SetThumbnail(av,aw,ax)
-return au.SetThumbnail and au:SetThumbnail(aw,ax)
+function at.SetThumbnail(aw,ax,ay)
+return av.SetThumbnail and av:SetThumbnail(ax,ay)
 end
-function at.Highlight(av)
-au:Highlight()
+function at.Highlight(aw)
+av:Highlight()
 end
-function at.Destroy(av)
-au:Destroy()
+function at.Destroy(aw)
+av:Destroy()
 
 table.remove(ah.AllElements,ar.GlobalIndex)
 table.remove(aa.Elements,ar.Index)
@@ -11577,7 +11584,7 @@ Icon=at.Icon,
 IconSize=at.IconSize or 22,
 IconThemed=at.IconThemed,
 IconRadius=at.IconRadius or 0,
-Folder=at.Folder,
+Folder=at.Folder or(at.DataSystem and at.DataSystem.DataSave and(at.Title or"UI Library")),
 Resizable=at.Resizable~=false,
 Background=at.Background,
 BackgroundImageTransparency=at.BackgroundImageTransparency or 0,
@@ -11606,6 +11613,7 @@ IgnoreAlerts=at.IgnoreAlerts or false,
 HidePanelBackground=at.HidePanelBackground or false,
 AutoScale=at.AutoScale~=false,
 OpenButton=at.OpenButton,
+DataSave=at.DataSystem and at.DataSystem.DataSave==true,
 DragFrameSize=160,
 
 Position=UDim2.new(0.5,0,0.5,0),
@@ -11686,6 +11694,21 @@ CornerRadius=UDim.new(0,au.UICorner),
 
 if au.Folder then
 au.ConfigManager=as:Init(au)
+if au.DataSave and au.ConfigManager then
+local ax=ah.LocalPlayer and ah.LocalPlayer.UserId or 0
+au.DataConfig=au.ConfigManager:CreateConfig("__autosave_"..tostring(ax),false)
+au.DataConfig:Load()
+
+local ay=au.DataConfig:Get"windowPosition"
+if ay then
+au.Position=UDim2.new(
+ay.xScale or 0.5,
+ay.xOffset or 0,
+ay.yScale or 0.5,
+ay.yOffset or 0
+)
+end
+end
 end
 
 if au.Acrylic then local
@@ -12888,6 +12911,7 @@ end)
 end
 function au.Close(z)
 local A={}
+au:SaveData()
 
 if au.OnCloseCallback then
 task.spawn(function()
@@ -13071,6 +13095,21 @@ end
 
 function au.SetCurrentConfig(z,A)
 au.CurrentConfig=A
+end
+
+function au.SaveData(z)
+if not au.DataSave or not au.DataConfig then
+return false
+end
+
+local A=au.UIElements.Main and au.UIElements.Main.Position or au.Position
+au.DataConfig:Set("windowPosition",{
+xScale=A.X.Scale,
+xOffset=A.X.Offset,
+yScale=A.Y.Scale,
+yOffset=A.Y.Offset,
+})
+return au.DataConfig:Save()
 end
 
 do

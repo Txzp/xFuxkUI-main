@@ -218,7 +218,7 @@ function ConfigManager:CreateConfig(configFilename, autoload)
         if not success then
             return false, "Failed to parse config file"
         end
-        
+
         if not loadData.__version then
             local migratedData = {
                 __version = ConfigModule.Version,
@@ -227,6 +227,8 @@ function ConfigManager:CreateConfig(configFilename, autoload)
             }
             loadData = migratedData
         end
+
+        Window.PendingConfigData = loadData.__elements or {}
         
         if Window.PendingFlags then
             for flag, element in next, Window.PendingFlags do

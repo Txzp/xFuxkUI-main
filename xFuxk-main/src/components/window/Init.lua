@@ -34,7 +34,7 @@ return function(Config)
 		IconSize = Config.IconSize or 22,
 		IconThemed = Config.IconThemed,
 		IconRadius = Config.IconRadius or 0,
-		Folder = Config.Folder,
+		Folder = Config.Folder or (Config.DataSystem and Config.DataSystem.DataSave and (Config.Title or "UI Library")),
 		Resizable = Config.Resizable ~= false,
 		Background = Config.Background,
 		BackgroundImageTransparency = Config.BackgroundImageTransparency or 0,
@@ -63,6 +63,7 @@ return function(Config)
 		HidePanelBackground = Config.HidePanelBackground or false,
 		AutoScale = Config.AutoScale ~= false,
 		OpenButton = Config.OpenButton,
+		DataSave = Config.DataSystem and Config.DataSystem.DataSave == true,
 		DragFrameSize = 160,
 
 		Position = UDim2.new(0.5, 0, 0.5, 0),
@@ -143,6 +144,21 @@ return function(Config)
 
 	if Window.Folder then
 		Window.ConfigManager = ConfigManager:Init(Window)
+		if Window.DataSave and Window.ConfigManager then
+			local UserId = Players.LocalPlayer and Players.LocalPlayer.UserId or 0
+			Window.DataConfig = Window.ConfigManager:CreateConfig("__autosave_" .. tostring(UserId), false)
+			Window.DataConfig:Load()
+
+			local PositionData = Window.DataConfig:Get("windowPosition")
+			if PositionData then
+				Window.Position = UDim2.new(
+					PositionData.xScale or 0.5,
+					PositionData.xOffset or 0,
+					PositionData.yScale or 0.5,
+					PositionData.yOffset or 0
+				)
+			end
+		end
 	end
 
 	if Window.Acrylic then
@@ -1345,6 +1361,7 @@ return function(Config)
 	end
 	function Window:Close()
 		local Close = {}
+		Window:SaveData()
 
 		if Window.OnCloseCallback then
 			task.spawn(function()
@@ -1528,6 +1545,21 @@ return function(Config)
 
 	function Window:SetCurrentConfig(ConfigModule)
 		Window.CurrentConfig = ConfigModule
+	end
+
+	function Window:SaveData()
+		if not Window.DataSave or not Window.DataConfig then
+			return false
+		end
+
+		local Position = Window.UIElements.Main and Window.UIElements.Main.Position or Window.Position
+		Window.DataConfig:Set("windowPosition", {
+			xScale = Position.X.Scale,
+			xOffset = Position.X.Offset,
+			yScale = Position.Y.Scale,
+			yOffset = Position.Y.Offset,
+		})
+		return Window.DataConfig:Save()
 	end
 
 	do
