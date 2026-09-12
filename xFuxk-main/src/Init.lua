@@ -41,8 +41,6 @@ if Package then
 end
 
 local KeySystem = require("src/components/KeySystem")
-local Intro = require("src/components/Intro")
-WindUI.Intro = Intro
 local Creator = WindUI.Creator
 
 local New = Creator.New
@@ -267,11 +265,6 @@ WindUI:SetLanguage(Creator.Language)
 function WindUI:CreateWindow(Config)
 	local CreateWindow = require("src/components/window/Init")
 
-	Intro.Show({
-		Duration = 3.5,
-		Title = Config.Title or "Loading xFuxk",
-	})
-
 	if not RunService:IsStudio() and writefile then
 		if not isfolder("WindUI") then
 			makefolder("WindUI")
@@ -309,7 +302,6 @@ function WindUI:CreateWindow(Config)
 		CanLoadWindow = false
 
 		local function loadKeysystem()
-			Intro.Wait()
 			KeySystem.new(Config, Filename, function(c)
 				CanLoadWindow = c
 			end)
@@ -380,9 +372,8 @@ function WindUI:CreateWindow(Config)
 		until CanLoadWindow
 	end
 
-	Intro.Wait()
 	Config.OpenOnCreate = false
-local Window = CreateWindow(Config)
+	local Window = CreateWindow(Config)
 	WindUI.Transparent = Config.Transparent
 	WindUI.Window = Window
 	Window:Open()
