@@ -3103,224 +3103,146 @@ end
 return aa end function a.p()
 
 local aa=game:GetService"Players"
-local ab=game:GetService"TweenService"
 
-local ac=aa.LocalPlayer
+local ab=aa.LocalPlayer
 
-local ad={}
-ad.IsPlaying=false
+local ac={}
+ac.IsPlaying=false
 
-local function Tween(ae,af,ag,ah,ai)
-local aj=TweenInfo.new(
-af,
-ah or Enum.EasingStyle.Quint,
-ai or Enum.EasingDirection.Out
-)
+function ac.Show(ad)
+ad=ad or{}
 
-return ab:Create(ae,aj,ag)
+local ae=ad.Duration or 3.5
+local af=ad.Title or"Loading xFuxk"
+
+ac.IsPlaying=true
+
+
+if ac.Gui then
+ac.Gui:Destroy()
+ac.Gui=nil
 end
 
-function ad.Show(ae)
-ae=ae or{}
+local ag=ab:WaitForChild"PlayerGui"
 
-local af=ae.Duration or 3.5
-local ag=ae.Title or"Loading xFuxk"
+local ah=Instance.new"ScreenGui"
+ah.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
+ah.Parent=ag
 
-ad.IsPlaying=true
+ac.Gui=ah
 
-
-if ad.Gui then
-ad.Gui:Destroy()
-ad.Gui=nil
-end
-
-local ah=ac:WaitForChild"PlayerGui"
-
-local ai=Instance.new"ScreenGui"
-ai.Name="xFuxkIntro"
-ai.IgnoreGuiInset=true
-ai.ResetOnSpawn=false
-ai.DisplayOrder=999999
-ai.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
+local ai=Instance.new"ImageLabel"
+ai.BorderSizePixel=0
+ai.BackgroundColor3=Color3.fromRGB(255,255,255)
+ai.ImageColor3=Color3.fromRGB(77,77,77)
+ai.AnchorPoint=Vector2.new(0.5,0.5)
+ai.Image="rbxassetid://90245988184263"
+ai.Size=UDim2.new(0.27686,0,0.27466,0)
+ai.BorderColor3=Color3.fromRGB(0,0,0)
+ai.BackgroundTransparency=1
+ai.Position=UDim2.new(0.46907,0,0.48089,0)
 ai.Parent=ah
 
-ad.Gui=ai
-
-
-local aj=Instance.new"Frame"
-aj.Name="Background"
-aj.Size=UDim2.fromScale(1,1)
-aj.Position=UDim2.fromScale(0,0)
-aj.BackgroundColor3=Color3.fromRGB(5,5,7)
-aj.BackgroundTransparency=0
+local aj=Instance.new"TextLabel"
+aj.TextWrapped=true
 aj.BorderSizePixel=0
+aj.TextSize=22
+aj.TextScaled=true
+aj.BackgroundColor3=Color3.fromRGB(255,255,255)
+aj.FontFace=Font.new("rbxasset://fonts/families/GothamSSm.json",Enum.FontWeight.ExtraBold,Enum.FontStyle.Normal)
+aj.TextColor3=Color3.fromRGB(255,255,255)
+aj.BackgroundTransparency=1
+aj.Size=UDim2.new(0.6821,0,0.22151,0)
+aj.BorderColor3=Color3.fromRGB(0,0,0)
+aj.Text=af
+aj.Name="Hubtitle"
+aj.Position=UDim2.new(0.29529,0,0.23209,0)
 aj.Parent=ai
 
-
-local ak=Instance.new"Frame"
-ak.Name="Container"
-ak.AnchorPoint=Vector2.new(0.5,0.5)
-ak.Position=UDim2.fromScale(0.5,0.5)
-ak.Size=UDim2.fromOffset(360,130)
-ak.BackgroundTransparency=1
+local ak=Instance.new"UIStroke"
+ak.Thickness=0.056
+ak.StrokeSizingMode=Enum.StrokeSizingMode.ScaledSize
 ak.Parent=aj
 
-
-local al=Instance.new"ImageLabel"
-al.Name="Avatar"
+local al=Instance.new"TextLabel"
+al.TextWrapped=true
+al.BorderSizePixel=0
+al.TextSize=14
+al.TextScaled=true
+al.BackgroundColor3=Color3.fromRGB(255,255,255)
+al.FontFace=Font.new("rbxasset://fonts/families/GothamSSm.json",Enum.FontWeight.ExtraBold,Enum.FontStyle.Normal)
+al.TextColor3=Color3.fromRGB(255,255,255)
 al.BackgroundTransparency=1
-al.AnchorPoint=Vector2.new(0.5,0.5)
-al.Position=UDim2.new(0.5,-110,0.5,0)
-al.Size=UDim2.fromOffset(86,86)
-al.ImageTransparency=0
-al.Parent=ak
+al.Size=UDim2.new(0.4513,0,0.25185,0)
+al.BorderColor3=Color3.fromRGB(0,0,0)
+al.Text="@"..ab.DisplayName
+al.Name="Hubtitle"
+al.Position=UDim2.new(0.34801,0,0.48667,0)
+al.Parent=ai
 
-local am=Instance.new"UICorner"
-am.CornerRadius=UDim.new(1,0)
+local am=Instance.new"UIStroke"
+am.Thickness=0.056
+am.StrokeSizingMode=Enum.StrokeSizingMode.ScaledSize
 am.Parent=al
 
-
-local an=Instance.new"TextLabel"
-an.Name="Title"
+local an=Instance.new"ImageLabel"
+an.Name="Avatar"
+an.BorderSizePixel=0
+an.BackgroundColor3=Color3.fromRGB(255,255,255)
+an.Image="rbxasset://textures/ui/GuiImagePlaceholder.png"
+an.Size=UDim2.new(0,81,0,79)
+an.BorderColor3=Color3.fromRGB(0,0,0)
 an.BackgroundTransparency=1
-an.AnchorPoint=Vector2.new(0,0.5)
-an.Position=UDim2.new(0.5,-58,0.5,-18)
-an.Size=UDim2.fromOffset(250,42)
-an.Font=Enum.Font.GothamBold
-an.Text=ag
-an.TextColor3=Color3.fromRGB(255,255,255)
-an.TextSize=28
-an.TextTransparency=0
-an.TextXAlignment=Enum.TextXAlignment.Left
-an.TextYAlignment=Enum.TextYAlignment.Center
-an.Parent=ak
+an.Position=UDim2.new(0.0415,0,0.28823,0)
+an.Parent=ai
 
-
-local ao=Instance.new"TextLabel"
-ao.Name="DisplayName"
-ao.BackgroundTransparency=1
-ao.AnchorPoint=Vector2.new(0,0.5)
-ao.Position=UDim2.new(0.5,-58,0.5,16)
-ao.Size=UDim2.fromOffset(250,26)
-ao.Font=Enum.Font.Gotham
-ao.Text="@"..ac.DisplayName
-ao.TextColor3=Color3.fromRGB(175,175,180)
-ao.TextSize=15
-ao.TextTransparency=0
-ao.TextXAlignment=Enum.TextXAlignment.Left
-ao.TextYAlignment=Enum.TextYAlignment.Center
-ao.Parent=ak
+local ao=Instance.new"UICorner"
+ao.CornerRadius=UDim.new(1,5)
+ao.Parent=an
 
 
 task.spawn(function()
 local ap,aq=pcall(function()
 return aa:GetUserThumbnailAsync(
-ac.UserId,
+ab.UserId,
 Enum.ThumbnailType.HeadShot,
 Enum.ThumbnailSize.Size100x100
 )
 end)
 
-if ap and ad.Gui==ai then
-al.Image=aq
+if ap and ac.Gui==ah then
+an.Image=aq
 end
 end)
 
-
-al.Position=UDim2.new(0.5,-125,0.5,0)
-al.ImageTransparency=1
-
-an.Position=UDim2.new(0.5,15,0.5,-18)
-an.TextTransparency=1
-
-ao.Position=UDim2.new(0.5,15,0.5,16)
-ao.TextTransparency=1
-
-
-Tween(al,0.5,{
-Position=UDim2.new(0.5,-110,0.5,0),
-ImageTransparency=0,
-}):Play()
-
-
-Tween(an,0.5,{
-Position=UDim2.new(0.5,-58,0.5,-18),
-TextTransparency=0,
-}):Play()
-
-Tween(ao,0.5,{
-Position=UDim2.new(0.5,-58,0.5,16),
-TextTransparency=0,
-}):Play()
-
-
-task.delay(af,function()
-if ad.Gui~=ai then
+task.delay(ae,function()
+if ac.Gui~=ah then
 return
 end
 
-
-local ap=Tween(
-al,
-0.4,
-{
-Position=UDim2.new(0.5,-125,0.5,0),
-ImageTransparency=1,
-},
-Enum.EasingStyle.Quint,
-Enum.EasingDirection.In
-)
-
-Tween(
-an,
-0.4,
-{
-Position=UDim2.new(0.5,15,0.5,-18),
-TextTransparency=1,
-},
-Enum.EasingStyle.Quint,
-Enum.EasingDirection.In
-):Play()
-
-Tween(
-ao,
-0.4,
-{
-Position=UDim2.new(0.5,15,0.5,16),
-TextTransparency=1,
-},
-Enum.EasingStyle.Quint,
-Enum.EasingDirection.In
-):Play()
-
-ap:Play()
-ap.Completed:Wait()
-
-if ad.Gui==ai then
-ai:Destroy()
-ad.Gui=nil
-ad.IsPlaying=false
-end
+ah:Destroy()
+ac.Gui=nil
+ac.IsPlaying=false
 end)
 end
 
-function ad.Wait()
-while ad.IsPlaying do
+function ac.Wait()
+while ac.IsPlaying do
 task.wait()
 end
 end
 
-function ad.Hide()
-if not ad.Gui then
+function ac.Hide()
+if not ac.Gui then
 return
 end
 
-ad.Gui:Destroy()
-ad.Gui=nil
-ad.IsPlaying=false
+ac.Gui:Destroy()
+ac.Gui=nil
+ac.IsPlaying=false
 end
 
-return ad end function a.q()
+return ac end function a.q()
 
 
 

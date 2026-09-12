@@ -1,20 +1,9 @@
 local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
 
 local LocalPlayer = Players.LocalPlayer
 
 local Intro = {}
 Intro.IsPlaying = false
-
-local function Tween(Object, Duration, Properties, EasingStyle, EasingDirection)
-	local TweenInfoObject = TweenInfo.new(
-		Duration,
-		EasingStyle or Enum.EasingStyle.Quint,
-		EasingDirection or Enum.EasingDirection.Out
-	)
-
-	return TweenService:Create(Object, TweenInfoObject, Properties)
-end
 
 function Intro.Show(Config)
 	Config = Config or {}
@@ -33,79 +22,79 @@ function Intro.Show(Config)
 	local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 	local Gui = Instance.new("ScreenGui")
-	Gui.Name = "xFuxkIntro"
-	Gui.IgnoreGuiInset = true
-	Gui.ResetOnSpawn = false
-	Gui.DisplayOrder = 999999
 	Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	Gui.Parent = PlayerGui
 
 	Intro.Gui = Gui
 
-	-- Fondo completo, sólido y sin transparencia
-	local Background = Instance.new("Frame")
-	Background.Name = "Background"
-	Background.Size = UDim2.fromScale(1, 1)
-	Background.Position = UDim2.fromScale(0, 0)
-	Background.BackgroundColor3 = Color3.fromRGB(5, 5, 7)
-	Background.BackgroundTransparency = 0
-	Background.BorderSizePixel = 0
-	Background.Parent = Gui
-
-	-- Contenedor pequeño para el contenido central
-	local Container = Instance.new("Frame")
-	Container.Name = "Container"
+	local Container = Instance.new("ImageLabel")
+	Container.BorderSizePixel = 0
+	Container.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Container.ImageColor3 = Color3.fromRGB(77, 77, 77)
 	Container.AnchorPoint = Vector2.new(0.5, 0.5)
-	Container.Position = UDim2.fromScale(0.5, 0.5)
-	Container.Size = UDim2.fromOffset(360, 130)
+	Container.Image = "rbxassetid://90245988184263"
+	Container.Size = UDim2.new(0.27686, 0, 0.27466, 0)
+	Container.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Container.BackgroundTransparency = 1
-	Container.Parent = Background
+	Container.Position = UDim2.new(0.46907, 0, 0.48089, 0)
+	Container.Parent = Gui
 
-	-- Avatar
+	local TitleLabel = Instance.new("TextLabel")
+	TitleLabel.TextWrapped = true
+	TitleLabel.BorderSizePixel = 0
+	TitleLabel.TextSize = 22
+	TitleLabel.TextScaled = true
+	TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	TitleLabel.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.ExtraBold, Enum.FontStyle.Normal)
+	TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	TitleLabel.BackgroundTransparency = 1
+	TitleLabel.Size = UDim2.new(0.6821, 0, 0.22151, 0)
+	TitleLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	TitleLabel.Text = Title
+	TitleLabel.Name = "Hubtitle"
+	TitleLabel.Position = UDim2.new(0.29529, 0, 0.23209, 0)
+	TitleLabel.Parent = Container
+
+	local TitleStroke = Instance.new("UIStroke")
+	TitleStroke.Thickness = 0.056
+	TitleStroke.StrokeSizingMode = Enum.StrokeSizingMode.ScaledSize
+	TitleStroke.Parent = TitleLabel
+
+	local DisplayName = Instance.new("TextLabel")
+	DisplayName.TextWrapped = true
+	DisplayName.BorderSizePixel = 0
+	DisplayName.TextSize = 14
+	DisplayName.TextScaled = true
+	DisplayName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	DisplayName.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.ExtraBold, Enum.FontStyle.Normal)
+	DisplayName.TextColor3 = Color3.fromRGB(255, 255, 255)
+	DisplayName.BackgroundTransparency = 1
+	DisplayName.Size = UDim2.new(0.4513, 0, 0.25185, 0)
+	DisplayName.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	DisplayName.Text = "@" .. LocalPlayer.DisplayName
+	DisplayName.Name = "Hubtitle"
+	DisplayName.Position = UDim2.new(0.34801, 0, 0.48667, 0)
+	DisplayName.Parent = Container
+
+	local DisplayNameStroke = Instance.new("UIStroke")
+	DisplayNameStroke.Thickness = 0.056
+	DisplayNameStroke.StrokeSizingMode = Enum.StrokeSizingMode.ScaledSize
+	DisplayNameStroke.Parent = DisplayName
+
 	local Avatar = Instance.new("ImageLabel")
 	Avatar.Name = "Avatar"
+	Avatar.BorderSizePixel = 0
+	Avatar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Avatar.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+	Avatar.Size = UDim2.new(0, 81, 0, 79)
+	Avatar.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Avatar.BackgroundTransparency = 1
-	Avatar.AnchorPoint = Vector2.new(0.5, 0.5)
-	Avatar.Position = UDim2.new(0.5, -110, 0.5, 0)
-	Avatar.Size = UDim2.fromOffset(86, 86)
-	Avatar.ImageTransparency = 0
+	Avatar.Position = UDim2.new(0.0415, 0, 0.28823, 0)
 	Avatar.Parent = Container
 
 	local AvatarCorner = Instance.new("UICorner")
-	AvatarCorner.CornerRadius = UDim.new(1, 0)
+	AvatarCorner.CornerRadius = UDim.new(1, 5)
 	AvatarCorner.Parent = Avatar
-
-	-- Título
-	local TitleLabel = Instance.new("TextLabel")
-	TitleLabel.Name = "Title"
-	TitleLabel.BackgroundTransparency = 1
-	TitleLabel.AnchorPoint = Vector2.new(0, 0.5)
-	TitleLabel.Position = UDim2.new(0.5, -58, 0.5, -18)
-	TitleLabel.Size = UDim2.fromOffset(250, 42)
-	TitleLabel.Font = Enum.Font.GothamBold
-	TitleLabel.Text = Title
-	TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-	TitleLabel.TextSize = 28
-	TitleLabel.TextTransparency = 0
-	TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-	TitleLabel.TextYAlignment = Enum.TextYAlignment.Center
-	TitleLabel.Parent = Container
-
-	-- Display name
-	local DisplayName = Instance.new("TextLabel")
-	DisplayName.Name = "DisplayName"
-	DisplayName.BackgroundTransparency = 1
-	DisplayName.AnchorPoint = Vector2.new(0, 0.5)
-	DisplayName.Position = UDim2.new(0.5, -58, 0.5, 16)
-	DisplayName.Size = UDim2.fromOffset(250, 26)
-	DisplayName.Font = Enum.Font.Gotham
-	DisplayName.Text = "@" .. LocalPlayer.DisplayName
-	DisplayName.TextColor3 = Color3.fromRGB(175, 175, 180)
-	DisplayName.TextSize = 15
-	DisplayName.TextTransparency = 0
-	DisplayName.TextXAlignment = Enum.TextXAlignment.Left
-	DisplayName.TextYAlignment = Enum.TextYAlignment.Center
-	DisplayName.Parent = Container
 
 	-- Obtener avatar
 	task.spawn(function()
@@ -122,81 +111,14 @@ function Intro.Show(Config)
 		end
 	end)
 
-	-- Posiciones iniciales para la entrada
-	Avatar.Position = UDim2.new(0.5, -125, 0.5, 0)
-	Avatar.ImageTransparency = 1
-
-	TitleLabel.Position = UDim2.new(0.5, 15, 0.5, -18)
-	TitleLabel.TextTransparency = 1
-
-	DisplayName.Position = UDim2.new(0.5, 15, 0.5, 16)
-	DisplayName.TextTransparency = 1
-
-	-- Entrada del avatar
-	Tween(Avatar, 0.5, {
-		Position = UDim2.new(0.5, -110, 0.5, 0),
-		ImageTransparency = 0,
-	}):Play()
-
-	-- Entrada del texto
-	Tween(TitleLabel, 0.5, {
-		Position = UDim2.new(0.5, -58, 0.5, -18),
-		TextTransparency = 0,
-	}):Play()
-
-	Tween(DisplayName, 0.5, {
-		Position = UDim2.new(0.5, -58, 0.5, 16),
-		TextTransparency = 0,
-	}):Play()
-
-	-- Duración total de la intro
 	task.delay(Duration, function()
 		if Intro.Gui ~= Gui then
 			return
 		end
 
-		-- Salida del contenido
-		local AvatarTween = Tween(
-			Avatar,
-			0.4,
-			{
-				Position = UDim2.new(0.5, -125, 0.5, 0),
-				ImageTransparency = 1,
-			},
-			Enum.EasingStyle.Quint,
-			Enum.EasingDirection.In
-		)
-
-		Tween(
-			TitleLabel,
-			0.4,
-			{
-				Position = UDim2.new(0.5, 15, 0.5, -18),
-				TextTransparency = 1,
-			},
-			Enum.EasingStyle.Quint,
-			Enum.EasingDirection.In
-		):Play()
-
-		Tween(
-			DisplayName,
-			0.4,
-			{
-				Position = UDim2.new(0.5, 15, 0.5, 16),
-				TextTransparency = 1,
-			},
-			Enum.EasingStyle.Quint,
-			Enum.EasingDirection.In
-		):Play()
-
-		AvatarTween:Play()
-		AvatarTween.Completed:Wait()
-
-		if Intro.Gui == Gui then
-			Gui:Destroy()
-			Intro.Gui = nil
-			Intro.IsPlaying = false
-		end
+		Gui:Destroy()
+		Intro.Gui = nil
+		Intro.IsPlaying = false
 	end)
 end
 
