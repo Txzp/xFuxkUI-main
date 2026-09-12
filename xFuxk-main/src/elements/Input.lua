@@ -85,6 +85,9 @@ function Element:New(Config)
     function Input:Set(v, IsUserInput)
         if CanCallback then
             Input.Value = v
+            if Config.Window.ConfigManager then
+                Config.Window.ConfigManager:MarkDirty()
+            end
             Creator.SafeCallback(Input.Callback, v)
             
             if not IsUserInput then

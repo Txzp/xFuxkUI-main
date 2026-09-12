@@ -92,6 +92,9 @@ function Element:New(Config)
         local normalizedValue = NormalizeKeyCode(v)
         Keybind.Value = normalizedValue
         Keybind.UIElements.Keybind.Frame.Frame.TextLabel.Text = normalizedValue
+        if Config.Window.ConfigManager then
+            Config.Window.ConfigManager:MarkDirty()
+        end
     end
     
     if Keybind.Locked then
@@ -125,6 +128,9 @@ function Element:New(Config)
                             
                             Keybind.UIElements.Keybind.Frame.Frame.TextLabel.Text = Key
                             Keybind.Value = Key
+                            if Config.Window.ConfigManager then
+                                Config.Window.ConfigManager:MarkDirty()
+                            end
                             
                             Event:Disconnect()
                             EndedEvent:Disconnect()

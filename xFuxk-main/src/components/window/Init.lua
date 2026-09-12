@@ -98,6 +98,10 @@ return function(Config)
 		ElementConfig = {},
 
 		PendingFlags = {},
+		DataKeyCounts = {},
+		DataDirty = false,
+		DataSaveTask = nil,
+		DataLoading = false,
 
 		IsToggleDragging = false,
 	}
@@ -1042,6 +1046,9 @@ return function(Config)
 				end
 				Window.Position = Window.UIElements.Main.Position
 				Window.Dragging = dragging
+				if Window.ConfigManager then
+					Window.ConfigManager:MarkDirty()
+				end
 			end
 		end
 	)
@@ -1551,6 +1558,7 @@ return function(Config)
 		if not Window.DataSave or not Window.DataConfig then
 			return false
 		end
+		Window.DataSaveTask = nil
 
 		local Position = Window.UIElements.Main and Window.UIElements.Main.Position or Window.Position
 		Window.DataConfig:Set("windowPosition", {
@@ -1559,7 +1567,9 @@ return function(Config)
 			yScale = Position.Y.Scale,
 			yOffset = Position.Y.Offset,
 		})
-		return Window.DataConfig:Save()
+		local result = Window.DataConfig:Save()
+		Window.DataDirty = false
+		return result
 	end
 
 	do

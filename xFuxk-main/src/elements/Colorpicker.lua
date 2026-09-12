@@ -689,6 +689,9 @@ function Element:New(Config)
         if Transparency then
             Colorpicker.Transparency = Transparency
         end
+        if Config.Window.ConfigManager then
+            Config.Window.ConfigManager:MarkDirty()
+        end
     end
     
     function Colorpicker:Set(c,t)

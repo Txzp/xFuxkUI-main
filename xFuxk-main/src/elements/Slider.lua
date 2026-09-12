@@ -233,6 +233,7 @@ function Element:New(Config)
                         if Tooltip then Tooltip.TitleFrame.Text = FormatValue(Value) end
                         Slider.Value.Default = FormatValue(Value)
                         LastValue = Value
+                        if Config.Window.ConfigManager then Config.Window.ConfigManager:MarkDirty() end
                         Creator.SafeCallback(Slider.Callback, FormatValue(Value))
                     end
                     
@@ -247,6 +248,7 @@ function Element:New(Config)
                             if Tooltip then Tooltip.TitleFrame.Text = FormatValue(Value) end
                             Slider.Value.Default = FormatValue(Value)
                             LastValue = Value
+                            if Config.Window.ConfigManager then Config.Window.ConfigManager:MarkDirty() end
                             Creator.SafeCallback(Slider.Callback, FormatValue(Value))
                         end
                     end)
@@ -276,6 +278,7 @@ function Element:New(Config)
                         if Tooltip then Tooltip.TitleFrame.Text = FormatValue(Value) end
                         Slider.Value.Default = FormatValue(Value)
                         LastValue = Value
+                        if Config.Window.ConfigManager then Config.Window.ConfigManager:MarkDirty() end
                         Creator.SafeCallback(Slider.Callback, FormatValue(Value))
                     end
                 end

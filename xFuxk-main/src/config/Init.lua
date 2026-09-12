@@ -23,6 +23,11 @@ ConfigManager = {
             Load = function(element, data)
                 if element and element.Update then
                     element:Update(Color3.fromHex(data.value), data.transparency or nil)
+                    if element.Callback then
+                        task.spawn(function()
+                            pcall(element.Callback, element.Default, element.Transparency)
+                        end)
+                    end
                 end
             end
         },
@@ -36,6 +41,11 @@ ConfigManager = {
             Load = function(element, data)
                 if element and element.Select then
                     element:Select(data.value)
+                    if element.Callback then
+                        task.spawn(function()
+                            pcall(element.Callback, element.Value)
+                        end)
+                    end
                 end
             end
         },
@@ -105,6 +115,8 @@ function ConfigManager:Init(WindowTable)
     end
     
     Window = WindowTable
+    Window.DataKeyCounts = {}
+    Window.DataLoading = false
     ConfigManager.Folder = Window.Folder
     ConfigManager.Path = "WindUI/" .. tostring(ConfigManager.Folder) .. "/config/"
     
@@ -228,6 +240,7 @@ function ConfigManager:CreateConfig(configFilename, autoload)
             loadData = migratedData
         end
 
+        Window.DataLoading = true
         Window.PendingConfigData = loadData.__elements or {}
         
         if Window.PendingFlags then
@@ -245,6 +258,7 @@ function ConfigManager:CreateConfig(configFilename, autoload)
         end
         
         ConfigModule.CustomData = loadData.__custom or {}
+        Window.DataLoading = false
         
         return ConfigModule.CustomData
     end
@@ -310,6 +324,24 @@ function ConfigManager:CreateConfig(configFilename, autoload)
     ConfigModule:SetAsCurrent()
     ConfigManager.Configs[configFilename] = ConfigModule
     return ConfigModule
+end
+
+function ConfigManager:MarkDirty()
+    if not Window or not Window.DataSave or Window.DataLoading then
+        return
+    end
+
+    Window.DataDirty = true
+    if Window.DataSaveTask then
+        return
+    end
+
+    Window.DataSaveTask = task.delay(0.35, function()
+        Window.DataSaveTask = nil
+        if Window.DataDirty then
+            Window:SaveData()
+        end
+    end)
 end
 
 function ConfigManager:Config(configFilename, autoload)

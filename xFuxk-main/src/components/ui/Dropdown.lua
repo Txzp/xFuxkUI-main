@@ -171,6 +171,9 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 
 	local function Callback(customCallback)
 		DropdownModule:Display()
+		if Config.Window.ConfigManager then
+			Config.Window.ConfigManager:MarkDirty()
+		end
 		if Dropdown.Callback then
 			task.spawn(function()
 				Creator.SafeCallback(Dropdown.Callback, Dropdown.Value)
@@ -593,6 +596,9 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 			end
 		end
 		DropdownModule:Refresh(Dropdown.Values)
+		if Config.Window.ConfigManager then
+			Config.Window.ConfigManager:MarkDirty()
+		end
 	end
 
 	RecalculateListSize()

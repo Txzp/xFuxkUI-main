@@ -19,6 +19,29 @@ return {
 		--Video       = require("./Video"),
 	},
 	Load = function(tbl, Container, Elements, Window, WindUI, OnElementCreateFunction, ElementsModule, UIScale, Tab)
+		local function DataSegment(value)
+			local segment = tostring(value or "")
+			segment = segment:gsub("[^%w]+", "_")
+			segment = segment:gsub("^_+", ""):gsub("_+$", "")
+			return segment
+		end
+
+		local function GetAutomaticDataKey(config, content)
+			local tabTitle = Tab and Tab.Title or "Tab"
+			local parentTitle = tbl ~= Tab and tbl.Title or nil
+			local parts = { DataSegment(tabTitle) }
+			if parentTitle then
+				table.insert(parts, DataSegment(parentTitle))
+			end
+			table.insert(parts, DataSegment(content.__type))
+			table.insert(parts, DataSegment(content.Title))
+
+			local base = "__auto/" .. table.concat(parts, "/")
+			local count = (Window.DataKeyCounts[base] or 0) + 1
+			Window.DataKeyCounts[base] = count
+			return count == 1 and base or base .. "_" .. tostring(count)
+		end
+
 		for name, module in next, Elements do
 			tbl[name] = function(self, config)
 				config = config or {}
@@ -36,7 +59,7 @@ return {
 				local elementInstance, content = module:New(config)
 				local DataKey = config.Flag
 				if not DataKey and Window.DataSave then
-					DataKey = "__auto_" .. tostring(config.GlobalIndex) .. "_" .. tostring(content.__type)
+					DataKey = GetAutomaticDataKey(config, content)
 					content.__dataKey = DataKey
 				end
 
@@ -44,8 +67,12 @@ return {
 					if Window.CurrentConfig then
 						Window.CurrentConfig:Register(DataKey, content)
 
-						if Window.PendingConfigData and Window.PendingConfigData[DataKey] then
-							local data = Window.PendingConfigData[DataKey]
+						local PendingKey = DataKey
+						if Window.PendingConfigData and not Window.PendingConfigData[PendingKey] and config.GlobalIndex then
+							PendingKey = "__auto_" .. tostring(config.GlobalIndex) .. "_" .. tostring(content.__type)
+						end
+					if Window.PendingConfigData and Window.PendingConfigData[PendingKey] then
+							local data = Window.PendingConfigData[PendingKey]
 
 							local ConfigManager = Window.ConfigManager
 							if ConfigManager.Parser[data.__type] then
@@ -55,7 +82,7 @@ return {
 									end)
 
 									if success then
-										Window.PendingConfigData[DataKey] = nil
+										Window.PendingConfigData[PendingKey] = nil
 									else
 										warn(
 											"[ WindUI ] Failed to apply pending config for '"

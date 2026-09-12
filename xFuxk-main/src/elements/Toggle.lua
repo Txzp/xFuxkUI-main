@@ -80,6 +80,9 @@ function Element:New(Config)
             ToggleFunc:Set(v, isCallback, isAnim or false)
             Toggled = v
             Toggle.Value = v
+            if Config.Window.ConfigManager then
+                Config.Window.ConfigManager:MarkDirty()
+            end
         end
     end
 

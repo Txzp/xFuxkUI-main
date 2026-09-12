@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-09-09  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-09-11  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -3118,7 +3118,6 @@ ai or Enum.EasingDirection.Out
 )
 
 return ab:Create(ae,aj,ag)
-
 end
 
 function ad.Show(ae)
@@ -3126,6 +3125,7 @@ ae=ae or{}
 
 local af=ae.Duration or 3.5
 local ag=ae.Title or"Loading xFuxk"
+
 ad.IsPlaying=true
 
 
@@ -3146,71 +3146,74 @@ ai.Parent=ah
 
 ad.Gui=ai
 
+
 local aj=Instance.new"Frame"
-aj.Name="Container"
-aj.AnchorPoint=Vector2.new(0.5,0.5)
-aj.Position=UDim2.new(0.5,0,0.5,0)
-aj.Size=UDim2.fromOffset(330,100)
-aj.BackgroundColor3=Color3.fromRGB(8,8,10)
-aj.BackgroundTransparency=0.08
+aj.Name="Background"
+aj.Size=UDim2.fromScale(1,1)
+aj.Position=UDim2.fromScale(0,0)
+aj.BackgroundColor3=Color3.fromRGB(5,5,7)
+aj.BackgroundTransparency=0
+aj.BorderSizePixel=0
 aj.Parent=ai
 
-local ak=Instance.new"UICorner"
-ak.CornerRadius=UDim.new(0,14)
+
+local ak=Instance.new"Frame"
+ak.Name="Container"
+ak.AnchorPoint=Vector2.new(0.5,0.5)
+ak.Position=UDim2.fromScale(0.5,0.5)
+ak.Size=UDim2.fromOffset(360,130)
+ak.BackgroundTransparency=1
 ak.Parent=aj
 
-local al=Instance.new"UIStroke"
-al.Color=Color3.fromRGB(255,255,255)
-al.Thickness=1
-al.Transparency=0.78
-al.Parent=aj
 
+local al=Instance.new"ImageLabel"
+al.Name="Avatar"
+al.BackgroundTransparency=1
+al.AnchorPoint=Vector2.new(0.5,0.5)
+al.Position=UDim2.new(0.5,-110,0.5,0)
+al.Size=UDim2.fromOffset(86,86)
+al.ImageTransparency=0
+al.Parent=ak
 
-local am=Instance.new"TextLabel"
-am.Name="Title"
-am.BackgroundTransparency=1
-am.AnchorPoint=Vector2.new(0,0.5)
-am.Position=UDim2.new(0,-40,0,28)
-am.Size=UDim2.fromOffset(240,28)
-am.Font=Enum.Font.GothamSemibold
-am.Text=ag
-am.TextColor3=Color3.fromRGB(255,255,255)
-am.TextSize=18
-am.TextTransparency=0
-am.TextXAlignment=Enum.TextXAlignment.Left
-am.Parent=aj
+local am=Instance.new"UICorner"
+am.CornerRadius=UDim.new(1,0)
+am.Parent=al
+
 
 local an=Instance.new"TextLabel"
-an.Name="DisplayName"
+an.Name="Title"
 an.BackgroundTransparency=1
 an.AnchorPoint=Vector2.new(0,0.5)
-an.Position=UDim2.new(0,-40,0,62)
-an.Size=UDim2.fromOffset(240,24)
-an.Font=Enum.Font.Gotham
-an.Text="@"..ac.DisplayName
+an.Position=UDim2.new(0.5,-58,0.5,-18)
+an.Size=UDim2.fromOffset(250,42)
+an.Font=Enum.Font.GothamBold
+an.Text=ag
 an.TextColor3=Color3.fromRGB(255,255,255)
-an.TextSize=14
-an.TextTransparency=0.15
+an.TextSize=28
+an.TextTransparency=0
 an.TextXAlignment=Enum.TextXAlignment.Left
-an.Parent=aj
+an.TextYAlignment=Enum.TextYAlignment.Center
+an.Parent=ak
 
 
-local ao=Instance.new"ImageLabel"
-ao.Name="Avatar"
+local ao=Instance.new"TextLabel"
+ao.Name="DisplayName"
 ao.BackgroundTransparency=1
 ao.AnchorPoint=Vector2.new(0,0.5)
-ao.Position=UDim2.new(0,-28,0.5,0)
-ao.Size=UDim2.fromOffset(58,58)
-ao.ImageTransparency=0
-ao.Parent=aj
-
-local ap=Instance.new"UICorner"
-ap.CornerRadius=UDim.new(1,0)
-ap.Parent=ao
+ao.Position=UDim2.new(0.5,-58,0.5,16)
+ao.Size=UDim2.fromOffset(250,26)
+ao.Font=Enum.Font.Gotham
+ao.Text="@"..ac.DisplayName
+ao.TextColor3=Color3.fromRGB(175,175,180)
+ao.TextSize=15
+ao.TextTransparency=0
+ao.TextXAlignment=Enum.TextXAlignment.Left
+ao.TextYAlignment=Enum.TextYAlignment.Center
+ao.Parent=ak
 
 
 task.spawn(function()
-local aq,ar=pcall(function()
+local ap,aq=pcall(function()
 return aa:GetUserThumbnailAsync(
 ac.UserId,
 Enum.ThumbnailType.HeadShot,
@@ -3218,27 +3221,36 @@ Enum.ThumbnailSize.Size100x100
 )
 end)
 
-if aq and ad.Gui==ai then
-ao.Image=ar
+if ap and ad.Gui==ai then
+al.Image=aq
 end
 end)
 
 
-am.Position=UDim2.new(0,-40,0,28)
-an.Position=UDim2.new(0,-40,0,62)
-ao.Position=UDim2.new(0,-28,0.5,0)
+al.Position=UDim2.new(0.5,-125,0.5,0)
+al.ImageTransparency=1
+
+an.Position=UDim2.new(0.5,15,0.5,-18)
+an.TextTransparency=1
+
+ao.Position=UDim2.new(0.5,15,0.5,16)
+ao.TextTransparency=1
 
 
-Tween(am,0.45,{
-Position=UDim2.new(0,82,0,28),
+Tween(al,0.5,{
+Position=UDim2.new(0.5,-110,0.5,0),
+ImageTransparency=0,
 }):Play()
 
-Tween(an,0.45,{
-Position=UDim2.new(0,82,0,62),
+
+Tween(an,0.5,{
+Position=UDim2.new(0.5,-58,0.5,-18),
+TextTransparency=0,
 }):Play()
 
-Tween(ao,0.45,{
-Position=UDim2.new(0,12,0.5,0),
+Tween(ao,0.5,{
+Position=UDim2.new(0.5,-58,0.5,16),
+TextTransparency=0,
 }):Play()
 
 
@@ -3248,32 +3260,41 @@ return
 end
 
 
-Tween(aj,0.4,{
-BackgroundTransparency=1,
-},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
-
-Tween(al,0.4,{
-Transparency=1,
-},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
-
-Tween(am,0.4,{
-Position=UDim2.new(0,42,0,28),
-TextTransparency=1,
-},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
-
-Tween(an,0.4,{
-Position=UDim2.new(0,42,0,62),
-TextTransparency=1,
-},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
-
-local aq=Tween(ao,0.4,{
-Position=UDim2.new(0,-28,0.5,0),
+local ap=Tween(
+al,
+0.4,
+{
+Position=UDim2.new(0.5,-125,0.5,0),
 ImageTransparency=1,
-},Enum.EasingStyle.Quint,Enum.EasingDirection.In)
+},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.In
+)
 
-aq:Play()
+Tween(
+an,
+0.4,
+{
+Position=UDim2.new(0.5,15,0.5,-18),
+TextTransparency=1,
+},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.In
+):Play()
 
-aq.Completed:Wait()
+Tween(
+ao,
+0.4,
+{
+Position=UDim2.new(0.5,15,0.5,16),
+TextTransparency=1,
+},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.In
+):Play()
+
+ap:Play()
+ap.Completed:Wait()
 
 if ad.Gui==ai then
 ai:Destroy()
@@ -3281,7 +3302,6 @@ ad.Gui=nil
 ad.IsPlaying=false
 end
 end)
-
 end
 
 function ad.Wait()
@@ -4346,6 +4366,11 @@ end,
 Load=function(af,ag)
 if af and af.Update then
 af:Update(Color3.fromHex(ag.value),ag.transparency or nil)
+if af.Callback then
+task.spawn(function()
+pcall(af.Callback,af.Default,af.Transparency)
+end)
+end
 end
 end
 },
@@ -4359,6 +4384,11 @@ end,
 Load=function(af,ag)
 if af and af.Select then
 af:Select(ag.value)
+if af.Callback then
+task.spawn(function()
+pcall(af.Callback,af.Value)
+end)
+end
 end
 end
 },
@@ -4428,6 +4458,8 @@ return false
 end
 
 ad=ag
+ad.DataKeyCounts={}
+ad.DataLoading=false
 ae.Folder=ad.Folder
 ae.Path="WindUI/"..tostring(ae.Folder).."/config/"
 
@@ -4551,6 +4583,7 @@ __custom={}
 al=am
 end
 
+ad.DataLoading=true
 ad.PendingConfigData=al.__elements or{}
 
 if ad.PendingFlags then
@@ -4568,6 +4601,7 @@ end
 end
 
 ai.CustomData=al.__custom or{}
+ad.DataLoading=false
 
 return ai.CustomData
 end
@@ -4633,6 +4667,24 @@ end
 ai:SetAsCurrent()
 ae.Configs[ag]=ai
 return ai
+end
+
+function ae.MarkDirty(af)
+if not ad or not ad.DataSave or ad.DataLoading then
+return
+end
+
+ad.DataDirty=true
+if ad.DataSaveTask then
+return
+end
+
+ad.DataSaveTask=task.delay(0.35,function()
+ad.DataSaveTask=nil
+if ad.DataDirty then
+ad:SaveData()
+end
+end)
 end
 
 function ae.Config(af,ag,ah)
@@ -6610,6 +6662,9 @@ if aj then
 am:Set(ao,ap,aq or false)
 ak=ao
 ai.Value=ao
+if ah.Window.ConfigManager then
+ah.Window.ConfigManager:MarkDirty()
+end
 end
 end
 
@@ -6880,6 +6935,7 @@ al.UIElements.SliderContainer.TextBox.Text=FormatValue(aA)
 if ax then ax.TitleFrame.Text=FormatValue(aA)end
 al.Value.Default=FormatValue(aA)
 aq=aA
+if ak.Window.ConfigManager then ak.Window.ConfigManager:MarkDirty()end
 ae.SafeCallback(al.Callback,FormatValue(aA))
 end
 
@@ -6894,6 +6950,7 @@ al.UIElements.SliderContainer.TextBox.Text=FormatValue(aA)
 if ax then ax.TitleFrame.Text=FormatValue(aA)end
 al.Value.Default=FormatValue(aA)
 aq=aA
+if ak.Window.ConfigManager then ak.Window.ConfigManager:MarkDirty()end
 ae.SafeCallback(al.Callback,FormatValue(aA))
 end
 end)
@@ -6923,6 +6980,7 @@ al.UIElements.SliderContainer.TextBox.Text=FormatValue(aA)
 if ax then ax.TitleFrame.Text=FormatValue(aA)end
 al.Value.Default=FormatValue(aA)
 aq=aA
+if ak.Window.ConfigManager then ak.Window.ConfigManager:MarkDirty()end
 ae.SafeCallback(al.Callback,FormatValue(aA))
 end
 end
@@ -7080,6 +7138,9 @@ function ak.Set(am,an)
 local ao=NormalizeKeyCode(an)
 ak.Value=ao
 ak.UIElements.Keybind.Frame.Frame.TextLabel.Text=ao
+if aj.Window.ConfigManager then
+aj.Window.ConfigManager:MarkDirty()
+end
 end
 
 if ak.Locked then
@@ -7113,6 +7174,9 @@ ak.Picking=false
 
 ak.UIElements.Keybind.Frame.Frame.TextLabel.Text=ao
 ak.Value=ao
+if aj.Window.ConfigManager then
+aj.Window.ConfigManager:MarkDirty()
+end
 
 am:Disconnect()
 ap:Disconnect()
@@ -7234,6 +7298,9 @@ end
 function aj.Set(am,an,ao)
 if ak then
 aj.Value=an
+if ai.Window.ConfigManager then
+ai.Window.ConfigManager:MarkDirty()
+end
 aa.SafeCallback(aj.Callback,an)
 
 if not ao then
@@ -7457,6 +7524,9 @@ end
 
 local function Callback(at)
 ar:Display()
+if am.Window.ConfigManager then
+am.Window.ConfigManager:MarkDirty()
+end
 if an.Callback then
 task.spawn(function()
 aj.SafeCallback(an.Callback,an.Value)
@@ -7879,6 +7949,9 @@ an.Value=nil
 end
 end
 ar:Refresh(an.Values)
+if am.Window.ConfigManager then
+am.Window.ConfigManager:MarkDirty()
+end
 end
 
 RecalculateListSize()
@@ -8017,7 +8090,7 @@ Locked=an.Locked or false,
 LockedTitle=an.LockedTitle,
 Values=an.Values or{},
 MenuWidth=an.MenuWidth or 180,
-Value=an.Value,
+Value=an.Value~=nil and an.Value or an.Default,
 AllowNone=an.AllowNone,
 SearchBarEnabled=an.SearchBarEnabled or false,
 Multi=an.Multi,
@@ -9253,6 +9326,9 @@ au.Default=ax
 if ay then
 au.Transparency=ay
 end
+if at.Window.ConfigManager then
+at.Window.ConfigManager:MarkDirty()
+end
 end
 
 function au.Set(aw,ax,ay)
@@ -9980,6 +10056,29 @@ VStack=a.load'X',
 
 },
 Load=function(aa,ae,af,ah,aj,ak,al,am,an)
+local function DataSegment(ao)
+local ap=tostring(ao or"")
+ap=ap:gsub("[^%w]+","_")
+ap=ap:gsub("^_+",""):gsub("_+$","")
+return ap
+end
+
+local function GetAutomaticDataKey(ao,ap)
+local aq=an and an.Title or"Tab"
+local ar=aa~=an and aa.Title or nil
+local as={DataSegment(aq)}
+if ar then
+table.insert(as,DataSegment(ar))
+end
+table.insert(as,DataSegment(ap.__type))
+table.insert(as,DataSegment(ap.Title))
+
+local at="__auto/"..table.concat(as,"/")
+local au=(ah.DataKeyCounts[at]or 0)+1
+ah.DataKeyCounts[at]=au
+return au==1 and at or at.."_"..tostring(au)
+end
+
 for ao,ap in next,af do
 aa[ao]=function(aq,ar)
 ar=ar or{}
@@ -9997,7 +10096,7 @@ ar.ElementsModule=al local
 as, at=ap:New(ar)
 local au=ar.Flag
 if not au and ah.DataSave then
-au="__auto_"..tostring(ar.GlobalIndex).."_"..tostring(at.__type)
+au=GetAutomaticDataKey(ar,at)
 at.__dataKey=au
 end
 
@@ -10005,24 +10104,28 @@ if au and typeof(au)=="string"then
 if ah.CurrentConfig then
 ah.CurrentConfig:Register(au,at)
 
-if ah.PendingConfigData and ah.PendingConfigData[au]then
-local av=ah.PendingConfigData[au]
+local av=au
+if ah.PendingConfigData and not ah.PendingConfigData[av]and ar.GlobalIndex then
+av="__auto_"..tostring(ar.GlobalIndex).."_"..tostring(at.__type)
+end
+if ah.PendingConfigData and ah.PendingConfigData[av]then
+local aw=ah.PendingConfigData[av]
 
-local aw=ah.ConfigManager
-if aw.Parser[av.__type]then
+local ax=ah.ConfigManager
+if ax.Parser[aw.__type]then
 task.defer(function()
-local ax,ay=pcall(function()
-aw.Parser[av.__type].Load(at,av)
+local ay,az=pcall(function()
+ax.Parser[aw.__type].Load(at,aw)
 end)
 
-if ax then
-ah.PendingConfigData[au]=nil
+if ay then
+ah.PendingConfigData[av]=nil
 else
 warn(
 "[ WindUI ] Failed to apply pending config for '"
 ..au
 .."': "
-..tostring(ay)
+..tostring(az)
 )
 end
 end)
@@ -11680,6 +11783,10 @@ AllElements={},
 ElementConfig={},
 
 PendingFlags={},
+DataKeyCounts={},
+DataDirty=false,
+DataSaveTask=nil,
+DataLoading=false,
 
 IsToggleDragging=false,
 }
@@ -12624,6 +12731,9 @@ an(l,0.2,{ImageTransparency=0.8}):Play()
 end
 au.Position=au.UIElements.Main.Position
 au.Dragging=u
+if au.ConfigManager then
+au.ConfigManager:MarkDirty()
+end
 end
 end
 )
@@ -13133,6 +13243,7 @@ function au.SaveData(z)
 if not au.DataSave or not au.DataConfig then
 return false
 end
+au.DataSaveTask=nil
 
 local A=au.UIElements.Main and au.UIElements.Main.Position or au.Position
 au.DataConfig:Set("windowPosition",{
@@ -13141,7 +13252,9 @@ xOffset=A.X.Offset,
 yScale=A.Y.Scale,
 yOffset=A.Y.Offset,
 })
-return au.DataConfig:Save()
+local B=au.DataConfig:Save()
+au.DataDirty=false
+return B
 end
 
 do

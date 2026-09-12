@@ -35,7 +35,7 @@ function Element:New(Config)
 		LockedTitle = Config.LockedTitle,
 		Values = Config.Values or {},
 		MenuWidth = Config.MenuWidth or 180,
-		Value = Config.Value,
+		Value = Config.Value ~= nil and Config.Value or Config.Default,
 		AllowNone = Config.AllowNone,
 		SearchBarEnabled = Config.SearchBarEnabled or false,
 		Multi = Config.Multi,
