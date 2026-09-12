@@ -373,16 +373,50 @@ d.Heartbeat
 
 local l="https://raw.githubusercontent.com/Footagesus/Icons/main/Main-v2.lua"
 
+local function CreateFallbackIcons()
+local m={}
+local p="rbxasset://textures/ui/GuiImagePlaceholder.png"
+
+function m.SetIconsType()end
+function m.AddIcons()end
+function m.Init(r)
+m.New=r
+return m
+end
+function m.Icon2(r)
+if type(r)=="string"and(r:match"^https?://"or r:match"^rbxasset")then
+return nil
+end
+return{
+p,
+{ImageRectSize=Vector2.new(0,0),ImageRectPosition=Vector2.new(0,0)},
+}
+end
+m.Icon=m.Icon2
+function m.Image(r)
+local u=Instance.new"ImageLabel"
+u.BackgroundTransparency=1
+u.Size=r.Size or UDim2.new(0,24,0,24)
+u.Image=p
+return{IconFrame=u}
+end
+
+return m
+end
+
 local m
-local p=i:FindFirstChild"GetIcons"
+local p=i:WaitForChild("GetIcons",2)
 if p then
 m=a.load'a'
 elseif d:IsStudio()or not writefile then
-m=a.load'a'
+m=CreateFallbackIcons()
 else
-m=loadstring(
+local r,u=pcall(function()
+return loadstring(
 game.HttpGetAsync and game:HttpGetAsync(l)or h:GetAsync(l)
 )()
+end)
+m=r and u or CreateFallbackIcons()
 end
 
 m.SetIconsType"lucide"

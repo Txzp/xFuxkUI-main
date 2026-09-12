@@ -13,16 +13,50 @@ local RenderStepped = RunService.Heartbeat
 
 local IconsURL = "https://raw.githubusercontent.com/Footagesus/Icons/main/Main-v2.lua"
 
+local function CreateFallbackIcons()
+	local fallback = {}
+	local placeholder = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+
+	function fallback.SetIconsType() end
+	function fallback.AddIcons() end
+	function fallback.Init(New)
+		fallback.New = New
+		return fallback
+	end
+	function fallback.Icon2(icon)
+		if type(icon) == "string" and (icon:match("^https?://") or icon:match("^rbxasset")) then
+			return nil
+		end
+		return {
+			placeholder,
+			{ ImageRectSize = Vector2.new(0, 0), ImageRectPosition = Vector2.new(0, 0) },
+		}
+	end
+	fallback.Icon = fallback.Icon2
+	function fallback.Image(config)
+		local image = Instance.new("ImageLabel")
+		image.BackgroundTransparency = 1
+		image.Size = config.Size or UDim2.new(0, 24, 0, 24)
+		image.Image = placeholder
+		return { IconFrame = image }
+	end
+
+	return fallback
+end
+
 local Icons
-local RemoteIcons = ReplicatedStorage:FindFirstChild("GetIcons")
+local RemoteIcons = ReplicatedStorage:WaitForChild("GetIcons", 2)
 if RemoteIcons then
 	Icons = require("./Icons")
 elseif RunService:IsStudio() or not writefile then
-	Icons = require("./Icons")
+	Icons = CreateFallbackIcons()
 else
-	Icons = loadstring(
-		game.HttpGetAsync and game:HttpGetAsync(IconsURL) or HttpService:GetAsync(IconsURL) --studio
-	)()
+	local success, result = pcall(function()
+		return loadstring(
+			game.HttpGetAsync and game:HttpGetAsync(IconsURL) or HttpService:GetAsync(IconsURL)
+		)()
+	end)
+	Icons = success and result or CreateFallbackIcons()
 end
 
 Icons.SetIconsType("lucide")
