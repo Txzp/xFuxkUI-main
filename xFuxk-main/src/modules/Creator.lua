@@ -7,13 +7,17 @@ local UserInputService = cloneref(game:GetService("UserInputService"))
 local TweenService = cloneref(game:GetService("TweenService"))
 local LocalizationService = cloneref(game:GetService("LocalizationService"))
 local HttpService = cloneref(game:GetService("HttpService"))
+local ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage"))
 
 local RenderStepped = RunService.Heartbeat
 
 local IconsURL = "https://raw.githubusercontent.com/Footagesus/Icons/main/Main-v2.lua"
 
 local Icons
-if RunService:IsStudio() or not writefile then
+local RemoteIcons = ReplicatedStorage:FindFirstChild("GetIcons")
+if RemoteIcons then
+	Icons = require("./Icons")
+elseif RunService:IsStudio() or not writefile then
 	Icons = require("./Icons")
 else
 	Icons = loadstring(

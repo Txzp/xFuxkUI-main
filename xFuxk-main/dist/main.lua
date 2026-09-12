@@ -366,33 +366,37 @@ local d=b(game:GetService"RunService")
 local e=b(game:GetService"UserInputService")
 local f=b(game:GetService"TweenService")
 local g=b(game:GetService"LocalizationService")
-local h=b(game:GetService"HttpService")local i=
+local h=b(game:GetService"HttpService")
+local i=b(game:GetService"ReplicatedStorage")local j=
 
 d.Heartbeat
 
-local j="https://raw.githubusercontent.com/Footagesus/Icons/main/Main-v2.lua"
+local l="https://raw.githubusercontent.com/Footagesus/Icons/main/Main-v2.lua"
 
-local l
-if d:IsStudio()or not writefile then
-l=a.load'a'
+local m
+local p=i:FindFirstChild"GetIcons"
+if p then
+m=a.load'a'
+elseif d:IsStudio()or not writefile then
+m=a.load'a'
 else
-l=loadstring(
-game.HttpGetAsync and game:HttpGetAsync(j)or h:GetAsync(j)
+m=loadstring(
+game.HttpGetAsync and game:HttpGetAsync(l)or h:GetAsync(l)
 )()
 end
 
-l.SetIconsType"lucide"
+m.SetIconsType"lucide"
 
-local m
+local r
 
-local p
-p={
+local u
+u={
 Font="rbxassetid://12187365364",
 Localization=nil,
 CanDraggable=true,
 Theme=nil,
 Themes=nil,
-Icons=l,
+Icons=m,
 Signals={},
 Objects={},
 LocalizationObjects={},
@@ -490,543 +494,543 @@ Shapes={Square=
 ThemeChangeCallbacks={},
 }
 
-function p.Init(r)
-m=r
+function u.Init(v)
+r=v
 
-p.ThemeFallbacks=a.load'b'(p)
+u.ThemeFallbacks=a.load'b'(u)
 end
 
-function p.AddSignal(r,u)
-local v=r:Connect(u)
-table.insert(p.Signals,v)
-return v
+function u.AddSignal(v,x)
+local z=v:Connect(x)
+table.insert(u.Signals,z)
+return z
 end
 
-function p.DisconnectAll()
-for r,u in next,p.Signals do
-local v=table.remove(p.Signals,r)
-v:Disconnect()
+function u.DisconnectAll()
+for v,x in next,u.Signals do
+local z=table.remove(u.Signals,v)
+z:Disconnect()
 end
 end
 
-function p.SafeCallback(r,...)
-if not r then
+function u.SafeCallback(v,...)
+if not v then
 return
 end
 
-local u,v=pcall(r,...)
-if not u then
-if m and m.Window and m.Window.Debug then local
-x, z=v:find":%d+: "
+local x,z=pcall(v,...)
+if not x then
+if r and r.Window and r.Window.Debug then local
+A, B=z:find":%d+: "
 
-warn("[ WindUI: DEBUG Mode ] "..v)
+warn("[ WindUI: DEBUG Mode ] "..z)
 
-return m:Notify{
+return r:Notify{
 Title="DEBUG Mode: Error",
-Content=not z and v or v:sub(z+1),
+Content=not B and z or z:sub(B+1),
 Duration=8,
 }
 end
 end
 end
 
-function p.Gradient(r,u)
-if m and m.Gradient then
-return m:Gradient(r,u)
+function u.Gradient(v,x)
+if r and r.Gradient then
+return r:Gradient(v,x)
 end
 
-local v={}
-local x={}
+local z={}
+local A={}
 
-for z,A in next,r do
-local B=tonumber(z)
-if B then
-B=math.clamp(B/100,0,1)
-table.insert(v,ColorSequenceKeypoint.new(B,A.Color))
-table.insert(x,NumberSequenceKeypoint.new(B,A.Transparency or 0))
+for B,C in next,v do
+local F=tonumber(B)
+if F then
+F=math.clamp(F/100,0,1)
+table.insert(z,ColorSequenceKeypoint.new(F,C.Color))
+table.insert(A,NumberSequenceKeypoint.new(F,C.Transparency or 0))
 end
 end
 
-table.sort(v,function(z,A)
-return z.Time<A.Time
+table.sort(z,function(B,C)
+return B.Time<C.Time
 end)
-table.sort(x,function(z,A)
-return z.Time<A.Time
+table.sort(A,function(B,C)
+return B.Time<C.Time
 end)
 
-if#v<2 then
+if#z<2 then
 error"ColorSequence requires at least 2 keypoints"
 end
 
-local z={
-Color=ColorSequence.new(v),
-Transparency=NumberSequence.new(x),
+local B={
+Color=ColorSequence.new(z),
+Transparency=NumberSequence.new(A),
 }
 
-if u then
-for A,B in pairs(u)do
-z[A]=B
-end
-end
-
-return z
-end
-
-function p.SetTheme(r)
-local u=p.Theme
-p.Theme=r
-p.UpdateTheme(nil,false)
-
-for v,x in next,p.ThemeChangeCallbacks do
-p.SafeCallback(x,r,u)
-end
-end
-
-function p.AddFontObject(r)
-table.insert(p.FontObjects,r)
-p.UpdateFont(p.Font)
-end
-
-function p.UpdateFont(r)
-p.Font=r
-for u,v in next,p.FontObjects do
-v.FontFace=Font.new(r,v.FontFace.Weight,v.FontFace.Style)
-end
-end
-
-function p.GetThemeProperty(r,u)
-local function getValue(v,x)
-local z=x[v]
-
-if z==nil then
-return nil
-end
-
-if typeof(z)=="string"and string.sub(z,1,1)=="#"then
-return Color3.fromHex(z)
-end
-
-if typeof(z)=="Color3"then
-return z
-end
-
-if typeof(z)=="number"then
-return z
-end
-
-if typeof(z)=="table"and z.Color and z.Transparency then
-return z
-end
-
-if typeof(z)=="function"then
-return z(x)
-end
-
-return z
-end
-
-local v=getValue(r,u)
-if v~=nil then
-if typeof(v)=="string"and string.sub(v,1,1)~="#"then
-local x=p.GetThemeProperty(v,u)
-if x~=nil then
-return x
-end
-else
-return v
-end
-end
-
-local x=p.ThemeFallbacks[r]
-if x~=nil then
-if typeof(x)=="string"and string.sub(x,1,1)~="#"then
-return p.GetThemeProperty(x,u)
-else
-return getValue(r,{[r]=x})
-end
-end
-
-v=getValue(r,p.Themes.Dark)
-if v~=nil then
-if typeof(v)=="string"and string.sub(v,1,1)~="#"then
-local z=p.GetThemeProperty(v,p.Themes.Dark)
-if z~=nil then
-return z
-end
-else
-return v
-end
-end
-
-if x~=nil then
-if typeof(x)=="string"and string.sub(x,1,1)~="#"then
-return p.GetThemeProperty(x,p.Themes.Dark)
-else
-return getValue(r,{[r]=x})
-end
-end
-
-return nil
-end
-
-function p.AddThemeObject(r,u,v)
-if p.Objects[r]then
-for x,z in pairs(u)do
-p.Objects[r].Properties[x]=z
-end
-else
-p.Objects[r]={Object=r,Properties=u}
-end
-
-if not v then
-p.UpdateTheme(r,false)
-end
-return r
-end
-
-function p.AddLangObject(r)
-local u=p.LocalizationObjects[r]
-if not u then
-return
-end
-
-local v=u.Object
-
-p.SetLangForObject(r)
-
-return v
-end
-
-function p.UpdateTheme(r,u,v,x,z,A)
-local function ApplyTheme(B)
-for C,F in pairs(B.Properties or{})do
-local G=p.GetThemeProperty(F,p.Theme)
-if G~=nil then
-if typeof(G)=="Color3"then
-local H=B.Object:FindFirstChild"LibraryGradient"
-if H then
-H:Destroy()
-end
-
-if v then
-p.Tween(
-B.Object,
-x or 0.2,
-{[C]=G},
-z or Enum.EasingStyle.Quint,
-A or Enum.EasingDirection.Out
-):Play()
-elseif u then
-p.Tween(B.Object,0.08,{[C]=G}):Play()
-else
-B.Object[C]=G
-end
-elseif typeof(G)=="table"and G.Color and G.Transparency then
-B.Object[C]=Color3.new(1,1,1)
-
-local H=B.Object:FindFirstChild"LibraryGradient"
-if not H then
-H=Instance.new"UIGradient"
-H.Name="LibraryGradient"
-H.Parent=B.Object
-end
-
-H.Color=G.Color
-H.Transparency=G.Transparency
-
-for J,L in pairs(G)do
-if J~="Color"and J~="Transparency"and H[J]~=nil then
-H[J]=L
-end
-end
-elseif typeof(G)=="number"then
-if v then
-p.Tween(
-B.Object,
-x or 0.2,
-{[C]=G},
-z or Enum.EasingStyle.Quint,
-A or Enum.EasingDirection.Out
-):Play()
-elseif u then
-p.Tween(B.Object,0.08,{[C]=G}):Play()
-else
-B.Object[C]=G
-end
-end
-else
-local H=B.Object:FindFirstChild"LibraryGradient"
-if H then
-H:Destroy()
-end
-end
-end
-end
-
-if r then
-local B=p.Objects[r]
-if B then
-ApplyTheme(B)
-end
-else
-for B,C in pairs(p.Objects)do
-ApplyTheme(C)
-end
-end
-end
-
-function p.SetThemeTag(r,u,v,x,z)
-p.AddThemeObject(r,u)
-p.UpdateTheme(r,false,true,v,x,z)
-end
-
-function p.SetLangForObject(r)
-if p.Localization and p.Localization.Enabled then
-local u=p.LocalizationObjects[r]
-if not u then
-return
-end
-
-local v=u.Object
-local x=u.TranslationId
-
-local z=p.Localization.Translations[p.Language]
-if z and z[x]then
-v.Text=z[x]
-else
-local A=p.Localization
-and p.Localization.Translations
-and p.Localization.Translations.en
-or nil
-if A and A[x]then
-v.Text=A[x]
-else
-v.Text="["..x.."]"
-end
-end
-end
-end
-
-function p.ChangeTranslationKey(r,u,v)
-if p.Localization and p.Localization.Enabled then
-local x=string.match(v,"^"..p.Localization.Prefix.."(.+)")
 if x then
-for z,A in ipairs(p.LocalizationObjects)do
-if A.Object==u then
-A.TranslationId=x
-p.SetLangForObject(z)
-return
-end
-end
-
-table.insert(p.LocalizationObjects,{
-TranslationId=x,
-Object=u,
-})
-p.SetLangForObject(#p.LocalizationObjects)
-end
-end
-end
-
-function p.UpdateLang(r)
-if r then
-p.Language=r
-end
-
-for u=1,#p.LocalizationObjects do
-local v=p.LocalizationObjects[u]
-if v.Object and v.Object.Parent~=nil then
-p.SetLangForObject(u)
-else
-p.LocalizationObjects[u]=nil
-end
-end
-end
-
-function p.SetLanguage(r)
-p.Language=r
-p.UpdateLang()
-end
-
-function p.Icon(r,u)
-return l.Icon2(r,nil,u~=false)
-end
-
-function p.AddIcons(r,u)
-return l.AddIcons(r,u)
-end
-
-function p.New(r,u,v)
-local x=Instance.new(r)
-
-for z,A in next,p.DefaultProperties[r]or{}do
-x[z]=A
-end
-
-for z,A in next,u or{}do
-if z~="ThemeTag"then
-x[z]=A
-end
-if p.Localization and p.Localization.Enabled and z=="Text"then
-local B=string.match(A,"^"..p.Localization.Prefix.."(.+)")
-if B then
-local C=#p.LocalizationObjects+1
-p.LocalizationObjects[C]={TranslationId=B,Object=x}
-
-p.SetLangForObject(C)
-end
-end
-end
-
-for z,A in next,v or{}do
-if A then
-A.Parent=x
-end
-end
-
-if u and u.ThemeTag then
-p.AddThemeObject(x,u.ThemeTag)
-end
-if u and u.FontFace then
-p.AddFontObject(x)
-end
-return x
-end
-
-function p.Tween(r,u,v,...)
-return f:Create(r,TweenInfo.new(u,...),v)
-end
-
-function p.NewRoundFrame(r,u,v,x,z,A)
-local function getImageForType(B)
-return p.Shapes[B]
-end
-
-local function getSliceCenterForType(B)
-return not table.find({"Shadow-sm","Glass-0.7","Glass-1","Glass-1.4"},B)
-and Rect.new(256,256,256,256)
-or Rect.new(512,512,512,512)
-end
-
-local B=p.New(z and"ImageButton"or"ImageLabel",{
-Image=getImageForType(u),
-ScaleType="Slice",
-SliceCenter=getSliceCenterForType(u),
-SliceScale=1,
-BackgroundTransparency=1,
-ThemeTag=v.ThemeTag and v.ThemeTag,
-},x)
-
-for C,F in pairs(v or{})do
-if C~="ThemeTag"then
+for C,F in pairs(x)do
 B[C]=F
 end
 end
 
-local function UpdateSliceScale(C)
-local F=not table.find({"Shadow-sm","Glass-0.7","Glass-1","Glass-1.4"},u)
-and(C/(256))
-or(C/512)
-B.SliceScale=math.max(F,0.0001)
+return B
 end
 
-local C={}
+function u.SetTheme(v)
+local x=u.Theme
+u.Theme=v
+u.UpdateTheme(nil,false)
 
-function C.SetRadius(F,G)
-UpdateSliceScale(G)
+for z,A in next,u.ThemeChangeCallbacks do
+u.SafeCallback(A,v,x)
+end
 end
 
-function C.SetType(F,G)
-u=G
-B.Image=getImageForType(G)
-B.SliceCenter=getSliceCenterForType(G)
-UpdateSliceScale(r)
+function u.AddFontObject(v)
+table.insert(u.FontObjects,v)
+u.UpdateFont(u.Font)
 end
 
-function C.UpdateShape(F,G,H)
-if H then
-u=H
-B.Image=getImageForType(H)
-B.SliceCenter=getSliceCenterForType(H)
+function u.UpdateFont(v)
+u.Font=v
+for x,z in next,u.FontObjects do
+z.FontFace=Font.new(v,z.FontFace.Weight,z.FontFace.Style)
 end
-if G then
-r=G
-end
-UpdateSliceScale(r)
 end
 
-function C.GetRadius(F)
-return r
+function u.GetThemeProperty(v,x)
+local function getValue(z,A)
+local B=A[z]
+
+if B==nil then
+return nil
 end
 
-function C.GetType(F)
-return u
+if typeof(B)=="string"and string.sub(B,1,1)=="#"then
+return Color3.fromHex(B)
 end
 
-UpdateSliceScale(r)
-
-return B,A and C or nil
+if typeof(B)=="Color3"then
+return B
 end
 
-local r=p.New local u=
-p.Tween
-
-function p.SetDraggable(v)
-p.CanDraggable=v
+if typeof(B)=="number"then
+return B
 end
 
-function p.Drag(v,x,z)
-local A
-local B,C,F
-local G={
-CanDraggable=true,
-}
-
-if not x or typeof(x)~="table"then
-x={v}
+if typeof(B)=="table"and B.Color and B.Transparency then
+return B
 end
 
-local function update(H)
-if not B or not G.CanDraggable then
+if typeof(B)=="function"then
+return B(A)
+end
+
+return B
+end
+
+local z=getValue(v,x)
+if z~=nil then
+if typeof(z)=="string"and string.sub(z,1,1)~="#"then
+local A=u.GetThemeProperty(z,x)
+if A~=nil then
+return A
+end
+else
+return z
+end
+end
+
+local A=u.ThemeFallbacks[v]
+if A~=nil then
+if typeof(A)=="string"and string.sub(A,1,1)~="#"then
+return u.GetThemeProperty(A,x)
+else
+return getValue(v,{[v]=A})
+end
+end
+
+z=getValue(v,u.Themes.Dark)
+if z~=nil then
+if typeof(z)=="string"and string.sub(z,1,1)~="#"then
+local B=u.GetThemeProperty(z,u.Themes.Dark)
+if B~=nil then
+return B
+end
+else
+return z
+end
+end
+
+if A~=nil then
+if typeof(A)=="string"and string.sub(A,1,1)~="#"then
+return u.GetThemeProperty(A,u.Themes.Dark)
+else
+return getValue(v,{[v]=A})
+end
+end
+
+return nil
+end
+
+function u.AddThemeObject(v,x,z)
+if u.Objects[v]then
+for A,B in pairs(x)do
+u.Objects[v].Properties[A]=B
+end
+else
+u.Objects[v]={Object=v,Properties=x}
+end
+
+if not z then
+u.UpdateTheme(v,false)
+end
+return v
+end
+
+function u.AddLangObject(v)
+local x=u.LocalizationObjects[v]
+if not x then
 return
 end
 
-local J=H.Position-C
-p.Tween(v,0.02,{
+local z=x.Object
+
+u.SetLangForObject(v)
+
+return z
+end
+
+function u.UpdateTheme(v,x,z,A,B,C)
+local function ApplyTheme(F)
+for G,H in pairs(F.Properties or{})do
+local J=u.GetThemeProperty(H,u.Theme)
+if J~=nil then
+if typeof(J)=="Color3"then
+local L=F.Object:FindFirstChild"LibraryGradient"
+if L then
+L:Destroy()
+end
+
+if z then
+u.Tween(
+F.Object,
+A or 0.2,
+{[G]=J},
+B or Enum.EasingStyle.Quint,
+C or Enum.EasingDirection.Out
+):Play()
+elseif x then
+u.Tween(F.Object,0.08,{[G]=J}):Play()
+else
+F.Object[G]=J
+end
+elseif typeof(J)=="table"and J.Color and J.Transparency then
+F.Object[G]=Color3.new(1,1,1)
+
+local L=F.Object:FindFirstChild"LibraryGradient"
+if not L then
+L=Instance.new"UIGradient"
+L.Name="LibraryGradient"
+L.Parent=F.Object
+end
+
+L.Color=J.Color
+L.Transparency=J.Transparency
+
+for M,N in pairs(J)do
+if M~="Color"and M~="Transparency"and L[M]~=nil then
+L[M]=N
+end
+end
+elseif typeof(J)=="number"then
+if z then
+u.Tween(
+F.Object,
+A or 0.2,
+{[G]=J},
+B or Enum.EasingStyle.Quint,
+C or Enum.EasingDirection.Out
+):Play()
+elseif x then
+u.Tween(F.Object,0.08,{[G]=J}):Play()
+else
+F.Object[G]=J
+end
+end
+else
+local L=F.Object:FindFirstChild"LibraryGradient"
+if L then
+L:Destroy()
+end
+end
+end
+end
+
+if v then
+local F=u.Objects[v]
+if F then
+ApplyTheme(F)
+end
+else
+for F,G in pairs(u.Objects)do
+ApplyTheme(G)
+end
+end
+end
+
+function u.SetThemeTag(v,x,z,A,B)
+u.AddThemeObject(v,x)
+u.UpdateTheme(v,false,true,z,A,B)
+end
+
+function u.SetLangForObject(v)
+if u.Localization and u.Localization.Enabled then
+local x=u.LocalizationObjects[v]
+if not x then
+return
+end
+
+local z=x.Object
+local A=x.TranslationId
+
+local B=u.Localization.Translations[u.Language]
+if B and B[A]then
+z.Text=B[A]
+else
+local C=u.Localization
+and u.Localization.Translations
+and u.Localization.Translations.en
+or nil
+if C and C[A]then
+z.Text=C[A]
+else
+z.Text="["..A.."]"
+end
+end
+end
+end
+
+function u.ChangeTranslationKey(v,x,z)
+if u.Localization and u.Localization.Enabled then
+local A=string.match(z,"^"..u.Localization.Prefix.."(.+)")
+if A then
+for B,C in ipairs(u.LocalizationObjects)do
+if C.Object==x then
+C.TranslationId=A
+u.SetLangForObject(B)
+return
+end
+end
+
+table.insert(u.LocalizationObjects,{
+TranslationId=A,
+Object=x,
+})
+u.SetLangForObject(#u.LocalizationObjects)
+end
+end
+end
+
+function u.UpdateLang(v)
+if v then
+u.Language=v
+end
+
+for x=1,#u.LocalizationObjects do
+local z=u.LocalizationObjects[x]
+if z.Object and z.Object.Parent~=nil then
+u.SetLangForObject(x)
+else
+u.LocalizationObjects[x]=nil
+end
+end
+end
+
+function u.SetLanguage(v)
+u.Language=v
+u.UpdateLang()
+end
+
+function u.Icon(v,x)
+return m.Icon2(v,nil,x~=false)
+end
+
+function u.AddIcons(v,x)
+return m.AddIcons(v,x)
+end
+
+function u.New(v,x,z)
+local A=Instance.new(v)
+
+for B,C in next,u.DefaultProperties[v]or{}do
+A[B]=C
+end
+
+for B,C in next,x or{}do
+if B~="ThemeTag"then
+A[B]=C
+end
+if u.Localization and u.Localization.Enabled and B=="Text"then
+local F=string.match(C,"^"..u.Localization.Prefix.."(.+)")
+if F then
+local G=#u.LocalizationObjects+1
+u.LocalizationObjects[G]={TranslationId=F,Object=A}
+
+u.SetLangForObject(G)
+end
+end
+end
+
+for B,C in next,z or{}do
+if C then
+C.Parent=A
+end
+end
+
+if x and x.ThemeTag then
+u.AddThemeObject(A,x.ThemeTag)
+end
+if x and x.FontFace then
+u.AddFontObject(A)
+end
+return A
+end
+
+function u.Tween(v,x,z,...)
+return f:Create(v,TweenInfo.new(x,...),z)
+end
+
+function u.NewRoundFrame(v,x,z,A,B,C)
+local function getImageForType(F)
+return u.Shapes[F]
+end
+
+local function getSliceCenterForType(F)
+return not table.find({"Shadow-sm","Glass-0.7","Glass-1","Glass-1.4"},F)
+and Rect.new(256,256,256,256)
+or Rect.new(512,512,512,512)
+end
+
+local F=u.New(B and"ImageButton"or"ImageLabel",{
+Image=getImageForType(x),
+ScaleType="Slice",
+SliceCenter=getSliceCenterForType(x),
+SliceScale=1,
+BackgroundTransparency=1,
+ThemeTag=z.ThemeTag and z.ThemeTag,
+},A)
+
+for G,H in pairs(z or{})do
+if G~="ThemeTag"then
+F[G]=H
+end
+end
+
+local function UpdateSliceScale(G)
+local H=not table.find({"Shadow-sm","Glass-0.7","Glass-1","Glass-1.4"},x)
+and(G/(256))
+or(G/512)
+F.SliceScale=math.max(H,0.0001)
+end
+
+local G={}
+
+function G.SetRadius(H,J)
+UpdateSliceScale(J)
+end
+
+function G.SetType(H,J)
+x=J
+F.Image=getImageForType(J)
+F.SliceCenter=getSliceCenterForType(J)
+UpdateSliceScale(v)
+end
+
+function G.UpdateShape(H,J,L)
+if L then
+x=L
+F.Image=getImageForType(L)
+F.SliceCenter=getSliceCenterForType(L)
+end
+if J then
+v=J
+end
+UpdateSliceScale(v)
+end
+
+function G.GetRadius(H)
+return v
+end
+
+function G.GetType(H)
+return x
+end
+
+UpdateSliceScale(v)
+
+return F,C and G or nil
+end
+
+local v=u.New local x=
+u.Tween
+
+function u.SetDraggable(z)
+u.CanDraggable=z
+end
+
+function u.Drag(z,A,B)
+local C
+local F,G,H
+local J={
+CanDraggable=true,
+}
+
+if not A or typeof(A)~="table"then
+A={z}
+end
+
+local function update(L)
+if not F or not J.CanDraggable then
+return
+end
+
+local M=L.Position-G
+u.Tween(z,0.02,{
 Position=UDim2.new(
-F.X.Scale,
-F.X.Offset+J.X,
-F.Y.Scale,
-F.Y.Offset+J.Y
+H.X.Scale,
+H.X.Offset+M.X,
+H.Y.Scale,
+H.Y.Offset+M.Y
 ),
 }):Play()
 end
 
-for H,J in pairs(x)do
-J.InputBegan:Connect(function(L)
+for L,M in pairs(A)do
+M.InputBegan:Connect(function(N)
 if
 (
-L.UserInputType==Enum.UserInputType.MouseButton1
-or L.UserInputType==Enum.UserInputType.Touch
-)and G.CanDraggable
+N.UserInputType==Enum.UserInputType.MouseButton1
+or N.UserInputType==Enum.UserInputType.Touch
+)and J.CanDraggable
 then
-if A==nil then
-A=J
-B=true
-C=L.Position
-F=v.Position
+if C==nil then
+C=M
+F=true
+G=N.Position
+H=z.Position
 
-if z and typeof(z)=="function"then
-z(true,A)
+if B and typeof(B)=="function"then
+B(true,C)
 end
 
-L.Changed:Connect(function()
-if L.UserInputState==Enum.UserInputState.End then
-B=false
-A=nil
+N.Changed:Connect(function()
+if N.UserInputState==Enum.UserInputState.End then
+F=false
+C=nil
 
-if z and typeof(z)=="function"then
-z(false,nil)
+if B and typeof(B)=="function"then
+B(false,nil)
 end
 end
 end)
@@ -1034,8 +1038,20 @@ end
 end
 end)
 
-J.InputChanged:Connect(function(L)
-if B and A==J then
+M.InputChanged:Connect(function(N)
+if F and C==M then
+if
+N.UserInputType==Enum.UserInputType.MouseMovement
+or N.UserInputType==Enum.UserInputType.Touch
+then
+update(N)
+end
+end
+end)
+end
+
+e.InputChanged:Connect(function(L)
+if F and C~=nil then
 if
 L.UserInputType==Enum.UserInputType.MouseMovement
 or L.UserInputType==Enum.UserInputType.Touch
@@ -1044,235 +1060,223 @@ update(L)
 end
 end
 end)
-end
 
-e.InputChanged:Connect(function(H)
-if B and A~=nil then
-if
-H.UserInputType==Enum.UserInputType.MouseMovement
-or H.UserInputType==Enum.UserInputType.Touch
-then
-update(H)
-end
-end
-end)
-
-function G.Set(H,J)
-G.CanDraggable=J
-end
-
-return G
-end
-
-l.Init(r,"Icon")
-
-function p.SanitizeFilename(v)
-local x=v:match"([^/]+)$"or v
-
-x=x:gsub("%.[^%.]+$","")
-
-x=x:gsub("[^%w%-_]","_")
-
-if#x>50 then
-x=x:sub(1,50)
-end
-
-return x
-end
-
-function p.Image(v,x,z,A,B,C,F,G)
-A=A or"Temp"
-x=p.SanitizeFilename(x)
-local H
-
-local J=r("Frame",{
-Size=UDim2.new(0,0,0,0),
-BackgroundTransparency=1,
-},{
-r("ImageLabel",{
-Size=UDim2.new(1,0,1,0),
-BackgroundTransparency=1,
-ScaleType="Crop",
-ThemeTag=(p.Icon(v)or F)and{
-ImageColor3=C and(G or"Icon")or nil,
-}or nil,
-},{
-r("UICorner",{
-CornerRadius=UDim.new(0,z),
-}),
-}),
-})
-H=J:FindFirstChildWhichIsA"ImageLabel"
-if p.Icon(v)then
-H:Destroy()
-
-local L=l.Image{
-Icon=v,
-Size=UDim2.new(1,0,1,0),
-Colors={
-(C and(G or"Icon")or false),
-"Button",
-},
-}.IconFrame
-L.Name="ImageLabel"
-L.Parent=J
-H=L
-elseif string.find(v,"http")and not string.find(v,"roblox.com")then
-local L="WindUI/"..A.."/assets/."..B.."-"..x..".png"
-local M,N=pcall(function()
-task.spawn(function()
-local M=p.Request
-and p.Request{
-Url=v,
-Method="GET",
-}.Body
-or{}
-
-if not d:IsStudio()and writefile then
-writefile(L,M)
-end
-
-
-local N,O=pcall(getcustomasset,L)
-if N then
-H.Image=O
-else
-warn(
-string.format(
-"[ WindUI.Creator ] Failed to load custom asset '%s': %s",
-L,
-tostring(O)
-)
-)
-J:Destroy()
-
-return
-end
-end)
-end)
-if not M then
-warn(
-"[ WindUI.Creator ]  '"..identifyexecutor()
-or"Studio".."' doesnt support the URL Images. Error: "..N
-)
-
-J:Destroy()
-end
-elseif v==""then
-J.Visible=false
-else
-H.Image=v
+function J.Set(L,M)
+J.CanDraggable=M
 end
 
 return J
 end
 
-function p.Color3ToHSB(v)
-local x,z,A=v.R,v.G,v.B
-local B=math.max(x,z,A)
-local C=math.min(x,z,A)
-local F=B-C
+m.Init(v,"Icon")
 
-local G=0
-if F~=0 then
-if B==x then
-G=(z-A)/F%6
-elseif B==z then
-G=(A-x)/F+2
-else
-G=(x-z)/F+4
-end
-G=G*60
-else
-G=0
+function u.SanitizeFilename(z)
+local A=z:match"([^/]+)$"or z
+
+A=A:gsub("%.[^%.]+$","")
+
+A=A:gsub("[^%w%-_]","_")
+
+if#A>50 then
+A=A:sub(1,50)
 end
 
-local H=(B==0)and 0 or(F/B)
-local J=B
+return A
+end
+
+function u.Image(z,A,B,C,F,G,H,J)
+C=C or"Temp"
+A=u.SanitizeFilename(A)
+local L
+
+local M=v("Frame",{
+Size=UDim2.new(0,0,0,0),
+BackgroundTransparency=1,
+},{
+v("ImageLabel",{
+Size=UDim2.new(1,0,1,0),
+BackgroundTransparency=1,
+ScaleType="Crop",
+ThemeTag=(u.Icon(z)or H)and{
+ImageColor3=G and(J or"Icon")or nil,
+}or nil,
+},{
+v("UICorner",{
+CornerRadius=UDim.new(0,B),
+}),
+}),
+})
+L=M:FindFirstChildWhichIsA"ImageLabel"
+if u.Icon(z)then
+L:Destroy()
+
+local N=m.Image{
+Icon=z,
+Size=UDim2.new(1,0,1,0),
+Colors={
+(G and(J or"Icon")or false),
+"Button",
+},
+}.IconFrame
+N.Name="ImageLabel"
+N.Parent=M
+L=N
+elseif string.find(z,"http")and not string.find(z,"roblox.com")then
+local N="WindUI/"..C.."/assets/."..F.."-"..A..".png"
+local O,P=pcall(function()
+task.spawn(function()
+local O=u.Request
+and u.Request{
+Url=z,
+Method="GET",
+}.Body
+or{}
+
+if not d:IsStudio()and writefile then
+writefile(N,O)
+end
+
+
+local P,Q=pcall(getcustomasset,N)
+if P then
+L.Image=Q
+else
+warn(
+string.format(
+"[ WindUI.Creator ] Failed to load custom asset '%s': %s",
+N,
+tostring(Q)
+)
+)
+M:Destroy()
+
+return
+end
+end)
+end)
+if not O then
+warn(
+"[ WindUI.Creator ]  '"..identifyexecutor()
+or"Studio".."' doesnt support the URL Images. Error: "..P
+)
+
+M:Destroy()
+end
+elseif z==""then
+M.Visible=false
+else
+L.Image=z
+end
+
+return M
+end
+
+function u.Color3ToHSB(z)
+local A,B,C=z.R,z.G,z.B
+local F=math.max(A,B,C)
+local G=math.min(A,B,C)
+local H=F-G
+
+local J=0
+if H~=0 then
+if F==A then
+J=(B-C)/H%6
+elseif F==B then
+J=(C-A)/H+2
+else
+J=(A-B)/H+4
+end
+J=J*60
+else
+J=0
+end
+
+local L=(F==0)and 0 or(H/F)
+local M=F
 
 return{
-h=math.floor(G+0.5),
-s=H,
-b=J,
+h=math.floor(J+0.5),
+s=L,
+b=M,
 }
 end
 
-function p.GetPerceivedBrightness(v)
-local x=v.R
-local z=v.G
-local A=v.B
-return 0.299*x+0.587*z+0.114*A
+function u.GetPerceivedBrightness(z)
+local A=z.R
+local B=z.G
+local C=z.B
+return 0.299*A+0.587*B+0.114*C
 end
 
-function p.GetTextColorForHSB(v,x)
-local z=p.Color3ToHSB(v)local
-A, B, C=z.h, z.s, z.b
-if p.GetPerceivedBrightness(v)>(x or 0.5)then
-return Color3.fromHSV(A/360,0,0.05)
+function u.GetTextColorForHSB(z,A)
+local B=u.Color3ToHSB(z)local
+C, F, G=B.h, B.s, B.b
+if u.GetPerceivedBrightness(z)>(A or 0.5)then
+return Color3.fromHSV(C/360,0,0.05)
 else
-return Color3.fromHSV(A/360,0,0.98)
+return Color3.fromHSV(C/360,0,0.98)
 end
 end
 
-function p.GetAverageColor(v)
-local x,z,A=0,0,0
-local B=v.Color.Keypoints
-for C,F in ipairs(B)do
+function u.GetAverageColor(z)
+local A,B,C=0,0,0
+local F=z.Color.Keypoints
+for G,H in ipairs(F)do
 
-x=x+F.Value.R
-z=z+F.Value.G
-A=A+F.Value.B
+A=A+H.Value.R
+B=B+H.Value.G
+C=C+H.Value.B
 end
-local C=#B
-return Color3.new(x/C,z/C,A/C)
+local G=#F
+return Color3.new(A/G,B/G,C/G)
 end
 
-function p.GenerateUniqueID(v)
+function u.GenerateUniqueID(z)
 return h:GenerateGUID(false)
 end
 
-function p.OnThemeChange(v,x)
-if typeof(x)~="function"then
+function u.OnThemeChange(z,A)
+if typeof(A)~="function"then
 return
 end
 
-local z=h:GenerateGUID(false)
-p.ThemeChangeCallbacks[z]=x
+local B=h:GenerateGUID(false)
+u.ThemeChangeCallbacks[B]=A
 
 return{
 Disconnect=function()
-p.ThemeChangeCallbacks[z]=nil
+u.ThemeChangeCallbacks[B]=nil
 end,
 }
 end
 
-function p.AddColor(v,x,z,A)
-A=math.clamp(A or 1,0,1)
-if typeof(z)=="string"then z=Color3.fromHex(z)end
+function u.AddColor(z,A,B,C)
+C=math.clamp(C or 1,0,1)
+if typeof(B)=="string"then B=Color3.fromHex(B)end
 
-return function(B)
-local C
-if typeof(x)=="string"and string.sub(x,1,1)~="#"then
-C=p.GetThemeProperty(x,B)
-elseif typeof(x)=="string"then
-C=Color3.fromHex(x)
+return function(F)
+local G
+if typeof(A)=="string"and string.sub(A,1,1)~="#"then
+G=u.GetThemeProperty(A,F)
+elseif typeof(A)=="string"then
+G=Color3.fromHex(A)
 else
-C=x
+G=A
 end
 
-if not C or typeof(C)~="Color3"then
+if not G or typeof(G)~="Color3"then
 return nil
 end
 
 return Color3.new(
-math.clamp(C.R+z.R*A,0,1),
-math.clamp(C.G+z.G*A,0,1),
-math.clamp(C.B+z.B*A,0,1)
+math.clamp(G.R+B.R*C,0,1),
+math.clamp(G.G+B.G*C,0,1),
+math.clamp(G.B+B.B*C,0,1)
 )
 end
 end
 
-return p end function a.d()
+return u end function a.d()
 
 local b={}
 
@@ -1318,9 +1322,9 @@ local h={
 Lower=false
 }
 
-function h.SetLower(j)
-h.Lower=j
-h.Frame.Size=j and f.SizeLower or f.Size
+function h.SetLower(i)
+h.Lower=i
+h.Frame.Size=i and f.SizeLower or f.Size
 end
 
 h.Frame=d("Frame",{
@@ -1375,7 +1379,7 @@ f.Notifications[f.NotificationIndex]=h
 
 
 
-local j
+local i
 
 if h.Icon then
 
@@ -1399,7 +1403,7 @@ if h.Icon then
 
 
 
-j=b.Image(
+i=b.Image(
 h.Icon,
 h.Title..":"..h.Icon,
 0,
@@ -1407,8 +1411,8 @@ g.Window,
 "Notification",
 h.IconThemed
 )
-j.Size=UDim2.new(0,26,0,26)
-j.Position=UDim2.new(0,f.UIPadding,0,f.UIPadding)
+i.Size=UDim2.new(0,26,0,26)
+i.Position=UDim2.new(0,f.UIPadding,0,f.UIPadding)
 
 end
 
@@ -1553,7 +1557,7 @@ CornerRadius=UDim.new(0,f.UICorner),
 }),
 
 p,
-j,l,
+i,l,
 })
 
 local u=d("Frame",{
@@ -1614,7 +1618,7 @@ return f end function a.f()
 
 
 
-local b=4294967296;local d=b-1;local function c(e,f)local g,h=0,1;while e~=0 or f~=0 do local j,l=e%2,f%2;local m=(j+l)%2;g=g+m*h;e=math.floor(e/2)f=math.floor(f/2)h=h*2 end;return g%b end;local function k(e,f,g,...)local h;if f then e=e%b;f=f%b;h=c(e,f)if g then h=k(h,g,...)end;return h elseif e then return e%b else return 0 end end;local function n(e,f,g,...)local h;if f then e=e%b;f=f%b;h=(e+f-c(e,f))/2;if g then h=n(h,g,...)end;return h elseif e then return e%b else return d end end;local function o(e)return d-e end;local function q(e,f)if f<0 then return lshift(e,-f)end;return math.floor(e%4294967296/2^f)end;local function s(e,f)if f>31 or f<-31 then return 0 end;return q(e%b,f)end;local function lshift(e,f)if f<0 then return s(e,-f)end;return e*2^f%4294967296 end;local function t(e,f)e=e%b;f=f%32;local g=n(e,2^f-1)return s(e,f)+lshift(g,32-f)end;local e={0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2}local function w(f)return string.gsub(f,".",function(g)return string.format("%02x",string.byte(g))end)end;local function y(f,g)local h=""for j=1,g do local l=f%256;h=string.char(l)..h;f=(f-l)/256 end;return h end;local function D(f,g)local h=0;for j=g,g+3 do h=h*256+string.byte(f,j)end;return h end;local function E(f,g)local h=64-(g+9)%64;g=y(8*g,8)f=f.."\128"..string.rep("\0",h)..g;assert(#f%64==0)return f end;local function I(f)f[1]=0x6a09e667;f[2]=0xbb67ae85;f[3]=0x3c6ef372;f[4]=0xa54ff53a;f[5]=0x510e527f;f[6]=0x9b05688c;f[7]=0x1f83d9ab;f[8]=0x5be0cd19;return f end;local function K(f,g,h)local j={}for l=1,16 do j[l]=D(f,g+(l-1)*4)end;for l=17,64 do local m=j[l-15]local p=k(t(m,7),t(m,18),s(m,3))m=j[l-2]j[l]=(j[l-16]+p+j[l-7]+k(t(m,17),t(m,19),s(m,10)))%b end;local l,m,p,r,u,v,x,z=h[1],h[2],h[3],h[4],h[5],h[6],h[7],h[8]for A=1,64 do local B=k(t(l,2),t(l,13),t(l,22))local C=k(n(l,m),n(l,p),n(m,p))local F=(B+C)%b;local G=k(t(u,6),t(u,11),t(u,25))local H=k(n(u,v),n(o(u),x))local J=(z+G+H+e[A]+j[A])%b;z=x;x=v;v=u;u=(r+J)%b;r=p;p=m;m=l;l=(J+F)%b end;h[1]=(h[1]+l)%b;h[2]=(h[2]+m)%b;h[3]=(h[3]+p)%b;h[4]=(h[4]+r)%b;h[5]=(h[5]+u)%b;h[6]=(h[6]+v)%b;h[7]=(h[7]+x)%b;h[8]=(h[8]+z)%b end;local function Z(f)f=E(f,#f)local g=I{}for h=1,#f,64 do K(f,h,g)end;return w(y(g[1],4)..y(g[2],4)..y(g[3],4)..y(g[4],4)..y(g[5],4)..y(g[6],4)..y(g[7],4)..y(g[8],4))end;local f;local g={["\\"]="\\",["\""]="\"",["\b"]="b",["\f"]="f",["\n"]="n",["\r"]="r",["\t"]="t"}local h={["/"]="/"}for j,l in pairs(g)do h[l]=j end;local j=function(j)return"\\"..(g[j]or string.format("u%04x",j:byte()))end;local l=function(l)return"null"end;local m=function(m,p)local r={}p=p or{}if p[m]then error"circular reference"end;p[m]=true;if rawget(m,1)~=nil or next(m)==nil then local u=0;for v in pairs(m)do if type(v)~="number"then error"invalid table: mixed or invalid key types"end;u=u+1 end;if u~=#m then error"invalid table: sparse array"end;for v,x in ipairs(m)do table.insert(r,f(x,p))end;p[m]=nil;return"["..table.concat(r,",").."]"else for u,v in pairs(m)do if type(u)~="string"then error"invalid table: mixed or invalid key types"end;table.insert(r,f(u,p)..":"..f(v,p))end;p[m]=nil;return"{"..table.concat(r,",").."}"end end;local p=function(p)return'"'..p:gsub('[%z\1-\31\\"]',j)..'"'end;local r=function(r)if r~=r or r<=-math.huge or r>=math.huge then error("unexpected number value '"..tostring(r).."'")end;return string.format("%.14g",r)end;local u={["nil"]=l,table=m,string=p,number=r,boolean=tostring}f=function(v,x)local z=type(v)local A=u[z]if A then return A(v,x)end;error("unexpected type '"..z.."'")end;local v=function(v)return f(v)end;local x;local z=function(...)local z={}for A=1,select("#",...)do z[select(A,...)]=true end;return z end;local A=z(" ","\t","\r","\n")local B=z(" ","\t","\r","\n","]","}",",")local C=z("\\","/",'"',"b","f","n","r","t","u")local F=z("true","false","null")local G={["true"]=true,["false"]=false,null=nil}local H=function(H,J,L,M)for N=J,#H do if L[H:sub(N,N)]~=M then return N end end;return#H+1 end;local J=function(J,L,M)local N=1;local O=1;for P=1,L-1 do O=O+1;if J:sub(P,P)=="\n"then N=N+1;O=1 end end;error(string.format("%s at line %d col %d",M,N,O))end;local L=function(L)local M=math.floor;if L<=0x7f then return string.char(L)elseif L<=0x7ff then return string.char(M(L/64)+192,L%64+128)elseif L<=0xffff then return string.char(M(L/4096)+224,M(L%4096/64)+128,L%64+128)elseif L<=0x10ffff then return string.char(M(L/262144)+240,M(L%262144/4096)+128,M(L%4096/64)+128,L%64+128)end;error(string.format("invalid unicode codepoint '%x'",L))end;local M=function(M)local N=tonumber(M:sub(1,4),16)local O=tonumber(M:sub(7,10),16)if O then return L((N-0xd800)*0x400+O-0xdc00+0x10000)else return L(N)end end;local N=function(N,O)local P=""local Q=O+1;local R=Q;while Q<=#N do local S=N:byte(Q)if S<32 then J(N,Q,"control character in string")elseif S==92 then P=P..N:sub(R,Q-1)Q=Q+1;local T=N:sub(Q,Q)if T=="u"then local U=N:match("^[dD][89aAbB]%x%x\\u%x%x%x%x",Q+1)or N:match("^%x%x%x%x",Q+1)or J(N,Q-1,"invalid unicode escape in string")P=P..M(U)Q=Q+#U else if not C[T]then J(N,Q-1,"invalid escape char '"..T.."' in string")end;P=P..h[T]end;R=Q+1 elseif S==34 then P=P..N:sub(R,Q-1)return P,Q+1 end;Q=Q+1 end;J(N,O,"expected closing quote for string")end;local O=function(O,P)local Q=H(O,P,B)local R=O:sub(P,Q-1)local S=tonumber(R)if not S then J(O,P,"invalid number '"..R.."'")end;return S,Q end;local P=function(P,Q)local R=H(P,Q,B)local S=P:sub(Q,R-1)if not F[S]then J(P,Q,"invalid literal '"..S.."'")end;return G[S],R end;local Q=function(Q,R)local S={}local T=1;R=R+1;while 1 do local U;R=H(Q,R,A,true)if Q:sub(R,R)=="]"then R=R+1;break end;U,R=x(Q,R)S[T]=U;T=T+1;R=H(Q,R,A,true)local V=Q:sub(R,R)R=R+1;if V=="]"then break end;if V~=","then J(Q,R,"expected ']' or ','")end end;return S,R end;local R=function(R,S)local T={}S=S+1;while 1 do local U,V;S=H(R,S,A,true)if R:sub(S,S)=="}"then S=S+1;break end;if R:sub(S,S)~='"'then J(R,S,"expected string for key")end;U,S=x(R,S)S=H(R,S,A,true)if R:sub(S,S)~=":"then J(R,S,"expected ':' after key")end;S=H(R,S+1,A,true)V,S=x(R,S)T[U]=V;S=H(R,S,A,true)local W=R:sub(S,S)S=S+1;if W=="}"then break end;if W~=","then J(R,S,"expected '}' or ','")end end;return T,S end;local S={['"']=N,["0"]=O,["1"]=O,["2"]=O,["3"]=O,["4"]=O,["5"]=O,["6"]=O,["7"]=O,["8"]=O,["9"]=O,["-"]=O,t=P,f=P,n=P,["["]=Q,["{"]=R}x=function(T,U)local V=T:sub(U,U)local W=S[V]if W then return W(T,U)end;J(T,U,"unexpected character '"..V.."'")end;local T=function(T)if type(T)~="string"then error("expected argument of type string, got "..type(T))end;local U,V=x(T,H(T,1,A,true))V=H(T,V,A,true)if V<=#T then J(T,V,"trailing garbage")end;return U end;
+local b=4294967296;local d=b-1;local function c(e,f)local g,h=0,1;while e~=0 or f~=0 do local i,l=e%2,f%2;local m=(i+l)%2;g=g+m*h;e=math.floor(e/2)f=math.floor(f/2)h=h*2 end;return g%b end;local function k(e,f,g,...)local h;if f then e=e%b;f=f%b;h=c(e,f)if g then h=k(h,g,...)end;return h elseif e then return e%b else return 0 end end;local function n(e,f,g,...)local h;if f then e=e%b;f=f%b;h=(e+f-c(e,f))/2;if g then h=n(h,g,...)end;return h elseif e then return e%b else return d end end;local function o(e)return d-e end;local function q(e,f)if f<0 then return lshift(e,-f)end;return math.floor(e%4294967296/2^f)end;local function s(e,f)if f>31 or f<-31 then return 0 end;return q(e%b,f)end;local function lshift(e,f)if f<0 then return s(e,-f)end;return e*2^f%4294967296 end;local function t(e,f)e=e%b;f=f%32;local g=n(e,2^f-1)return s(e,f)+lshift(g,32-f)end;local e={0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2}local function w(f)return string.gsub(f,".",function(g)return string.format("%02x",string.byte(g))end)end;local function y(f,g)local h=""for i=1,g do local l=f%256;h=string.char(l)..h;f=(f-l)/256 end;return h end;local function D(f,g)local h=0;for i=g,g+3 do h=h*256+string.byte(f,i)end;return h end;local function E(f,g)local h=64-(g+9)%64;g=y(8*g,8)f=f.."\128"..string.rep("\0",h)..g;assert(#f%64==0)return f end;local function I(f)f[1]=0x6a09e667;f[2]=0xbb67ae85;f[3]=0x3c6ef372;f[4]=0xa54ff53a;f[5]=0x510e527f;f[6]=0x9b05688c;f[7]=0x1f83d9ab;f[8]=0x5be0cd19;return f end;local function K(f,g,h)local i={}for l=1,16 do i[l]=D(f,g+(l-1)*4)end;for l=17,64 do local m=i[l-15]local p=k(t(m,7),t(m,18),s(m,3))m=i[l-2]i[l]=(i[l-16]+p+i[l-7]+k(t(m,17),t(m,19),s(m,10)))%b end;local l,m,p,r,u,v,x,z=h[1],h[2],h[3],h[4],h[5],h[6],h[7],h[8]for A=1,64 do local B=k(t(l,2),t(l,13),t(l,22))local C=k(n(l,m),n(l,p),n(m,p))local F=(B+C)%b;local G=k(t(u,6),t(u,11),t(u,25))local H=k(n(u,v),n(o(u),x))local J=(z+G+H+e[A]+i[A])%b;z=x;x=v;v=u;u=(r+J)%b;r=p;p=m;m=l;l=(J+F)%b end;h[1]=(h[1]+l)%b;h[2]=(h[2]+m)%b;h[3]=(h[3]+p)%b;h[4]=(h[4]+r)%b;h[5]=(h[5]+u)%b;h[6]=(h[6]+v)%b;h[7]=(h[7]+x)%b;h[8]=(h[8]+z)%b end;local function Z(f)f=E(f,#f)local g=I{}for h=1,#f,64 do K(f,h,g)end;return w(y(g[1],4)..y(g[2],4)..y(g[3],4)..y(g[4],4)..y(g[5],4)..y(g[6],4)..y(g[7],4)..y(g[8],4))end;local f;local g={["\\"]="\\",["\""]="\"",["\b"]="b",["\f"]="f",["\n"]="n",["\r"]="r",["\t"]="t"}local h={["/"]="/"}for i,l in pairs(g)do h[l]=i end;local i=function(i)return"\\"..(g[i]or string.format("u%04x",i:byte()))end;local l=function(l)return"null"end;local m=function(m,p)local r={}p=p or{}if p[m]then error"circular reference"end;p[m]=true;if rawget(m,1)~=nil or next(m)==nil then local u=0;for v in pairs(m)do if type(v)~="number"then error"invalid table: mixed or invalid key types"end;u=u+1 end;if u~=#m then error"invalid table: sparse array"end;for v,x in ipairs(m)do table.insert(r,f(x,p))end;p[m]=nil;return"["..table.concat(r,",").."]"else for u,v in pairs(m)do if type(u)~="string"then error"invalid table: mixed or invalid key types"end;table.insert(r,f(u,p)..":"..f(v,p))end;p[m]=nil;return"{"..table.concat(r,",").."}"end end;local p=function(p)return'"'..p:gsub('[%z\1-\31\\"]',i)..'"'end;local r=function(r)if r~=r or r<=-math.huge or r>=math.huge then error("unexpected number value '"..tostring(r).."'")end;return string.format("%.14g",r)end;local u={["nil"]=l,table=m,string=p,number=r,boolean=tostring}f=function(v,x)local z=type(v)local A=u[z]if A then return A(v,x)end;error("unexpected type '"..z.."'")end;local v=function(v)return f(v)end;local x;local z=function(...)local z={}for A=1,select("#",...)do z[select(A,...)]=true end;return z end;local A=z(" ","\t","\r","\n")local B=z(" ","\t","\r","\n","]","}",",")local C=z("\\","/",'"',"b","f","n","r","t","u")local F=z("true","false","null")local G={["true"]=true,["false"]=false,null=nil}local H=function(H,J,L,M)for N=J,#H do if L[H:sub(N,N)]~=M then return N end end;return#H+1 end;local J=function(J,L,M)local N=1;local O=1;for P=1,L-1 do O=O+1;if J:sub(P,P)=="\n"then N=N+1;O=1 end end;error(string.format("%s at line %d col %d",M,N,O))end;local L=function(L)local M=math.floor;if L<=0x7f then return string.char(L)elseif L<=0x7ff then return string.char(M(L/64)+192,L%64+128)elseif L<=0xffff then return string.char(M(L/4096)+224,M(L%4096/64)+128,L%64+128)elseif L<=0x10ffff then return string.char(M(L/262144)+240,M(L%262144/4096)+128,M(L%4096/64)+128,L%64+128)end;error(string.format("invalid unicode codepoint '%x'",L))end;local M=function(M)local N=tonumber(M:sub(1,4),16)local O=tonumber(M:sub(7,10),16)if O then return L((N-0xd800)*0x400+O-0xdc00+0x10000)else return L(N)end end;local N=function(N,O)local P=""local Q=O+1;local R=Q;while Q<=#N do local S=N:byte(Q)if S<32 then J(N,Q,"control character in string")elseif S==92 then P=P..N:sub(R,Q-1)Q=Q+1;local T=N:sub(Q,Q)if T=="u"then local U=N:match("^[dD][89aAbB]%x%x\\u%x%x%x%x",Q+1)or N:match("^%x%x%x%x",Q+1)or J(N,Q-1,"invalid unicode escape in string")P=P..M(U)Q=Q+#U else if not C[T]then J(N,Q-1,"invalid escape char '"..T.."' in string")end;P=P..h[T]end;R=Q+1 elseif S==34 then P=P..N:sub(R,Q-1)return P,Q+1 end;Q=Q+1 end;J(N,O,"expected closing quote for string")end;local O=function(O,P)local Q=H(O,P,B)local R=O:sub(P,Q-1)local S=tonumber(R)if not S then J(O,P,"invalid number '"..R.."'")end;return S,Q end;local P=function(P,Q)local R=H(P,Q,B)local S=P:sub(Q,R-1)if not F[S]then J(P,Q,"invalid literal '"..S.."'")end;return G[S],R end;local Q=function(Q,R)local S={}local T=1;R=R+1;while 1 do local U;R=H(Q,R,A,true)if Q:sub(R,R)=="]"then R=R+1;break end;U,R=x(Q,R)S[T]=U;T=T+1;R=H(Q,R,A,true)local V=Q:sub(R,R)R=R+1;if V=="]"then break end;if V~=","then J(Q,R,"expected ']' or ','")end end;return S,R end;local R=function(R,S)local T={}S=S+1;while 1 do local U,V;S=H(R,S,A,true)if R:sub(S,S)=="}"then S=S+1;break end;if R:sub(S,S)~='"'then J(R,S,"expected string for key")end;U,S=x(R,S)S=H(R,S,A,true)if R:sub(S,S)~=":"then J(R,S,"expected ':' after key")end;S=H(R,S+1,A,true)V,S=x(R,S)T[U]=V;S=H(R,S,A,true)local W=R:sub(S,S)S=S+1;if W=="}"then break end;if W~=","then J(R,S,"expected '}' or ','")end end;return T,S end;local S={['"']=N,["0"]=O,["1"]=O,["2"]=O,["3"]=O,["4"]=O,["5"]=O,["6"]=O,["7"]=O,["8"]=O,["9"]=O,["-"]=O,t=P,f=P,n=P,["["]=Q,["{"]=R}x=function(T,U)local V=T:sub(U,U)local W=S[V]if W then return W(T,U)end;J(T,U,"unexpected character '"..V.."'")end;local T=function(T)if type(T)~="string"then error("expected argument of type string, got "..type(T))end;local U,V=x(T,H(T,1,A,true))V=H(T,V,A,true)if V<=#T then J(T,V,"trailing garbage")end;return U end;
 local U,V,W=v,T,Z;
 
 
@@ -2837,16 +2841,16 @@ PaddingRight=UDim.new(0,5),
 }),
 })
 
-local j=ab.Image("chevron-down","chevron-down",0,"Temp","KeySystem",true)
+local i=ab.Image("chevron-down","chevron-down",0,"Temp","KeySystem",true)
 
-j.Size=UDim2.new(1,0,1,0)
+i.Size=UDim2.new(1,0,1,0)
 
 ac("Frame",{
 Size=UDim2.new(0,21,0,21),
 Parent=g.Frame,
 BackgroundTransparency=1,
 },{
-j,
+i,
 })
 
 local l=ab.NewRoundFrame(15,"Squircle",{
@@ -3005,7 +3009,7 @@ m,
 Enum.EasingStyle.Quint,
 Enum.EasingDirection.Out
 ):Play()
-ad(j,0.3,{Rotation=180},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+ad(i,0.3,{Rotation=180},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 else
 ad(
 m,
@@ -3014,7 +3018,7 @@ m,
 Enum.EasingStyle.Quint,
 Enum.EasingDirection.Out
 ):Play()
-ad(j,0.25,{Rotation=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+ad(i,0.25,{Rotation=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end
 f=not f
 end)
@@ -3064,7 +3068,7 @@ end
 end
 else
 local g,h
-for j,l in next,am do
+for i,l in next,am do
 local m,p=l.Verify(d)
 if m then
 g,h=true,p
@@ -5445,7 +5449,7 @@ if al then
 
 ad(b,0.12,{ImageTransparency=0.9}):Play()
 ad(aA,0.12,{ImageTransparency=0.8}):Play()
-aa.AddSignal(f.MouseMoved,function(h,j)
+aa.AddSignal(f.MouseMoved,function(h,i)
 b.HoverGradient.Offset=
 Vector2.new(((h-f.AbsolutePosition.X)/f.AbsoluteSize.X)-0.5,0)
 aA.HoverGradient.Offset=
@@ -5462,24 +5466,24 @@ end
 end)
 end
 
-function ag.SetTitle(h,j)
-ag.Title=j
-ap.Text=j
+function ag.SetTitle(h,i)
+ag.Title=i
+ap.Text=i
 end
 
-function ag.SetDesc(h,j)
-ag.Desc=j
-aq.Text=j or""
-if not j then
+function ag.SetDesc(h,i)
+ag.Desc=i
+aq.Text=i or""
+if not i then
 aq.Visible=false
 elseif not aq.Visible then
 aq.Visible=true
 end
 end
 
-function ag.Colorize(h,j,l)
+function ag.Colorize(h,i,l)
 if ag.Color then
-j[l]=typeof(ag.Color)=="string"
+i[l]=typeof(ag.Color)=="string"
 and GetTextColorForHSB(Color3.fromHex(aa.Colors[ag.Color]))
 or typeof(ag.Color)=="Color3"and GetTextColorForHSB(ag.Color)
 or nil
@@ -5505,18 +5509,18 @@ end
 
 
 
-function ag.SetThumbnail(h,j,l)
-ag.Thumbnail=j
+function ag.SetThumbnail(h,i,l)
+ag.Thumbnail=i
 if l then
 ag.ThumbnailSize=l
 ak=l
 end
 
 if an then
-if j then
+if i then
 an:Destroy()
 an=aa.Image(
-j,
+i,
 ag.Title,
 ag.UICorner-3,
 af.Window.Folder,
@@ -5537,9 +5541,9 @@ an.Visible=false
 
 end
 else
-if j then
+if i then
 an=aa.Image(
-j,
+i,
 ag.Title,
 ag.UICorner-3,
 af.Window.Folder,
@@ -5559,20 +5563,20 @@ end
 end
 end
 
-function ag.SetImage(h,j,l)
-ag.Image=j
+function ag.SetImage(h,i,l)
+ag.Image=i
 if l then
 ag.ImageSize=l
 aj=l
 end
 
-if j then
+if i then
 local m=ao and ao.Parent or ag.UIElements.Container.TitleFrame
 if ao then ao:Destroy()end
 
 ao=aa.Image(
-j,
-j,
+i,
+i,
 ag.UICorner-3,
 af.Window.Folder,
 "Image",
@@ -5607,11 +5611,11 @@ function ag.Destroy(h)
 f:Destroy()
 end
 
-function ag.Lock(h,j)
+function ag.Lock(h,i)
 al=false
 au.Active=true
 au.Visible=true
-as.Text=j or"Locked"
+as.Text=i or"Locked"
 end
 
 function ag.Unlock(h)
@@ -5621,7 +5625,7 @@ au.Visible=false
 end
 
 function ag.Highlight(h)
-local j=ab("UIGradient",{
+local i=ab("UIGradient",{
 Color=ColorSequence.new{
 ColorSequenceKeypoint.new(0,Color3.new(1,1,1)),
 ColorSequenceKeypoint.new(0.5,Color3.new(1,1,1)),
@@ -5660,7 +5664,7 @@ Parent=ay,
 aw.ImageTransparency=0.65
 ay.ImageTransparency=0.88
 
-ad(j,0.75,{
+ad(i,0.75,{
 Offset=Vector2.new(1,0),
 }):Play()
 
@@ -5672,27 +5676,27 @@ task.spawn(function()
 task.wait(0.75)
 aw.ImageTransparency=1
 ay.ImageTransparency=1
-j:Destroy()
+i:Destroy()
 l:Destroy()
 end)
 end
 
 function ag.UpdateShape(h)
 if af.Window.NewElements then
-local j
+local i
 if af.ParentConfig.ParentType=="Group"then
-j="Squircle"
+i="Squircle"
 else
-j=getElementPosition(h.Elements,ag.Index)
+i=getElementPosition(h.Elements,ag.Index)
 end
 
-if j and f then
-g:SetType(j)
-av:SetType(j)
-az:SetType(j)
-ax:SetType(j.."-Outline")
-d:SetType(j)
-aB:SetType(j.."-Outline")
+if i and f then
+g:SetType(i)
+av:SetType(i)
+az:SetType(i)
+ax:SetType(i.."-Outline")
+d:SetType(i)
+aB:SetType(i.."-Outline")
 end
 end
 end
@@ -6217,9 +6221,9 @@ end
 local g=d.Position.X-ay
 local h=math.max(2,math.min(aA+g,au-at-2))
 
-local j=math.clamp((h-2)/(au-at-4),0,1)
+local i=math.clamp((h-2)/(au-at-4),0,1)
 
-local l,m,p=am:GetGlassFrame(j)
+local l,m,p=am:GetGlassFrame(i)
 aq.Frame.Bar.Highlight.Glass.Image=l
 aq.Frame.Bar.Highlight.Glass.ImageRectSize=m
 aq.Frame.Bar.Highlight.Glass.ImageRectOffset=p
@@ -8676,11 +8680,11 @@ g,
 
 local h={}
 
-for j=0,1,0.1 do
-table.insert(h,ColorSequenceKeypoint.new(j,Color3.fromHSV(j,1,1)))
+for i=0,1,0.1 do
+table.insert(h,ColorSequenceKeypoint.new(i,Color3.fromHSV(i,1,1)))
 end
 
-local j=ae("UIGradient",{
+local i=ae("UIGradient",{
 Color=ColorSequence.new(h),
 Rotation=90,
 })
@@ -8720,7 +8724,7 @@ Parent=az.UIElements.Main,
 ae("UICorner",{
 CornerRadius=UDim.new(1,0),
 }),
-j,
+i,
 l,
 })
 
@@ -11990,7 +11994,7 @@ local f=false
 local g
 
 local h=typeof(au.Background)=="string"and string.match(au.Background,"^video:(.+)")or nil
-local j=typeof(au.Background)=="string"
+local i=typeof(au.Background)=="string"
 and not h
 and string.match(au.Background,"^(https?://.+|rbx%w+://.+)")
 or nil
@@ -12050,11 +12054,11 @@ CornerRadius=UDim.new(0,au.UICorner),
 }),
 })
 g:Play()
-elseif j then
+elseif i then
 local l=au.Folder
 .."/assets/."
-..al.SanitizeFilename(j)
-..GetImageExtension(j)
+..al.SanitizeFilename(i)
+..GetImageExtension(i)
 if isfile and not isfile(l)then
 local m,p=pcall(function()
 
@@ -12062,7 +12066,7 @@ local m,p=pcall(function()
 
 
 
-local m=game.HttpGet and game:HttpGet(j)
+local m=game.HttpGet and game:HttpGet(i)
 writefile(l,m.Body)
 end)
 if not m then
@@ -12082,7 +12086,7 @@ end
 g=am("ImageLabel",{
 BackgroundTransparency=1,
 Size=UDim2.new(1,0,1,0),
-Image=p or j,
+Image=p or i,
 ImageTransparency=0,
 ScaleType="Crop",
 },{
@@ -13979,14 +13983,14 @@ local d=readfile(b)
 local f=false
 
 for g,h in next,aw.KeySystem.API do
-local j=aa.Services[h.Type]
-if j then
+local i=aa.Services[h.Type]
+if i then
 local l={}
-for m,p in next,j.Args do
+for m,p in next,i.Args do
 table.insert(l,h[p])
 end
 
-local m=j.New(table.unpack(l))
+local m=i.New(table.unpack(l))
 local p=m.Verify(d)
 if p then
 f=true
