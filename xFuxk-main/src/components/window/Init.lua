@@ -1927,7 +1927,7 @@ return function(Config)
 				ClickedClose = true
 				--Window:SetToTheCenter()
 Window:Dialog({
-    Title = "Close | xFuxk Hub",
+    Title = "Close | Peakx Hub",
     Content = "Are you sure you want to close the Hub interface?",
     Buttons = {
         {
@@ -1945,7 +1945,7 @@ Window:Dialog({
                 Window:Destroy()
             end,
             Variant = "Primary",
-            Color = Color3.fromHex("#c32121"),
+            Color = Color3.fromHex("#b33b3b"),
         },
     },
 })
