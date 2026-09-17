@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-09-11  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-09-17  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -13431,7 +13431,7 @@ if not au.IgnoreAlerts then
 F=true
 
 au:Dialog{
-Title="Close | xFuxk Hub",
+Title="Close | Peakx Hub",
 Content="Are you sure you want to close the Hub interface?",
 Buttons={
 {
@@ -13449,7 +13449,7 @@ F=false
 au:Destroy()
 end,
 Variant="Primary",
-Color=Color3.fromHex"#c32121",
+Color=Color3.fromHex"#b33b3b",
 },
 },
 }
