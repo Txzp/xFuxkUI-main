@@ -269,11 +269,6 @@ function WindUI:CreateWindow(Config)
 		if not isfolder("WindUI") then
 			makefolder("WindUI")
 		end
-		if Config.Folder then
-			makefolder(Config.Folder)
-		else
-			makefolder(Config.Title)
-		end
 	end
 
 	Config.WindUI = WindUI
@@ -307,7 +302,7 @@ function WindUI:CreateWindow(Config)
 			end)
 		end
 
-		local keyPath = (Config.Folder or "Temp") .. "/" .. Filename .. ".key"
+		local keyPath = "WindUI/" .. (Config.Folder or "Temp") .. "/" .. Filename .. ".key"
 
 		if Config.KeySystem.KeyValidator then
 			if Config.KeySystem.SaveKey and isfile(keyPath) then

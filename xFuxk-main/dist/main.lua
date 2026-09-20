@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-09-17  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-09-19  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -3060,7 +3060,7 @@ end
 
 local function handleSuccess(d)
 CloseKeyDialog()
-writefile((ag.Folder or"Temp").."/"..ah..".key",tostring(d))
+writefile("WindUI/"..(ag.Folder or"Temp").."/"..ah..".key",tostring(d))
 task.wait(0.4)
 ai(true)
 end
@@ -4282,6 +4282,12 @@ ad.DataLoading=false
 ae.Folder=ad.Folder
 ae.Path="WindUI/"..tostring(ae.Folder).."/config/"
 
+if not isfolder"WindUI"then
+makefolder"WindUI"
+end
+if not isfolder("WindUI/"..tostring(ae.Folder))then
+makefolder("WindUI/"..tostring(ae.Folder))
+end
 if not isfolder(ae.Path)then
 makefolder(ae.Path)
 end
@@ -11638,12 +11644,6 @@ end
 if not isfolder("WindUI/"..au.Folder.."/assets")then
 makefolder("WindUI/"..au.Folder.."/assets")
 end
-if not isfolder(au.Folder)then
-makefolder(au.Folder)
-end
-if not isfolder(au.Folder.."/assets")then
-makefolder(au.Folder.."/assets")
-end
 end
 
 local aw=am("UICorner",{
@@ -12048,7 +12048,7 @@ if typeof(au.Background)=="string"and h then
 f=true
 
 if string.find(h,"http")then
-local l=au.Folder.."/assets/."..al.SanitizeFilename(h)..".webm"
+local l="WindUI/"..au.Folder.."/assets/."..al.SanitizeFilename(h)..".webm"
 if not isfile(l)then
 local m,p=pcall(function()
 
@@ -13944,11 +13944,6 @@ if not ak:IsStudio()and writefile then
 if not isfolder"WindUI"then
 makefolder"WindUI"
 end
-if aw.Folder then
-makefolder(aw.Folder)
-else
-makefolder(aw.Title)
-end
 end
 
 aw.WindUI=aa
@@ -13982,7 +13977,7 @@ ay=b
 end)
 end
 
-local b=(aw.Folder or"Temp").."/"..aB..".key"
+local b="WindUI/"..(aw.Folder or"Temp").."/"..aB..".key"
 
 if aw.KeySystem.KeyValidator then
 if aw.KeySystem.SaveKey and isfile(b)then

@@ -450,7 +450,7 @@ function KeySystem.new(Config, Filename, func, keyValidator)
 
 	local function handleSuccess(key)
 		CloseKeyDialog()
-		writefile((Config.Folder or "Temp") .. "/" .. Filename .. ".key", tostring(key))
+		writefile("WindUI/" .. (Config.Folder or "Temp") .. "/" .. Filename .. ".key", tostring(key))
 		task.wait(0.4)
 		func(true)
 	end

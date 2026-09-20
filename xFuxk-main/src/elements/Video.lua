@@ -31,7 +31,7 @@ function Element:New(Config)
     if VideoModule.Video then
         local BGVideo
         if string.find(VideoModule.Video, "http") then
-            local videoPath = Config.Window.Folder .. "/assets/." .. Creator.SanitizeFilename(VideoModule.Video) .. ".webm"
+            local videoPath = "WindUI/" .. Config.Window.Folder .. "/assets/." .. Creator.SanitizeFilename(VideoModule.Video) .. ".webm"
             if not isfile(videoPath) then
                 local success, result = pcall(function()
                     local response = Creator.Request({Url = VideoModule.Video, Method="GET", Headers = { ["User-Agent"] = "Roblox/Exploit" }})

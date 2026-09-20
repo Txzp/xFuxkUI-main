@@ -134,12 +134,6 @@ return function(Config)
 		if not isfolder("WindUI/" .. Window.Folder .. "/assets") then
 			makefolder("WindUI/" .. Window.Folder .. "/assets")
 		end
-		if not isfolder(Window.Folder) then
-			makefolder(Window.Folder)
-		end
-		if not isfolder(Window.Folder .. "/assets") then
-			makefolder(Window.Folder .. "/assets")
-		end
 	end
 
 	local UICorner = New("UICorner", {
@@ -544,7 +538,7 @@ return function(Config)
 		IsVideoBG = true
 
 		if string.find(BGVideo, "http") then
-			local videoPath = Window.Folder .. "/assets/." .. Creator.SanitizeFilename(BGVideo) .. ".webm"
+			local videoPath = "WindUI/" .. Window.Folder .. "/assets/." .. Creator.SanitizeFilename(BGVideo) .. ".webm"
 			if not isfile(videoPath) then
 				local success, result = pcall(function()
 					-- local response = Creator.Request({
