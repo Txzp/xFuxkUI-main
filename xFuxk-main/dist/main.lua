@@ -6034,7 +6034,7 @@ Parent=ai,
 })
 
 local aq=ab.NewRoundFrame(an,"Squircle",{
-ImageTransparency=0.45,
+ImageTransparency=0,
 ThemeTag={
 ImageColor3="Text"
 },
@@ -6083,11 +6083,13 @@ AnchorPoint=Vector2.new(0.5,0.5),
 Position=UDim2.new(0.5,0,0.5,0),
 Name="Bar"
 },{
-ab.NewRoundFrame(an,"Glass-1.4",{
+ab.NewRoundFrame(an,"Squircle",{
 Size=UDim2.new(1,0,1,0),
-ImageColor3=Color3.new(1,1,1),
+ThemeTag={
+ImageColor3="Text",
+},
 Name="Highlight",
-ImageTransparency=1,
+ImageTransparency=0,
 },{
 
 
@@ -6105,7 +6107,7 @@ ImageTransparency=1,
 ab.NewRoundFrame(an,"Squircle",{
 Size=UDim2.new(1,0,1,0),
 Name="GlassBackground",
-ImageTransparency=0,
+ImageTransparency=1,
 ThemeTag={
 ImageColor3="ElementBackground",
 },
@@ -6121,11 +6123,13 @@ ac("UICorner",{
 CornerRadius=UDim.new(1,0),
 })
 }),
-ab.NewRoundFrame(an,"Glass-1.4",{
+ab.NewRoundFrame(an,"Squircle",{
 Size=UDim2.new(1,0,1,0),
-ImageColor3=Color3.new(1,1,1),
+ThemeTag={
+ImageColor3="Text",
+},
 Name="Highlight",
-ImageTransparency=0.3,
+ImageTransparency=1,
 }),
 ab.NewRoundFrame(an,"Squircle",{
 Size=UDim2.new(1,0,1,0),
@@ -6133,6 +6137,7 @@ Name="BarOverlay",
 ThemeTag={
 ImageColor3="ToggleBar",
 },
+ImageTransparency=1,
 ZIndex=999,
 })
 }),
@@ -6164,14 +6169,14 @@ if aw then
 ad(aq.Frame,0.3,{
 Position=UDim2.new(0,au-at-2,0.5,0),
 },Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
-ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Toggle"},0.15)
-ad(aq.Frame.Bar.Highlight.Glass,0.15,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+ab.SetThemeTag(aq.Frame.Bar.Highlight,{ImageColor3="Toggle"},0.15)
+ad(aq.Frame.Bar.Highlight,0.15,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 else
 ad(aq.Frame,0.3,{
 Position=UDim2.new(0,2,0.5,0),
 },Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
-ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Text"},0.15)
-ad(aq.Frame.Bar.Highlight.Glass,0.15,{ImageTransparency=0.85},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+ab.SetThemeTag(aq.Frame.Bar.Highlight,{ImageColor3="Text"},0.15)
+ad(aq.Frame.Bar.Highlight,0.15,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end
 else
 if aw then
@@ -6185,8 +6190,8 @@ if aw then
 ad(aq.Layer,0.1,{
 ImageTransparency=0,
 }):Play()
-ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Toggle"},0.1)
-ad(aq.Frame.Bar.Highlight.Glass,0.1,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+ab.SetThemeTag(aq.Frame.Bar.Highlight,{ImageColor3="Toggle"},0.1)
+ad(aq.Frame.Bar.Highlight,0.1,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 
 if ao then
 ad(ao,0.1,{
@@ -6194,17 +6199,12 @@ ImageTransparency=0,
 }):Play()
 end
 
-local az,aA,aB=am:GetGlassFrame(1)
-
-aq.Frame.Bar.Highlight.Glass.Image=az
-aq.Frame.Bar.Highlight.Glass.ImageRectSize=aA
-aq.Frame.Bar.Highlight.Glass.ImageRectOffset=aB
 else
 ad(aq.Layer,0.1,{
 ImageTransparency=1,
 }):Play()
-ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Text"},0.1)
-ad(aq.Frame.Bar.Highlight.Glass,0.1,{ImageTransparency=0.85},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+ab.SetThemeTag(aq.Frame.Bar.Highlight,{ImageColor3="Text"},0.1)
+ad(aq.Frame.Bar.Highlight,0.1,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 
 if ao then
 ad(ao,0.1,{
@@ -6212,11 +6212,6 @@ ImageTransparency=1,
 }):Play()
 end
 
-local az,aA,aB=am:GetGlassFrame(0)
-
-aq.Frame.Bar.Highlight.Glass.Image=az
-aq.Frame.Bar.Highlight.Glass.ImageRectSize=aA
-aq.Frame.Bar.Highlight.Glass.ImageRectOffset=aB
 end
 
 ax=ax~=false
@@ -6261,12 +6256,7 @@ end
 local g=d.Position.X-ay
 local h=math.max(2,math.min(aA+g,au-at-2))
 
-local i=math.clamp((h-2)/(au-at-4),0,1)
-
-local l,m,p=am:GetGlassFrame(i)
-aq.Frame.Bar.Highlight.Glass.Image=l
-aq.Frame.Bar.Highlight.Glass.ImageRectSize=m
-aq.Frame.Bar.Highlight.Glass.ImageRectOffset=p
+math.clamp((h-2)/(au-at-4),0,1)
 
 ad(aq.Frame,0.12,{
 Position=UDim2.new(0,h,0.5,0)

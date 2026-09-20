@@ -69,7 +69,7 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
     })
     
     local ToggleFrame = Creator.NewRoundFrame(Radius, "Squircle",{
-        ImageTransparency = 0.45,
+        ImageTransparency = 0,
         ThemeTag = {
             ImageColor3 = "Text"
         },
@@ -85,7 +85,7 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
             ThemeTag = {
                 ImageColor3 = "Toggle",
             },
-            ImageTransparency = 1, -- 0
+                ImageTransparency = 1,
         }),
         Creator.NewRoundFrame(Radius, "SquircleOutline", {
             Size = UDim2.new(1,0,1,0),
@@ -103,7 +103,7 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
         }),
         
         --bar
-        Creator.NewRoundFrame(Radius, "Squircle", {
+            Creator.NewRoundFrame(Radius, "Squircle", {
             Size = UDim2.new(0, NewElement and 30 or 15, 0, NewElement and 20 or 15),
             Position = UDim2.new(0,2,0.5,0),
             AnchorPoint = Vector2.new(0,0.5),
@@ -118,11 +118,13 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
                 Position = UDim2.new(0.5,0,0.5,0),
                 Name = "Bar"
             }, {
-                Creator.NewRoundFrame(Radius, "Glass-1.4", {
+                Creator.NewRoundFrame(Radius, "Squircle", {
                     Size = UDim2.new(1,0,1,0),
-                    ImageColor3 = Color3.new(1,1,1),
+                    ThemeTag = {
+                        ImageColor3 = "Text",
+                    },
                     Name = "Highlight",
-                    ImageTransparency = 1,
+                    ImageTransparency = 0,
                 }, {
                     -- New("UIGradient", {
                     --     Rotation = 60,
@@ -140,7 +142,7 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
                     Creator.NewRoundFrame(Radius, "Squircle", {
                         Size = UDim2.new(1,0,1,0),
                         Name = "GlassBackground",
-                        ImageTransparency = 0,
+                        ImageTransparency = 1,
                         ThemeTag = {
                             ImageColor3 = "ElementBackground",
                         },
@@ -156,11 +158,13 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
                             CornerRadius = UDim.new(1,0),
                         })
                     }),
-                    Creator.NewRoundFrame(Radius, "Glass-1.4", {
+                    Creator.NewRoundFrame(Radius, "Squircle", {
                         Size = UDim2.new(1,0,1,0),
-                        ImageColor3 = Color3.new(1,1,1),
+                        ThemeTag = {
+                            ImageColor3 = "Text",
+                        },
                         Name = "Highlight",
-                        ImageTransparency = 0.3,
+                        ImageTransparency = 1,
                     }),
                     Creator.NewRoundFrame(Radius, "Squircle", {
                         Size = UDim2.new(1,0,1,0),
@@ -168,6 +172,7 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
                         ThemeTag = {
                             ImageColor3 = "ToggleBar",
                         },
+                        ImageTransparency = 1,
                         ZIndex = 999,
                     })
                 }),
@@ -199,14 +204,14 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
                 Tween(ToggleFrame.Frame, 0.3, {
                     Position = UDim2.new(0, ToggleWidth - FrameWidth - 2, 0.5, 0),
                 }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
-                Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight.Glass, { ImageColor3 = "Toggle" }, 0.15)
-                Tween(ToggleFrame.Frame.Bar.Highlight.Glass, 0.15, { ImageTransparency = 0 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight, { ImageColor3 = "Toggle" }, 0.15)
+                Tween(ToggleFrame.Frame.Bar.Highlight, 0.15, { ImageTransparency = 0 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             else
                 Tween(ToggleFrame.Frame, 0.3, {
                     Position = UDim2.new(0, 2, 0.5, 0),
                 }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
-                Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight.Glass, { ImageColor3 = "Text" }, 0.15)
-                Tween(ToggleFrame.Frame.Bar.Highlight.Glass, 0.15, { ImageTransparency = 0.85 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight, { ImageColor3 = "Text" }, 0.15)
+                Tween(ToggleFrame.Frame.Bar.Highlight, 0.15, { ImageTransparency = 0 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             end
         else
             if Toggled then
@@ -220,8 +225,8 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
             Tween(ToggleFrame.Layer, 0.1, {
                 ImageTransparency = 0,
             }):Play()
-            Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight.Glass, { ImageColor3 = "Toggle" }, 0.1)
-            Tween(ToggleFrame.Frame.Bar.Highlight.Glass, 0.1, { ImageTransparency = 0 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+            Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight, { ImageColor3 = "Toggle" }, 0.1)
+            Tween(ToggleFrame.Frame.Bar.Highlight, 0.1, { ImageTransparency = 0 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
         
             if IconToggleFrame then 
                 Tween(IconToggleFrame, 0.1, {
@@ -229,17 +234,12 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
                 }):Play()
             end
 
-            local Id, RectSize, RectOffset = Toggle:GetGlassFrame(1)
-
-            ToggleFrame.Frame.Bar.Highlight.Glass.Image = Id
-            ToggleFrame.Frame.Bar.Highlight.Glass.ImageRectSize = RectSize
-            ToggleFrame.Frame.Bar.Highlight.Glass.ImageRectOffset = RectOffset
         else
             Tween(ToggleFrame.Layer, 0.1, {
                 ImageTransparency = 1,
             }):Play()
-            Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight.Glass, { ImageColor3 = "Text" }, 0.1)
-            Tween(ToggleFrame.Frame.Bar.Highlight.Glass, 0.1, { ImageTransparency = 0.85 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+            Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight, { ImageColor3 = "Text" }, 0.1)
+            Tween(ToggleFrame.Frame.Bar.Highlight, 0.1, { ImageTransparency = 0 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
         
             if IconToggleFrame then 
                 Tween(IconToggleFrame, 0.1, {
@@ -247,11 +247,6 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
                 }):Play()
             end
 
-            local Id, RectSize, RectOffset = Toggle:GetGlassFrame(0)
-
-            ToggleFrame.Frame.Bar.Highlight.Glass.Image = Id
-            ToggleFrame.Frame.Bar.Highlight.Glass.ImageRectSize = RectSize
-            ToggleFrame.Frame.Bar.Highlight.Glass.ImageRectOffset = RectOffset
         end
     
         isCallback = isCallback ~= false
@@ -297,11 +292,6 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
                 local newX = math.max(2, math.min(startFrameX + mouseDelta, ToggleWidth - FrameWidth - 2))
 
                 local Percent = math.clamp((newX - 2) / (ToggleWidth - FrameWidth - 4), 0, 1)
-
-                local Id, RectSize, RectOffset = Toggle:GetGlassFrame(Percent)
-                ToggleFrame.Frame.Bar.Highlight.Glass.Image = Id
-                ToggleFrame.Frame.Bar.Highlight.Glass.ImageRectSize = RectSize
-                ToggleFrame.Frame.Bar.Highlight.Glass.ImageRectOffset = RectOffset
 
                 Tween(ToggleFrame.Frame, 0.12, {
                     Position = UDim2.new(0, newX, 0.5, 0)
