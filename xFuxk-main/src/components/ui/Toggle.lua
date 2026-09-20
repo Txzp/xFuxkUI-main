@@ -69,17 +69,17 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
     })
     
     local ToggleFrame = Creator.NewRoundFrame(Radius, "Squircle",{
-        ImageTransparency = .85,
+        ImageTransparency = 0.45,
         ThemeTag = {
             ImageColor3 = "Text"
         },
         Parent = ToggleContainer,
-        Size = UDim2.new(0,NewElement and (24+24+4) or (24*1.7),0,24),
+        Size = UDim2.new(0, NewElement and (24 + 24 + 4) or 38, 0, 24),
         AnchorPoint = Vector2.new(1,0.5),
         Position = UDim2.new(0,0,0.5,0),
         Name = "ToggleFrame",
     }, {
-        Creator.NewRoundFrame(Radius, "Squircle", {
+            Creator.NewRoundFrame(Radius, "Squircle", {
             Size = UDim2.new(1,0,1,0),
             Name = "Layer",
             ThemeTag = {
@@ -104,7 +104,7 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
         
         --bar
         Creator.NewRoundFrame(Radius, "Squircle", {
-            Size = UDim2.new(0,NewElement and 30 or 20,0,20),
+            Size = UDim2.new(0, NewElement and 30 or 15, 0, NewElement and 20 or 15),
             Position = UDim2.new(0,2,0.5,0),
             AnchorPoint = Vector2.new(0,0.5),
             ImageTransparency = 1,
@@ -190,19 +190,19 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
     local dragConnection
     local endConnection
     local startX
-    local FrameWidth = NewElement and 30 or 20
+    local FrameWidth = NewElement and 30 or 15
     local ToggleWidth = ToggleFrame.Size.X.Offset
     
     function Toggle:Set(Toggled, isCallback, isAnim)
         if not isAnim then
             if Toggled then
-                Tween(ToggleFrame.Frame, 0.35, {
+                Tween(ToggleFrame.Frame, 0.3, {
                     Position = UDim2.new(0, ToggleWidth - FrameWidth - 2, 0.5, 0),
                 }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
                 Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight.Glass, { ImageColor3 = "Toggle" }, 0.15)
                 Tween(ToggleFrame.Frame.Bar.Highlight.Glass, 0.15, { ImageTransparency = 0 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             else
-                Tween(ToggleFrame.Frame, 0.35, {
+                Tween(ToggleFrame.Frame, 0.3, {
                     Position = UDim2.new(0, 2, 0.5, 0),
                 }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
                 Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight.Glass, { ImageColor3 = "Text" }, 0.15)

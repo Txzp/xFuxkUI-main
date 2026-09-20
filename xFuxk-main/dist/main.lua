@@ -6034,12 +6034,12 @@ Parent=ai,
 })
 
 local aq=ab.NewRoundFrame(an,"Squircle",{
-ImageTransparency=.85,
+ImageTransparency=0.45,
 ThemeTag={
 ImageColor3="Text"
 },
 Parent=ap,
-Size=UDim2.new(0,ak and(52)or(40.8),0,24),
+Size=UDim2.new(0,ak and(52)or 38,0,24),
 AnchorPoint=Vector2.new(1,0.5),
 Position=UDim2.new(0,0,0.5,0),
 Name="ToggleFrame",
@@ -6069,7 +6069,7 @@ NumberSequenceKeypoint.new(1,1),
 
 
 ab.NewRoundFrame(an,"Squircle",{
-Size=UDim2.new(0,ak and 30 or 20,0,20),
+Size=UDim2.new(0,ak and 30 or 15,0,ak and 20 or 15),
 Position=UDim2.new(0,2,0.5,0),
 AnchorPoint=Vector2.new(0,0.5),
 ImageTransparency=1,
@@ -6155,19 +6155,19 @@ Text="",
 local ar
 local as
 
-local at=ak and 30 or 20
+local at=ak and 30 or 15
 local au=aq.Size.X.Offset
 
 function am.Set(av,aw,ax,ay)
 if not ay then
 if aw then
-ad(aq.Frame,0.35,{
+ad(aq.Frame,0.3,{
 Position=UDim2.new(0,au-at-2,0.5,0),
 },Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
 ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Toggle"},0.15)
 ad(aq.Frame.Bar.Highlight.Glass,0.15,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 else
-ad(aq.Frame,0.35,{
+ad(aq.Frame,0.3,{
 Position=UDim2.new(0,2,0.5,0),
 },Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
 ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Text"},0.15)
