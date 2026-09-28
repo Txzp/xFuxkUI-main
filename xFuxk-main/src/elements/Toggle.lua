@@ -199,13 +199,17 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
                 Tween(ToggleFrame.Frame, 0.35, {
                     Position = UDim2.new(0, ToggleWidth - FrameWidth - 2, 0.5, 0),
                 }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
-                Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight.Glass, { ImageColor3 = "Toggle" }, 0.15)
+                Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight.Glass, {
+    ImageColor3 = Color3.fromRGB(255, 255, 255),
+}, 0.15)
                 Tween(ToggleFrame.Frame.Bar.Highlight.Glass, 0.15, { ImageTransparency = 0 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             else
                 Tween(ToggleFrame.Frame, 0.35, {
                     Position = UDim2.new(0, 2, 0.5, 0),
                 }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
-                Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight.Glass, { ImageColor3 = "Text" }, 0.15)
+                Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight.Glass, {
+    ImageColor3 = Color3.fromRGB(145, 145, 145),
+}, 0.15)
                 Tween(ToggleFrame.Frame.Bar.Highlight.Glass, 0.15, { ImageTransparency = 0.85 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             end
         else
@@ -220,7 +224,9 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
             Tween(ToggleFrame.Layer, 0.1, {
                 ImageTransparency = 0,
             }):Play()
-            Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight.Glass, { ImageColor3 = "Toggle" }, 0.1)
+            Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight.Glass, {
+    ImageColor3 = Color3.fromRGB(255, 255, 255),
+}, 0.1)
             Tween(ToggleFrame.Frame.Bar.Highlight.Glass, 0.1, { ImageTransparency = 0 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
         
             if IconToggleFrame then 
@@ -238,7 +244,9 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
             Tween(ToggleFrame.Layer, 0.1, {
                 ImageTransparency = 1,
             }):Play()
-            Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight.Glass, { ImageColor3 = "Text" }, 0.1)
+            Creator.SetThemeTag(ToggleFrame.Frame.Bar.Highlight.Glass, {
+    ImageColor3 = Color3.fromRGB(145, 145, 145),
+}, 0.1)
             Tween(ToggleFrame.Frame.Bar.Highlight.Glass, 0.1, { ImageTransparency = 0.85 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
         
             if IconToggleFrame then 
