@@ -2095,7 +2095,7 @@ Window:Dialog({
 		--     Window.CanResize = false
 		-- end, 996)
 
-		local SearchLabel = CreateLabel("Search", "search", Window.UIElements.SideBarContainer, true)
+		local SearchLabel = CreateLabel("Search", nil, Window.UIElements.SideBarContainer, true)
 		SearchLabel.Size = UDim2.new(1, -Window.UIPadding / 2, 0, 39)
 		SearchLabel.Position = UDim2.new(0, Window.UIPadding / 2, 0,--[[Window.UIPadding/2]] 0)
 

@@ -4,17 +4,15 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-09-28  |  Roblox UI Library for scripts
+    v{{VERSION}}  |  {{BUILD_DATE}}  |  {{DESCRIPTION}}
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
     Author: Footagesus (Footages, .ftgs, oftgs)
-    Github: https://github.com/Footagesus/WindUI
-    Discord: https://discord.gg/ftgs-development-hub-1300692552005189632
-    License: MIT
+    Github: {{REPOSITORY}}
+    Discord: {{DISCORD}}
+    License: {{LICENSE}}
 ]]
-
-
 local a a={cache={}, load=function(b)if not a.cache[b]then a.cache[b]={c=a[b]()}end return a.cache[b].c end}do function a.a()local b=(cloneref or clonereference or function(b)return b end)
 
 local d=b(game:GetService"ReplicatedStorage":WaitForChild("GetIcons",99999):InvokeServer())
@@ -13393,7 +13391,7 @@ local M=false
 
 
 
-local N=an("Search","search",at.UIElements.SideBarContainer,true)
+local N=an("Search",nil,at.UIElements.SideBarContainer,true)
 N.Size=UDim2.new(1,-at.UIPadding/2,0,39)
 N.Position=UDim2.new(0,at.UIPadding/2,0,0)
 
