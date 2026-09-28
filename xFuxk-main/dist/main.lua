@@ -6164,13 +6164,17 @@ if aw then
 ad(aq.Frame,0.35,{
 Position=UDim2.new(0,au-at-2,0.5,0),
 },Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
-ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Toggle"},0.15)
+ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{
+ImageColor3=Color3.fromRGB(255,255,255),
+},0.15)
 ad(aq.Frame.Bar.Highlight.Glass,0.15,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 else
 ad(aq.Frame,0.35,{
 Position=UDim2.new(0,2,0.5,0),
 },Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
-ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Text"},0.15)
+ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{
+ImageColor3=Color3.fromRGB(145,145,145),
+},0.15)
 ad(aq.Frame.Bar.Highlight.Glass,0.15,{ImageTransparency=0.85},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end
 else
@@ -6185,7 +6189,9 @@ if aw then
 ad(aq.Layer,0.1,{
 ImageTransparency=0,
 }):Play()
-ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Toggle"},0.1)
+ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{
+ImageColor3=Color3.fromRGB(255,255,255),
+},0.1)
 ad(aq.Frame.Bar.Highlight.Glass,0.1,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 
 if ao then
@@ -6203,7 +6209,9 @@ else
 ad(aq.Layer,0.1,{
 ImageTransparency=1,
 }):Play()
-ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Text"},0.1)
+ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{
+ImageColor3=Color3.fromRGB(145,145,145),
+},0.1)
 ad(aq.Frame.Bar.Highlight.Glass,0.1,{ImageTransparency=0.85},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 
 if ao then
