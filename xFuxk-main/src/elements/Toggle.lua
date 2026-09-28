@@ -47,20 +47,24 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
     end
     
     local Radius = 24/2
-    local IconToggleFrame
-    if Icon and Icon ~= "" then
+local IconToggleFrame
+if Icon and Icon ~= "" then
+    local IconData = Creator.Icon(Icon)
+
+    if IconData then
         IconToggleFrame = New("ImageLabel", {
             Size = UDim2.new(0,20-7,0,20-7),
             BackgroundTransparency = 1,
             AnchorPoint = Vector2.new(0.5,0.5),
             Position = UDim2.new(0.5,0,0.5,0),
-            Image = Creator.Icon(Icon)[1],
-            ImageRectOffset = Creator.Icon(Icon)[2].ImageRectPosition,
-            ImageRectSize = Creator.Icon(Icon)[2].ImageRectSize,
+            Image = IconData[1],
+            ImageRectOffset = IconData[2].ImageRectPosition,
+            ImageRectSize = IconData[2].ImageRectSize,
             ImageTransparency = 1,
             ImageColor3 = Color3.new(0,0,0),
         })
     end
+end
     
     local ToggleContainer = New("Frame", {
         Size = UDim2.new(0,2,0,26),

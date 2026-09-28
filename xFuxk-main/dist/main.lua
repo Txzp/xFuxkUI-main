@@ -6012,17 +6012,21 @@ end
 local an=12
 local ao
 if ag and ag~=""then
+local ap=ab.Icon(ag)
+
+if ap then
 ao=ac("ImageLabel",{
 Size=UDim2.new(0,13,0,13),
 BackgroundTransparency=1,
 AnchorPoint=Vector2.new(0.5,0.5),
 Position=UDim2.new(0.5,0,0.5,0),
-Image=ab.Icon(ag)[1],
-ImageRectOffset=ab.Icon(ag)[2].ImageRectPosition,
-ImageRectSize=ab.Icon(ag)[2].ImageRectSize,
+Image=ap[1],
+ImageRectOffset=ap[2].ImageRectPosition,
+ImageRectSize=ap[2].ImageRectSize,
 ImageTransparency=1,
 ImageColor3=Color3.new(0,0,0),
 })
+end
 end
 
 local ap=ac("Frame",{
