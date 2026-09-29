@@ -98,25 +98,23 @@ function Toggle.New(_, Config)
 
     Toggle.ToggleFrame = ElementFrame
 
-    local ToggleContainer = New("Frame", {
-        Size = UDim2.new(0, NewElement and 52 or 41, 1, 0),
-        BackgroundTransparency = 1,
-        AnchorPoint = Vector2.new(1,0.5),
-        Position = UDim2.new(1,-6,0.5,0),
-        Parent = ElementFrame.UIElements.Main,
-    })
-    
-    local SwitchFrame = Creator.NewRoundFrame(Radius, "Squircle",{
-        ImageTransparency = .85,
-        ThemeTag = {
-            ImageColor3 = "Text"
-        },
-        Parent = ToggleContainer,
-        Size = UDim2.new(0,NewElement and (24+24+4) or (24*1.7),0,24),
-        AnchorPoint = Vector2.new(1,0.5),
-        Position = UDim2.new(0,0,0.5,0),
-        Name = "ToggleFrame",
-    }, {
+local ToggleContainer = New("Frame", {
+    Size = UDim2.new(0, 2, 0, 26),
+    BackgroundTransparency = 1,
+    Parent = ElementFrame.UIElements.Main,
+})
+
+local SwitchFrame = Creator.NewRoundFrame(Radius, "Squircle", {
+    ImageTransparency = .85,
+    ThemeTag = {
+        ImageColor3 = "Text"
+    },
+    Parent = ToggleContainer,
+    Size = UDim2.new(0,NewElement and (24+24+4) or (24*1.7),0,24),
+    AnchorPoint = Vector2.new(1,0.5),
+    Position = UDim2.new(0,0,0.5,0),
+    Name = "ToggleFrame",
+}, {
         Creator.NewRoundFrame(Radius, "Squircle", {
             Size = UDim2.new(1,0,1,0),
             Name = "Layer",
