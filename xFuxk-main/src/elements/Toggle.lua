@@ -102,7 +102,7 @@ function Toggle.New(_, Config)
         Size = UDim2.new(0, NewElement and 52 or 41, 1, 0),
         BackgroundTransparency = 1,
         AnchorPoint = Vector2.new(1,0.5),
-        Position = UDim2.new(1,0,0.5,0),
+        Position = UDim2.new(1,-6,0.5,0),
         Parent = ElementFrame.UIElements.Main,
     })
     
