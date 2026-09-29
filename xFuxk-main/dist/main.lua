@@ -6062,7 +6062,7 @@ ParentConfig=ag,
 an.ToggleFrame=aq
 
 local ar=ac("Frame",{
-Size=UDim2.new(0,2,0,26),
+Size=UDim2.new(1,0,1,0),
 BackgroundTransparency=1,
 Parent=aq.UIElements.Main,
 })
@@ -6075,7 +6075,7 @@ ImageColor3="Text"
 Parent=ar,
 Size=UDim2.new(0,am and(52)or(40.8),0,24),
 AnchorPoint=Vector2.new(1,0.5),
-Position=UDim2.new(0,0,0.5,0),
+Position=UDim2.new(1,0,0.5,0),
 Name="ToggleFrame",
 },{
 ab.NewRoundFrame(ao,"Squircle",{
