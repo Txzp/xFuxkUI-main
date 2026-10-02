@@ -9408,21 +9408,11 @@ ai.Window.Folder,
 "Image",
 false
 )
-if ak and ak.Parent then
+
+if ak then
 ak.Parent=ai.Parent
 ak.Size=UDim2.new(1,0,0,0)
 ak.BackgroundTransparency=1
-
-
-
-
-
-
-
-
-
-
-
 
 local al=ParseAspectRatio(aj.AspectRatio)
 local am
