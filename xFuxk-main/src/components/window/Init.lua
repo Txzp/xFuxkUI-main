@@ -1165,18 +1165,6 @@ return function(Config)
 	local iconCopy = Creator.Icon("minimize")
 	local iconSquare = Creator.Icon("maximize")
 
-	local FullscreenButton = Window:CreateTopbarButton(
-		"Fullscreen",
-		Window.Topbar.ButtonsType == "Mac" and "rbxassetid://127426072704909" or "maximize",
-		function()
-			Window:ToggleFullscreen()
-		end,
-		(Window.Topbar.ButtonsType == "Default" and 998 or 999),
-		true,
-		Color3.fromHex("#60C762"),
-		Window.Topbar.ButtonsType == "Mac" and 9 or nil
-	)
-
 	function Window:ToggleFullscreen()
 		local isFullscreen = Window.IsFullscreen
 		-- Creator.SetDraggable(isFullscreen)

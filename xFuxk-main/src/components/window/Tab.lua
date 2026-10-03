@@ -170,33 +170,23 @@ local TabPressScale = New("UIScale", {
 })
 
 -- ANIMACIÓN SUAVE DE LA TAB
-local TabNormalPosition = Tab.UIElements.Main.Position
-local TabHoverPosition = TabNormalPosition + UDim2.new(0, 3, 0, 0)
+local TabHovered = false
 
 Creator.AddSignal(Tab.UIElements.Main.MouseEnter, function()
+	TabHovered = true
 	if not Tab.Locked then
-		Creator.Tween(
-			Tab.UIElements.Main,
-			0.18,
-			{
-				Position = TabHoverPosition
-			},
-			Enum.EasingStyle.Quint,
-			Enum.EasingDirection.Out
-		):Play()
+		Creator.Tween(TabPressScale, 0.2, { Scale = 1.035 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 	end
 end)
 
 Creator.AddSignal(Tab.UIElements.Main.MouseLeave, function()
-	Creator.Tween(
-		Tab.UIElements.Main,
-		0.18,
-		{
-			Position = TabNormalPosition
-		},
-		Enum.EasingStyle.Quint,
-		Enum.EasingDirection.Out
-	):Play()
+	TabHovered = false
+	Creator.Tween(TabPressScale, 0.2, { Scale = 1 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+	if not Tab.Locked then
+		Creator.SetThemeTag(Tab.UIElements.Main.Frame, {
+			ImageTransparency = "TabBorderTransparency",
+		}, 0.1)
+	end
 end)
 
 Creator.AddSignal(Tab.UIElements.Main.InputBegan, function(Input)
@@ -467,7 +457,7 @@ Tab.UIElements.ActiveIndicator = Creator.NewRoundFrame(Tab.UICorner, "Squircle",
 			end
 		end
 
-		if not Tab.Locked then
+		if not Tab.Locked and not TabHovered then
 			Creator.SetThemeTag(Tab.UIElements.Main.Frame, {
 				ImageTransparency = "TabBorderTransparency",
 			}, 0.1)
@@ -475,7 +465,8 @@ Tab.UIElements.ActiveIndicator = Creator.NewRoundFrame(Tab.UICorner, "Squircle",
 
 		if Input.UserInputType == Enum.UserInputType.Touch
 			or Input.UserInputType == Enum.UserInputType.MouseButton1 then
-			Creator.Tween(TabPressScale, 0.16, { Scale = 1 }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
+			local targetScale = TabHovered and not Tab.Locked and 1.035 or 1
+			Creator.Tween(TabPressScale, 0.16, { Scale = targetScale }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
 		end
 	end)
 
