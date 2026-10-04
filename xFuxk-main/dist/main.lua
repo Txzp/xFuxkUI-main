@@ -2225,7 +2225,7 @@ BackgroundTransparency=1,
 },{
 ab.NewRoundFrame(an,"Squircle",{
 ThemeTag={
-ImageColor3=not ao and ah~="White"and"Button"or nil,
+ImageColor3=ah=="Primary"and"Primary"or(ah=="White"and"White")or"Button",
 },
 ImageColor3=ao or(ah=="White"and Color3.new(1,1,1))or nil,
 Size=UDim2.new(1,0,1,0),
@@ -5882,7 +5882,7 @@ BackgroundTransparency=1,
 },{
 ab.NewRoundFrame(am,"Squircle",{
 ThemeTag={
-ImageColor3=ah~="White"and"Button"or nil,
+ImageColor3=ah=="Primary"and"Primary"or(ah=="White"and"White")or"Button",
 },
 ImageColor3=ah=="White"and Color3.new(1,1,1)or nil,
 Size=UDim2.new(1,0,1,0),

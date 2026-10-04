@@ -32,7 +32,7 @@ function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded,
 	}, {
 		Creator.NewRoundFrame(Radius, "Squircle", {
 			ThemeTag = {
-				ImageColor3 = not ButtonColor and Variant ~= "White" and "Button" or nil,
+				ImageColor3 = Variant == "Primary" and "Primary" or (Variant == "White" and "White") or "Button",
 			},
 			ImageColor3 = ButtonColor or (Variant == "White" and Color3.new(1, 1, 1)) or nil,
 			Size = UDim2.new(1, 0, 1, 0),
