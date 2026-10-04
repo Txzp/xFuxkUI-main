@@ -5840,6 +5840,18 @@ ao.Size=UDim2.new(0,0,0,38)
 ao.AutomaticSize="X"
 ao.AnchorPoint=Vector2.new(1,am.Window.NewElements and 0 or 0.5)
 ao.Position=UDim2.new(1,0,am.Window.NewElements and 0 or 0.5,0)
+
+local ap=an.ButtonFrame.UIElements.Container.TitleFrame
+local function UpdateTextWidth()
+local aq=ao.AbsoluteSize.X
+if aq>0 then
+ap.Size=UDim2.new(1,-(aq+am.Window.ElementConfig.UIPadding),0,0)
+end
+end
+
+ao:GetPropertyChangedSignal"AbsoluteSize":Connect(UpdateTextWidth)
+task.defer(UpdateTextWidth)
+
 an.Button=ao
 return an.__type,an
 end
@@ -10053,42 +10065,32 @@ Parent=ao.UIElements.Main,
 })
 
 
-local ar=ao.UIElements.Main.Position
-local as=ar+UDim2.new(0,3,0,0)
+local ar=false
 
 ag.AddSignal(ao.UIElements.Main.MouseEnter,function()
+ar=true
 if not ao.Locked then
-ag.Tween(
-ao.UIElements.Main,
-0.18,
-{
-Position=as
-},
-Enum.EasingStyle.Quint,
-Enum.EasingDirection.Out
-):Play()
+ag.Tween(aq,0.2,{Scale=1.035},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end
 end)
 
 ag.AddSignal(ao.UIElements.Main.MouseLeave,function()
-ag.Tween(
-ao.UIElements.Main,
-0.18,
-{
-Position=ar
-},
-Enum.EasingStyle.Quint,
-Enum.EasingDirection.Out
-):Play()
+ar=false
+ag.Tween(aq,0.2,{Scale=1},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+if not ao.Locked then
+ag.SetThemeTag(ao.UIElements.Main.Frame,{
+ImageTransparency="TabBorderTransparency",
+},0.1)
+end
 end)
 
-ag.AddSignal(ao.UIElements.Main.InputBegan,function(at)
+ag.AddSignal(ao.UIElements.Main.InputBegan,function(as)
 if ao.Locked then
 return
 end
 
-if at.UserInputType==Enum.UserInputType.Touch
-or at.UserInputType==Enum.UserInputType.MouseButton1 then
+if as.UserInputType==Enum.UserInputType.Touch
+or as.UserInputType==Enum.UserInputType.MouseButton1 then
 ag.Tween(aq,0.1,{Scale=0.97},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end
 end)
@@ -10105,12 +10107,12 @@ ZIndex=10,
 Parent=ao.UIElements.Main,
 })
 
-local at=0
+local as=0
+local at
 local au
-local av
 
 if ao.Icon then
-au=ag.Image(
+at=ag.Image(
 ao.Icon,
 ao.Icon..":"..ao.Title,
 0,
@@ -10120,16 +10122,16 @@ ao.IconColor and false or true,
 ao.IconThemed,
 "TabIcon"
 )
-au.Size=UDim2.new(0,16,0,16)
+at.Size=UDim2.new(0,16,0,16)
 if ao.IconColor then
-au.ImageLabel.ImageColor3=ao.IconColor
+at.ImageLabel.ImageColor3=ao.IconColor
 end
 if not ao.IconShape then
-au.Parent=ao.UIElements.Main.Frame
-ao.UIElements.Icon=au
-au.ImageLabel.ImageTransparency=not ao.Locked and 0 or 0.7
-at=-18-(Window.UIPadding/2)
-ao.UIElements.Main.Frame.TextLabel.Size=UDim2.new(1,at,0,0)
+at.Parent=ao.UIElements.Main.Frame
+ao.UIElements.Icon=at
+at.ImageLabel.ImageTransparency=not ao.Locked and 0 or 0.7
+as=-18-(Window.UIPadding/2)
+ao.UIElements.Main.Frame.TextLabel.Size=UDim2.new(1,as,0,0)
 elseif ao.IconColor then
 ag.NewRoundFrame(
 ao.IconShape~="Circle"and(ao.UICorner+5-(2+(Window.UIPadding/4)))or 9999,
@@ -10140,7 +10142,7 @@ ImageColor3=ao.IconColor,
 Parent=ao.UIElements.Main.Frame,
 },
 {
-au,
+at,
 ag.NewRoundFrame(
 ao.IconShape~="Circle"and(ao.UICorner+5-(2+(Window.UIPadding/4)))or 9999,
 "Glass-1.4",
@@ -10170,19 +10172,19 @@ Name="Outline",
 ),
 }
 )
-au.AnchorPoint=Vector2.new(0.5,0.5)
-au.Position=UDim2.new(0.5,0,0.5,0)
-au.ImageLabel.ImageTransparency=0
-au.ImageLabel.ImageColor3=ag.GetTextColorForHSB(ao.IconColor,0.68)
-at=-28-(Window.UIPadding/2)
-ao.UIElements.Main.Frame.TextLabel.Size=UDim2.new(1,at,0,0)
+at.AnchorPoint=Vector2.new(0.5,0.5)
+at.Position=UDim2.new(0.5,0,0.5,0)
+at.ImageLabel.ImageTransparency=0
+at.ImageLabel.ImageColor3=ag.GetTextColorForHSB(ao.IconColor,0.68)
+as=-28-(Window.UIPadding/2)
+ao.UIElements.Main.Frame.TextLabel.Size=UDim2.new(1,as,0,0)
 end
 
-av=
+au=
 ag.Image(ao.Icon,ao.Icon..":"..ao.Title,0,Window.Folder,ao.__type,true,ao.IconThemed)
-av.Size=UDim2.new(0,16,0,16)
-av.ImageLabel.ImageTransparency=not ao.Locked and 0 or 0.7
-at=-30
+au.Size=UDim2.new(0,16,0,16)
+au.ImageLabel.ImageTransparency=not ao.Locked and 0 or 0.7
+as=-30
 
 
 
@@ -10232,7 +10234,7 @@ BackgroundTransparency=1,
 Visible=ao.ShowTabTitle or false,
 Name="TabTitle",
 },{
-av,
+au,
 ai("TextLabel",{
 Text=ao.Title,
 ThemeTag={
@@ -10296,30 +10298,30 @@ if Window.ScrollBarEnabled then
 ak(ao.UIElements.ContainerFrame,ao.UIElements.ContainerFrameCanvas,Window,3)
 end
 
+local av
 local aw
 local ax
-local ay
-local az=false
+local ay=false
 
 
 if ao.Desc then
 ag.AddSignal(ao.UIElements.Main.InputBegan,function()
-az=true
-ax=task.spawn(function()
+ay=true
+aw=task.spawn(function()
 task.wait(0.35)
-if az and not aw then
-aw=aj(ao.Desc,al.ToolTipParent,true)
-aw.Container.AnchorPoint=Vector2.new(0.5,0.5)
+if ay and not av then
+av=aj(ao.Desc,al.ToolTipParent,true)
+av.Container.AnchorPoint=Vector2.new(0.5,0.5)
 
 local function updatePosition()
-if aw then
-aw.Container.Position=UDim2.new(0,ae.X,0,ae.Y-4)
+if av then
+av.Container.Position=UDim2.new(0,ae.X,0,ae.Y-4)
 end
 end
 
 updatePosition()
-ay=ae.Move:Connect(updatePosition)
-aw:Open()
+ax=ae.Move:Connect(updatePosition)
+av:Open()
 end
 end)
 end)
@@ -10333,42 +10335,43 @@ ImageColor3="TabBackgroundHover",
 },0.1)
 end
 end)
-ag.AddSignal(ao.UIElements.Main.InputEnded,function(aA)
+ag.AddSignal(ao.UIElements.Main.InputEnded,function(az)
 if ao.Desc then
-az=false
+ay=false
+if aw then
+task.cancel(aw)
+aw=nil
+end
 if ax then
-task.cancel(ax)
+ax:Disconnect()
 ax=nil
 end
-if ay then
-ay:Disconnect()
-ay=nil
-end
-if aw then
-aw:Close()
-aw=nil
+if av then
+av:Close()
+av=nil
 end
 end
 
-if not ao.Locked then
+if not ao.Locked and not ar then
 ag.SetThemeTag(ao.UIElements.Main.Frame,{
 ImageTransparency="TabBorderTransparency",
 },0.1)
 end
 
-if aA.UserInputType==Enum.UserInputType.Touch
-or aA.UserInputType==Enum.UserInputType.MouseButton1 then
-ag.Tween(aq,0.16,{Scale=1},Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
+if az.UserInputType==Enum.UserInputType.Touch
+or az.UserInputType==Enum.UserInputType.MouseButton1 then
+local aA=ar and not ao.Locked and 1.035 or 1
+ag.Tween(aq,0.16,{Scale=aA},Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
 end
 end)
 
-function ao.ScrollToTheElement(aA,aB)
+function ao.ScrollToTheElement(az,aA)
 ao.UIElements.ContainerFrame.ScrollingEnabled=false
 
 ag.Tween(ao.UIElements.ContainerFrame,0.45,{
 CanvasPosition=Vector2.new(
 0,
-ao.Elements[aB].ElementFrame.AbsolutePosition.Y
+ao.Elements[aA].ElementFrame.AbsolutePosition.Y
 -ao.UIElements.ContainerFrame.AbsolutePosition.Y
 -ao.UIElements.ContainerFrame.UIPadding.PaddingTop.Offset
 ),
@@ -10377,8 +10380,8 @@ ao.Elements[aB].ElementFrame.AbsolutePosition.Y
 task.spawn(function()
 task.wait(0.48)
 
-if ao.Elements[aB].Highlight then
-ao.Elements[aB]:Highlight()
+if ao.Elements[aA].Highlight then
+ao.Elements[aA]:Highlight()
 end
 ao.UIElements.ContainerFrame.ScrollingEnabled=true
 end)
@@ -10388,96 +10391,96 @@ end
 
 
 
-local aA=a.load'V'
+local az=a.load'V'
 
-aA.Load(
+az.Load(
 ao,
 ao.UIElements.ContainerFrame,
-aA.Elements,
+az.Elements,
 Window,
 WindUI,
 nil,
-aA,
+az,
 an,
 ao
 )
 
-function ao.AddButton(aB,b)
-return ao:Button(b)
+function ao.AddButton(aA,aB)
+return ao:Button(aB)
 end
 
-function ao.AddToggle(aB,b)
-b=b or{}
-if b.Value==nil and b.Default~=nil then
-b.Value=b.Default
+function ao.AddToggle(aA,aB)
+aB=aB or{}
+if aB.Value==nil and aB.Default~=nil then
+aB.Value=aB.Default
 end
-return ao:Toggle(b)
+return ao:Toggle(aB)
 end
 
-function ao.AddSlider(aB,b)
-b=b or{}
-if b.Value==nil then
-b.Value={
-Min=b.Min,
-Max=b.Max,
-Default=b.Default,
+function ao.AddSlider(aA,aB)
+aB=aB or{}
+if aB.Value==nil then
+aB.Value={
+Min=aB.Min,
+Max=aB.Max,
+Default=aB.Default,
 }
 end
-return ao:Slider(b)
+return ao:Slider(aB)
 end
 
-function ao.LockAll(aB)
+function ao.LockAll(aA)
+
+for aB,b in next,Window.AllElements do
+if b.Tab and b.Tab.Index and b.Tab.Index==ao.Index and b.Lock then
+b:Lock()
+end
+end
+end
+function ao.UnlockAll(aA)
+for aB,b in next,Window.AllElements do
+if b.Tab and b.Tab.Index and b.Tab.Index==ao.Index and b.Unlock then
+b:Unlock()
+end
+end
+end
+function ao.GetLocked(aA)
+local aB={}
 
 for b,d in next,Window.AllElements do
-if d.Tab and d.Tab.Index and d.Tab.Index==ao.Index and d.Lock then
-d:Lock()
+if d.Tab and d.Tab.Index and d.Tab.Index==ao.Index and d.Locked==true then
+table.insert(aB,d)
 end
 end
+
+return aB
 end
-function ao.UnlockAll(aB)
+function ao.GetUnlocked(aA)
+local aB={}
+
 for b,d in next,Window.AllElements do
-if d.Tab and d.Tab.Index and d.Tab.Index==ao.Index and d.Unlock then
-d:Unlock()
-end
-end
-end
-function ao.GetLocked(aB)
-local b={}
-
-for d,f in next,Window.AllElements do
-if f.Tab and f.Tab.Index and f.Tab.Index==ao.Index and f.Locked==true then
-table.insert(b,f)
+if d.Tab and d.Tab.Index and d.Tab.Index==ao.Index and d.Locked==false then
+table.insert(aB,d)
 end
 end
 
-return b
-end
-function ao.GetUnlocked(aB)
-local b={}
-
-for d,f in next,Window.AllElements do
-if f.Tab and f.Tab.Index and f.Tab.Index==ao.Index and f.Locked==false then
-table.insert(b,f)
-end
+return aB
 end
 
-return b
-end
-
-function ao.Select(aB)
+function ao.Select(aA)
 return al:SelectTab(ao.Index)
 end
 
 task.spawn(function()
-local aB
+local aA
 if ao.CustomEmptyPage.Icon then
-aB=
+aA=
 ag.Image(ao.CustomEmptyPage.Icon,ao.CustomEmptyPage.Icon,0,"Temp","EmptyPage",true)
-aB.Size=
+aA.Size=
 UDim2.fromOffset(ao.CustomEmptyPage.IconSize or 48,ao.CustomEmptyPage.IconSize or 48)
 end
 
-local b=ai("Frame",{
+local aB=ai("Frame",{
 BackgroundTransparency=1,
 Size=UDim2.new(1,0,1,-Window.UIElements.Main.Main.Topbar.AbsoluteSize.Y),
 Parent=ao.UIElements.ContainerFrame,
@@ -10500,7 +10503,7 @@ FillDirection="Vertical",
 
 
 
-aB,
+aA,
 ao.CustomEmptyPage.Title
 and ai("TextLabel",{
 AutomaticSize="XY",
@@ -10533,10 +10536,10 @@ or nil,
 
 
 
-local d
-d=ag.AddSignal(ao.UIElements.ContainerFrame.ChildAdded,function()
-b.Visible=false
-d:Disconnect()
+local b
+b=ag.AddSignal(ao.UIElements.ContainerFrame.ChildAdded,function()
+aB.Visible=false
+b:Disconnect()
 end)
 end)
 
@@ -12519,18 +12522,6 @@ local u
 local v
 ak.Icon"minimize"
 ak.Icon"maximize"
-
-at:CreateTopbarButton(
-"Fullscreen",
-at.Topbar.ButtonsType=="Mac"and"rbxassetid://127426072704909"or"maximize",
-function()
-at:ToggleFullscreen()
-end,
-(at.Topbar.ButtonsType=="Default"and 998 or 999),
-true,
-Color3.fromHex"#60C762",
-at.Topbar.ButtonsType=="Mac"and 9 or nil
-)
 
 function at.ToggleFullscreen(x)
 local z=at.IsFullscreen
