@@ -43,6 +43,18 @@ function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded,
 		ButtonFrame.AutomaticSize = "X"
 		ButtonFrame.AnchorPoint = Vector2.new(1, Config.Window.NewElements and 0 or 0.5)
 		ButtonFrame.Position = UDim2.new(1, 0, Config.Window.NewElements and 0 or 0.5, 0)
+
+		local TextFrame = Element.ButtonFrame.UIElements.Container.TitleFrame
+		local function UpdateTextWidth()
+			local ButtonWidth = ButtonFrame.AbsoluteSize.X
+			if ButtonWidth > 0 then
+				TextFrame.Size = UDim2.new(1, -(ButtonWidth + Config.Window.ElementConfig.UIPadding), 0, 0)
+			end
+		end
+
+		ButtonFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(UpdateTextWidth)
+		task.defer(UpdateTextWidth)
+
 		Element.Button = ButtonFrame
 		return Element.__type, Element
 	end
