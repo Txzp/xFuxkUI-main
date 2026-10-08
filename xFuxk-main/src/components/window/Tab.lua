@@ -175,7 +175,7 @@ local TabHovered = false
 Creator.AddSignal(Tab.UIElements.Main.MouseEnter, function()
 	TabHovered = true
 	if not Tab.Locked then
-		Creator.Tween(TabPressScale, 0.2, { Scale = 1.035 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+		Creator.Tween(TabPressScale, 0.2, { Scale = 1.08 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 	end
 end)
 
@@ -200,7 +200,7 @@ Creator.AddSignal(Tab.UIElements.Main.InputBegan, function(Input)
 	end
 end)
 
--- AGREGADO POR TZHZK: Frame blanco lateral para indicar tab activa 
+-- tab indicator
 Tab.UIElements.ActiveIndicator = Creator.NewRoundFrame(Tab.UICorner, "Squircle", { 
 	Size = UDim2.new(0, 0, 1, -8),
     Position = UDim2.new(0, 2, 0.5, 0), 
@@ -465,7 +465,7 @@ Tab.UIElements.ActiveIndicator = Creator.NewRoundFrame(Tab.UICorner, "Squircle",
 
 		if Input.UserInputType == Enum.UserInputType.Touch
 			or Input.UserInputType == Enum.UserInputType.MouseButton1 then
-			local targetScale = TabHovered and not Tab.Locked and 1.035 or 1
+			local targetScale = TabHovered and not Tab.Locked and 1.08 or 1
 			Creator.Tween(TabPressScale, 0.16, { Scale = targetScale }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
 		end
 	end)

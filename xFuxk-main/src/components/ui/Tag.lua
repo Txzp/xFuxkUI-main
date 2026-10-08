@@ -67,13 +67,6 @@ function Tag:New(TagConfig, Parent)
 		},
 	}, {
 		BackgroundGradient,
-		Creator.NewRoundFrame(TagModule.Radius, "Glass-1", {
-			Size = UDim2.new(1, 0, 1, 0),
-			ThemeTag = {
-				ImageColor3 = "White",
-			},
-			ImageTransparency = 0.55,
-		}),
 		New("Frame", {
 			Size = UDim2.new(0, 0, 1, 0),
 			AutomaticSize = "X",

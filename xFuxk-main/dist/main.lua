@@ -3686,7 +3686,7 @@ return function(aa,ab)
 return{
 Dark={
 Name="Dark",
-Accent=Color3.fromHex"#18181b",
+Accent=Color3.fromHex"#0d0d0d",
 Dialog=Color3.fromHex"#000000",
 Outline=Color3.fromHex"#FFFFFF",
 Text=Color3.fromHex"#FFFFFF",
@@ -3712,6 +3712,7 @@ ElementBorderTransparency=0.5,
 
 
 }
+
 end end function a.v()
 local aa={}
 
@@ -4061,13 +4062,6 @@ ImageColor3=ah.Color,
 },
 },{
 ak,
-ab.NewRoundFrame(ah.Radius,"Glass-1",{
-Size=UDim2.new(1,0,1,0),
-ThemeTag={
-ImageColor3="White",
-},
-ImageTransparency=0.55,
-}),
 ac("Frame",{
 Size=UDim2.new(0,0,1,0),
 AutomaticSize="X",
@@ -10070,7 +10064,7 @@ local ar=false
 ag.AddSignal(ao.UIElements.Main.MouseEnter,function()
 ar=true
 if not ao.Locked then
-ag.Tween(aq,0.2,{Scale=1.035},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+ag.Tween(aq,0.2,{Scale=1.08},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end
 end)
 
@@ -10360,7 +10354,7 @@ end
 
 if az.UserInputType==Enum.UserInputType.Touch
 or az.UserInputType==Enum.UserInputType.MouseButton1 then
-local aA=ar and not ao.Locked and 1.035 or 1
+local aA=ar and not ao.Locked and 1.08 or 1
 ag.Tween(aq,0.16,{Scale=aA},Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
 end
 end)

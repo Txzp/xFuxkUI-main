@@ -2,7 +2,7 @@ return function(WindUI, Creator)
 	return {
 		Dark = {
 			Name = "Dark",
-			Accent = Color3.fromHex("#18181b"),
+			Accent = Color3.fromHex("#0d0d0d"),
 			Dialog = Color3.fromHex("#000000"),
 			Outline = Color3.fromHex("#FFFFFF"),
 			Text = Color3.fromHex("#FFFFFF"),
@@ -28,4 +28,5 @@ return function(WindUI, Creator)
         -- Para ahorrar espacio, asume que el resto de temas (Light, Rose, etc.) están bien.
         -- Solo asegúrate de que el archivo termine con:
     }
+	
 end
