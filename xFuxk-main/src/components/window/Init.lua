@@ -717,6 +717,59 @@ return function(Config)
 			--     Scale = 0.95,
 			-- }),
 		}),
+		New("Frame", {
+			Name = "GlassSweep",
+			Size = UDim2.new(1, 0, 1, 0),
+			BackgroundTransparency = 1,
+			ClipsDescendants = true,
+			Active = false,
+			Selectable = false,
+			ZIndex = 96,
+		}, {
+			New("Frame", {
+				Name = "BackGlass",
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.new(0, -72, 0.5, 0),
+				Rotation = 8,
+				Size = UDim2.new(0, 56, 1.15, 0),
+				BackgroundColor3 = Color3.new(1, 1, 1),
+				BorderSizePixel = 0,
+				ZIndex = 96,
+			}, {
+				New("UIGradient", {
+					Transparency = NumberSequence.new({
+						NumberSequenceKeypoint.new(0, 1),
+						NumberSequenceKeypoint.new(0.28, 0.99),
+						NumberSequenceKeypoint.new(0.43, 0.94),
+						NumberSequenceKeypoint.new(0.5, 0.88),
+						NumberSequenceKeypoint.new(0.57, 0.94),
+						NumberSequenceKeypoint.new(0.72, 0.99),
+						NumberSequenceKeypoint.new(1, 1),
+					}),
+				}),
+				New("Frame", {
+					Name = "FrontGlass",
+					AnchorPoint = Vector2.new(0.5, 0),
+					Position = UDim2.new(0.5, 0, 0, 0),
+					Size = UDim2.new(0, 6, 1, 0),
+					BackgroundColor3 = Color3.new(1, 1, 1),
+					BorderSizePixel = 0,
+					ZIndex = 96,
+				}, {
+					New("UIGradient", {
+						Transparency = NumberSequence.new({
+							NumberSequenceKeypoint.new(0, 1),
+							NumberSequenceKeypoint.new(0.25, 1),
+							NumberSequenceKeypoint.new(0.4, 0.92),
+							NumberSequenceKeypoint.new(0.5, 0.42),
+							NumberSequenceKeypoint.new(0.6, 0.92),
+							NumberSequenceKeypoint.new(0.75, 1),
+							NumberSequenceKeypoint.new(1, 1),
+						}),
+					}),
+				}),
+			}),
+		}),
 		--UIStroke,
 		UICorner,
 		FullScreenIcon,
@@ -828,6 +881,15 @@ return function(Config)
 			}),
 		}),
 	})
+
+	Tween(
+		Window.UIElements.Main.GlassSweep.BackGlass,
+		5.5,
+		{ Position = UDim2.new(1, 72, 0.5, 0) },
+		Enum.EasingStyle.Sine,
+		Enum.EasingDirection.InOut,
+		-1
+	):Play()
 
 	Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Left:GetPropertyChangedSignal("AbsoluteSize"), function()
 		local LeftWidth = 0
