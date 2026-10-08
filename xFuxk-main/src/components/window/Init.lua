@@ -734,51 +734,49 @@ return function(Config)
 			}),
 			New("Frame", {
 				Name = "GlassSweep",
-				Size = UDim2.new(1, 0, 1, 0),
+				Size = UDim2.new(1, -8, 1, -8),
+				Position = UDim2.new(0, 4, 0, 4),
 				BackgroundTransparency = 1,
-				ClipsDescendants = true,
 				Active = false,
 				Selectable = false,
 			}, {
-				New("Frame", {
+				New("UICorner", {
+					CornerRadius = UDim.new(0, math.max(Window.UICorner - 4, 0)),
+				}),
+				New("UIStroke", {
 					Name = "BackGlass",
-					AnchorPoint = Vector2.new(0.5, 0.5),
-					Position = UDim2.new(0, -72, 0.5, 0),
-					Rotation = 8,
-					Size = UDim2.new(0, 64, 1.15, 0),
-					BackgroundColor3 = Color3.new(1, 1, 1),
-					BorderSizePixel = 0,
+					Color = Color3.new(1, 1, 1),
+					Thickness = 8,
+					Transparency = 0.75,
 				}, {
 					New("UIGradient", {
 						Transparency = NumberSequence.new({
 							NumberSequenceKeypoint.new(0, 1),
-							NumberSequenceKeypoint.new(0.28, 0.99),
-							NumberSequenceKeypoint.new(0.43, 0.92),
-							NumberSequenceKeypoint.new(0.5, 0.8),
-							NumberSequenceKeypoint.new(0.57, 0.92),
-							NumberSequenceKeypoint.new(0.72, 0.99),
+							NumberSequenceKeypoint.new(0.4, 1),
+							NumberSequenceKeypoint.new(0.46, 0),
+							NumberSequenceKeypoint.new(0.54, 0),
+							NumberSequenceKeypoint.new(0.6, 1),
 							NumberSequenceKeypoint.new(1, 1),
 						}),
+						Offset = Vector2.new(-1, 0),
 					}),
-					New("Frame", {
-						Name = "FrontGlass",
-						AnchorPoint = Vector2.new(0.5, 0),
-						Position = UDim2.new(0.5, 0, 0, 0),
-						Size = UDim2.new(0, 8, 1, 0),
-						BackgroundColor3 = Color3.new(1, 1, 1),
-						BorderSizePixel = 0,
-					}, {
-						New("UIGradient", {
-							Transparency = NumberSequence.new({
-								NumberSequenceKeypoint.new(0, 1),
-								NumberSequenceKeypoint.new(0.25, 1),
-								NumberSequenceKeypoint.new(0.4, 0.88),
-								NumberSequenceKeypoint.new(0.5, 0.3),
-								NumberSequenceKeypoint.new(0.6, 0.88),
-								NumberSequenceKeypoint.new(0.75, 1),
-								NumberSequenceKeypoint.new(1, 1),
-							}),
+				}),
+				New("UIStroke", {
+					Name = "FrontGlass",
+					Color = Color3.new(1, 1, 1),
+					Thickness = 3,
+					Transparency = 0.85,
+				}, {
+					New("UIGradient", {
+						Transparency = NumberSequence.new({
+							NumberSequenceKeypoint.new(0, 1),
+							NumberSequenceKeypoint.new(0.45, 1),
+							NumberSequenceKeypoint.new(0.48, 0),
+							NumberSequenceKeypoint.new(0.52, 0),
+							NumberSequenceKeypoint.new(0.55, 1),
+							NumberSequenceKeypoint.new(1, 1),
 						}),
+						Offset = Vector2.new(-1, 0),
 					}),
 				}),
 			}),
@@ -879,10 +877,18 @@ return function(Config)
 		}),
 	})
 
+	Creator.AddSignal(
+		Window.UIElements.Main.Main.GlassSweep.BackGlass.UIGradient:GetPropertyChangedSignal("Offset"),
+		function()
+			Window.UIElements.Main.Main.GlassSweep.FrontGlass.UIGradient.Offset =
+				Window.UIElements.Main.Main.GlassSweep.BackGlass.UIGradient.Offset
+		end
+	)
+
 	Tween(
-		Window.UIElements.Main.Main.GlassSweep.BackGlass,
+		Window.UIElements.Main.Main.GlassSweep.BackGlass.UIGradient,
 		5.5,
-		{ Position = UDim2.new(1, 72, 0.5, 0) },
+		{ Offset = Vector2.new(1, 0) },
 		Enum.EasingStyle.Sine,
 		Enum.EasingDirection.InOut,
 		-1
