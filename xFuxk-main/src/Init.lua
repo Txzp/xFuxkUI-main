@@ -370,14 +370,10 @@ function WindUI:CreateWindow(Config)
 	local UpdateDialog = Config.UpdateDialog
 	if type(UpdateDialog) == "table" and UpdateDialog.Enabled then
 		local UpdateDialogClosed = false
-		local UpdateTitle = UpdateDialog.Title or "Update"
-		local Version = UpdateDialog.Version
-		if Version and tostring(Version) ~= "" then
-			UpdateTitle = UpdateTitle .. " (" .. tostring(Version) .. ")"
-		end
 
 		WindUI:Popup({
-			Title = UpdateTitle,
+			Title = UpdateDialog.Title or "Update",
+			Version = UpdateDialog.Version,
 			Icon = UpdateDialog.Icon or Config.Icon,
 			Content = UpdateDialog.Description,
 			BulletPoints = true,

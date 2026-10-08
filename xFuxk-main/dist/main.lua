@@ -3491,13 +3491,14 @@ return ab end function a.t()
 local aa={}
 
 local ab=a.load'c'
-local ac=ab.New local ad=
-ab.Tween
+local ac=ab.New
+local ad=ab.Tween
 
 
 function aa.new(ae,af)
 local ag={
 Title=ae.Title or"Dialog",
+Version=ae.Version and tostring(ae.Version),
 Content=ae.Content,
 Icon=ae.Icon,
 IconThemed=ae.IconThemed,
@@ -3554,7 +3555,43 @@ TextWrapped=true,
 Size=UDim2.new(1,al and-ag.IconSize-14 or 0,0,0)
 })
 
-local an=ac("Frame",{
+local an
+if ag.Version and ag.Version~=""then
+local ao=ac("TextLabel",{
+AutomaticSize="XY",
+BackgroundTransparency=1,
+FontFace=Font.new(ab.Font,Enum.FontWeight.SemiBold),
+Text=ag.Version,
+TextSize=13,
+ThemeTag={
+TextColor3="Text",
+},
+})
+
+an=ac("Frame",{
+AutomaticSize="XY",
+BackgroundColor3=Color3.new(1,1,1),
+BackgroundTransparency=0.92,
+},{
+ac("UICorner",{
+CornerRadius=UDim.new(1,0),
+}),
+ac("UIStroke",{
+Color=Color3.new(1,1,1),
+Transparency=0.72,
+Thickness=1,
+}),
+ao,
+ac("UIPadding",{
+PaddingLeft=UDim.new(0,9),
+PaddingRight=UDim.new(0,9),
+PaddingTop=UDim.new(0,4),
+PaddingBottom=UDim.new(0,4),
+}),
+})
+end
+
+local ao=ac("Frame",{
 BackgroundTransparency=1,
 AutomaticSize="XY",
 },{
@@ -3566,50 +3603,52 @@ VerticalAlignment="Center"
 al,am
 })
 
-local ao=ac("Frame",{
+local ap=ac("Frame",{
 AutomaticSize="Y",
 Size=UDim2.new(1,0,0,0),
-BackgroundTransparency=1,
-},{
-
-
-
-
-
-an,
-})
-
-local ap
-if ag.Content and ag.Content~=""then
-if ae.BulletPoints then
-local aq=ac("Frame",{
-Size=UDim2.new(1,0,0,0),
-AutomaticSize="Y",
 BackgroundTransparency=1,
 },{
 ac("UIListLayout",{
+Padding=UDim.new(0,8),
+FillDirection="Vertical",
 SortOrder="LayoutOrder",
-Padding=UDim.new(0,6),
 }),
+ao,
+an,
 })
 
-local ar=0
-local as=string.gsub(tostring(ag.Content),"\r\n","\n")
-for at in string.gmatch(as.."\n","(.-)\n")do
-at=string.gsub(at,"^%s*(.-)%s*$","%1")
-if at~=""then
-ar=ar+1
-if string.sub(at,1,#"•")~="•"then
-at="• "..at
+local aq
+if ag.Content and ag.Content~=""then
+if ae.BulletPoints then
+local ar=ac("UIListLayout",{
+SortOrder="LayoutOrder",
+Padding=UDim.new(0,6),
+})
+local as=ac("Frame",{
+Size=UDim2.new(1,0,0,0),
+AutomaticSize="Y",
+BackgroundTransparency=1,
+},{
+ar,
+})
+
+local at=0
+local au=string.gsub(tostring(ag.Content),"\r\n","\n")
+for av in string.gmatch(au.."\n","(.-)\n")do
+av=string.gsub(av,"^%s*(.-)%s*$","%1")
+if av~=""then
+at=at+1
+if string.sub(av,1,#"•")~="•"then
+av="• "..av
 end
 
 ac("TextLabel",{
-LayoutOrder=ar,
+LayoutOrder=at,
 Size=UDim2.new(1,0,0,0),
 AutomaticSize="Y",
 BackgroundTransparency=1,
 FontFace=Font.new(ab.Font,Enum.FontWeight.Medium),
-Text=at,
+Text=av,
 TextSize=18,
 TextTransparency=0.2,
 TextXAlignment="Left",
@@ -3623,18 +3662,18 @@ ac("UIPadding",{
 PaddingLeft=UDim.new(0,2),
 PaddingRight=UDim.new(0,2),
 }),
-}).Parent=aq
+}).Parent=as
 end
 end
 
-if ar>0 then
-local at=workspace.CurrentCamera
-local au=at and at.ViewportSize.Y or 720
-local av=math.clamp(au-220,80,320)
+if at>0 then
+local av=workspace.CurrentCamera
+local aw=av and av.ViewportSize.Y or 720
+local ax=math.clamp(aw-220,80,320)
 
-ap=ac("ScrollingFrame",{
+aq=ac("ScrollingFrame",{
 Size=UDim2.new(1,0,0,0),
-AutomaticSize="Y",
+AutomaticSize="None",
 AutomaticCanvasSize="Y",
 CanvasSize=UDim2.new(0,0,0,0),
 ScrollingDirection="Y",
@@ -3644,15 +3683,23 @@ ElasticBehavior="Never",
 ClipsDescendants=true,
 BackgroundTransparency=1,
 },{
-aq,
-ac("UISizeConstraint",{
-MinSize=Vector2.new(0,0),
-MaxSize=Vector2.new(10000,av),
-}),
+as,
 })
+
+local function UpdateContentHeight()
+aq.Size=UDim2.new(
+1,
+0,
+0,
+math.min(ar.AbsoluteContentSize.Y,ax)
+)
+end
+
+ab.AddSignal(ar:GetPropertyChangedSignal"AbsoluteContentSize",UpdateContentHeight)
+UpdateContentHeight()
 end
 else
-ap=ac("TextLabel",{
+aq=ac("TextLabel",{
 Size=UDim2.new(1,0,0,0),
 AutomaticSize="Y",
 FontFace=Font.new(ab.Font,Enum.FontWeight.Medium),
@@ -3670,8 +3717,8 @@ TextWrapped=true,
 end
 end
 
-local aq=ac("Frame",{
-Size=UDim2.new(1,0,0,42),
+local ar=ac("Frame",{
+Size=UDim2.new(1,0,0,46),
 BackgroundTransparency=1,
 },{
 ac("UIListLayout",{
@@ -3681,11 +3728,11 @@ HorizontalAlignment="Right"
 })
 })
 
-local ar
-if ag.Thumbnail and ag.Thumbnail.Image then
 local as
+if ag.Thumbnail and ag.Thumbnail.Image then
+local at
 if ag.Thumbnail.Title then
-as=ac("TextLabel",{
+at=ac("TextLabel",{
 Text=ag.Thumbnail.Title,
 ThemeTag={
 TextColor3="Text",
@@ -3698,14 +3745,14 @@ AnchorPoint=Vector2.new(0.5,0.5),
 Position=UDim2.new(0.5,0,0.5,0),
 })
 end
-ar=ac("ImageLabel",{
+as=ac("ImageLabel",{
 Image=ag.Thumbnail.Image,
 BackgroundTransparency=1,
 Size=UDim2.new(0,aj,1,0),
 Parent=ai.UIElements.Main,
 ScaleType="Crop"
 },{
-as,
+at,
 ac("UICorner",{
 CornerRadius=UDim.new(0,0),
 })
@@ -3714,8 +3761,8 @@ end
 
 ac("Frame",{
 
-Size=UDim2.new(1,ar and-aj or 0,1,0),
-Position=UDim2.new(0,ar and aj or 0,0,0),
+Size=UDim2.new(1,as and-aj or 0,1,0),
+Position=UDim2.new(0,as and aj or 0,0,0),
 BackgroundTransparency=1,
 Parent=ai.UIElements.Main
 },{
@@ -3728,27 +3775,33 @@ ac("UIListLayout",{
 Padding=UDim.new(0,18),
 FillDirection="Vertical",
 }),
-ao,
 ap,
 aq,
+ar,
 ac("UIPadding",{
-PaddingTop=UDim.new(0,16),
+PaddingTop=UDim.new(0,18),
 PaddingLeft=UDim.new(0,16),
 PaddingRight=UDim.new(0,16),
-PaddingBottom=UDim.new(0,16),
+PaddingBottom=UDim.new(0,24),
 })
 }),
 })
 
 
 
-local as=a.load'l'.New
+local at=a.load'l'.New
 
-for at,au in next,ag.Buttons do
-as(au.Title,au.Icon,au.Callback,au.Variant,aq,ai,nil,nil,au.Color)
+for au,av in next,ag.Buttons do
+at(av.Title,av.Icon,av.Callback,av.Variant,ar,ai,nil,nil,av.Color)
 end
 
+local au=ac("UIScale",{
+Scale=0.92,
+Parent=ai.UIElements.MainContainer,
+})
+
 ai:Open()
+ad(au,0.42,{Scale=1},Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
 
 return ag
 end
@@ -14012,14 +14065,10 @@ end
 local aB=av.UpdateDialog
 if type(aB)=="table"and aB.Enabled then
 local b=false
-local d=aB.Title or"Update"
-local f=aB.Version
-if f and tostring(f)~=""then
-d=d.." ("..tostring(f)..")"
-end
 
 aa:Popup{
-Title=d,
+Title=aB.Title or"Update",
+Version=aB.Version,
 Icon=aB.Icon or av.Icon,
 Content=aB.Description,
 BulletPoints=true,

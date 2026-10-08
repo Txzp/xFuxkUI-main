@@ -8,6 +8,7 @@ local Tween = Creator.Tween
 function PopupModule.new(PopupConfig, Parent)
     local Popup = {
         Title = PopupConfig.Title or "Dialog",
+        Version = PopupConfig.Version and tostring(PopupConfig.Version),
         Content = PopupConfig.Content,
         Icon = PopupConfig.Icon,
         IconThemed = PopupConfig.IconThemed,
@@ -64,6 +65,42 @@ function PopupModule.new(PopupConfig, Parent)
         Size = UDim2.new(1, IconFrame and -Popup.IconSize-14 or 0,0,0)
     })
 
+    local VersionBadge
+    if Popup.Version and Popup.Version ~= "" then
+        local VersionText = New("TextLabel", {
+            AutomaticSize = "XY",
+            BackgroundTransparency = 1,
+            FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
+            Text = Popup.Version,
+            TextSize = 13,
+            ThemeTag = {
+                TextColor3 = "Text",
+            },
+        })
+
+        VersionBadge = New("Frame", {
+            AutomaticSize = "XY",
+            BackgroundColor3 = Color3.new(1, 1, 1),
+            BackgroundTransparency = 0.92,
+        }, {
+            New("UICorner", {
+                CornerRadius = UDim.new(1, 0),
+            }),
+            New("UIStroke", {
+                Color = Color3.new(1, 1, 1),
+                Transparency = 0.72,
+                Thickness = 1,
+            }),
+            VersionText,
+            New("UIPadding", {
+                PaddingLeft = UDim.new(0, 9),
+                PaddingRight = UDim.new(0, 9),
+                PaddingTop = UDim.new(0, 4),
+                PaddingBottom = UDim.new(0, 4),
+            }),
+        })
+    end
+
     local IconAndTitleContainer = New("Frame", {
         BackgroundTransparency = 1,
         AutomaticSize = "XY",
@@ -81,26 +118,28 @@ function PopupModule.new(PopupConfig, Parent)
         Size = UDim2.new(1,0,0,0),
         BackgroundTransparency = 1,
     }, {
-        -- New("UIListLayout", {
-        --     Padding = UDim.new(0,9),
-        --     FillDirection = "Horizontal",
-        --     VerticalAlignment = "Bottom"
-        -- }),
+        New("UIListLayout", {
+            Padding = UDim.new(0, 8),
+            FillDirection = "Vertical",
+            SortOrder = "LayoutOrder",
+        }),
         IconAndTitleContainer,
+        VersionBadge,
     })
     
     local NoteText
     if Popup.Content and Popup.Content ~= "" then
         if PopupConfig.BulletPoints then
+            local ContentLayout = New("UIListLayout", {
+                SortOrder = "LayoutOrder",
+                Padding = UDim.new(0, 6),
+            })
             local ContentLines = New("Frame", {
                 Size = UDim2.new(1, 0, 0, 0),
                 AutomaticSize = "Y",
                 BackgroundTransparency = 1,
             }, {
-                New("UIListLayout", {
-                    SortOrder = "LayoutOrder",
-                    Padding = UDim.new(0, 6),
-                }),
+                ContentLayout,
             })
 
             local LineCount = 0
@@ -144,7 +183,7 @@ function PopupModule.new(PopupConfig, Parent)
 
                 NoteText = New("ScrollingFrame", {
                     Size = UDim2.new(1, 0, 0, 0),
-                    AutomaticSize = "Y",
+                    AutomaticSize = "None",
                     AutomaticCanvasSize = "Y",
                     CanvasSize = UDim2.new(0, 0, 0, 0),
                     ScrollingDirection = "Y",
@@ -155,11 +194,19 @@ function PopupModule.new(PopupConfig, Parent)
                     BackgroundTransparency = 1,
                 }, {
                     ContentLines,
-                    New("UISizeConstraint", {
-                        MinSize = Vector2.new(0, 0),
-                        MaxSize = Vector2.new(10000, MaxContentHeight),
-                    }),
                 })
+
+                local function UpdateContentHeight()
+                    NoteText.Size = UDim2.new(
+                        1,
+                        0,
+                        0,
+                        math.min(ContentLayout.AbsoluteContentSize.Y, MaxContentHeight)
+                    )
+                end
+
+                Creator.AddSignal(ContentLayout:GetPropertyChangedSignal("AbsoluteContentSize"), UpdateContentHeight)
+                UpdateContentHeight()
             end
         else
             NoteText = New("TextLabel", {
@@ -181,7 +228,7 @@ function PopupModule.new(PopupConfig, Parent)
     end
 
     local ButtonsContainer = New("Frame", {
-        Size = UDim2.new(1,0,0,42),
+        Size = UDim2.new(1,0,0,46),
         BackgroundTransparency = 1,
     }, {
         New("UIListLayout", {
@@ -242,10 +289,10 @@ function PopupModule.new(PopupConfig, Parent)
             NoteText,
             ButtonsContainer,
             New("UIPadding", {
-                PaddingTop = UDim.new(0,16),
+                PaddingTop = UDim.new(0,18),
                 PaddingLeft = UDim.new(0,16),
                 PaddingRight = UDim.new(0,16),
-                PaddingBottom = UDim.new(0,16),
+                PaddingBottom = UDim.new(0,24),
             })
         }),
     })
@@ -258,7 +305,13 @@ function PopupModule.new(PopupConfig, Parent)
         CreateButton(values.Title, values.Icon, values.Callback, values.Variant, ButtonsContainer, Dialog, nil, nil, values.Color)
     end  -- <--- ¡AGREGA ESTE 'end' PARA CERRAR EL FOR!
 
+    local PopupScale = New("UIScale", {
+        Scale = 0.92,
+        Parent = Dialog.UIElements.MainContainer,
+    })
+
     Dialog:Open()
+    Tween(PopupScale, 0.42, { Scale = 1 }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
     
     return Popup
 end
