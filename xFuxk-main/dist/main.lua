@@ -3581,6 +3581,77 @@ an,
 
 local ap
 if ag.Content and ag.Content~=""then
+if ae.BulletPoints then
+local aq=ac("Frame",{
+Size=UDim2.new(1,0,0,0),
+AutomaticSize="Y",
+BackgroundTransparency=1,
+},{
+ac("UIListLayout",{
+SortOrder="LayoutOrder",
+Padding=UDim.new(0,6),
+}),
+})
+
+local ar=0
+local as=string.gsub(tostring(ag.Content),"\r\n","\n")
+for at in string.gmatch(as.."\n","(.-)\n")do
+at=string.gsub(at,"^%s*(.-)%s*$","%1")
+if at~=""then
+ar=ar+1
+if string.sub(at,1,#"•")~="•"then
+at="• "..at
+end
+
+ac("TextLabel",{
+LayoutOrder=ar,
+Size=UDim2.new(1,0,0,0),
+AutomaticSize="Y",
+BackgroundTransparency=1,
+FontFace=Font.new(ab.Font,Enum.FontWeight.Medium),
+Text=at,
+TextSize=18,
+TextTransparency=0.2,
+TextXAlignment="Left",
+TextWrapped=true,
+RichText=true,
+ThemeTag={
+TextColor3="PopupContent",
+},
+},{
+ac("UIPadding",{
+PaddingLeft=UDim.new(0,2),
+PaddingRight=UDim.new(0,2),
+}),
+}).Parent=aq
+end
+end
+
+if ar>0 then
+local at=workspace.CurrentCamera
+local au=at and at.ViewportSize.Y or 720
+local av=math.clamp(au-220,80,320)
+
+ap=ac("ScrollingFrame",{
+Size=UDim2.new(1,0,0,0),
+AutomaticSize="Y",
+AutomaticCanvasSize="Y",
+CanvasSize=UDim2.new(0,0,0,0),
+ScrollingDirection="Y",
+ScrollBarThickness=0,
+ScrollBarImageTransparency=1,
+ElasticBehavior="Never",
+ClipsDescendants=true,
+BackgroundTransparency=1,
+},{
+aq,
+ac("UISizeConstraint",{
+MinSize=Vector2.new(0,0),
+MaxSize=Vector2.new(10000,av),
+}),
+})
+end
+else
 ap=ac("TextLabel",{
 Size=UDim2.new(1,0,0,0),
 AutomaticSize="Y",
@@ -3596,6 +3667,7 @@ BackgroundTransparency=1,
 RichText=true,
 TextWrapped=true,
 })
+end
 end
 
 local aq=ac("Frame",{
@@ -13937,11 +14009,41 @@ task.wait()
 until ax
 end
 
+local aB=av.UpdateDialog
+if type(aB)=="table"and aB.Enabled then
+local b=false
+local d=aB.Title or"Update"
+local f=aB.Version
+if f and tostring(f)~=""then
+d=d.." ("..tostring(f)..")"
+end
+
+aa:Popup{
+Title=d,
+Icon=aB.Icon or av.Icon,
+Content=aB.Description,
+BulletPoints=true,
+Buttons={
+{
+Title=aB.ButtonText or"Thanks!",
+Variant="Primary",
+Callback=function()
+b=true
+end,
+},
+},
+}
+
+repeat
+task.wait()
+until b
+end
+
 av.OpenOnCreate=false
-local aB=aw(av)
+local b=aw(av)
 aa.Transparent=av.Transparent
-aa.Window=aB
-aB:Open()
+aa.Window=b
+b:Open()
 
 if av.Acrylic then
 ap.init()
@@ -13959,7 +14061,7 @@ end
 
 
 
-return aB
+return b
 end
 
 return aa

@@ -91,21 +91,93 @@ function PopupModule.new(PopupConfig, Parent)
     
     local NoteText
     if Popup.Content and Popup.Content ~= "" then
-        NoteText = New("TextLabel", {
-            Size = UDim2.new(1,0,0,0),
-            AutomaticSize = "Y",
-            FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
-            TextXAlignment = "Left",
-            Text = Popup.Content,
-            TextSize = 18,
-            TextTransparency = .2,
-            ThemeTag = {
-                TextColor3 = "PopupContent",
-            },
-            BackgroundTransparency = 1,
-            RichText = true,
-            TextWrapped = true,
-        })
+        if PopupConfig.BulletPoints then
+            local ContentLines = New("Frame", {
+                Size = UDim2.new(1, 0, 0, 0),
+                AutomaticSize = "Y",
+                BackgroundTransparency = 1,
+            }, {
+                New("UIListLayout", {
+                    SortOrder = "LayoutOrder",
+                    Padding = UDim.new(0, 6),
+                }),
+            })
+
+            local LineCount = 0
+            local Content = string.gsub(tostring(Popup.Content), "\r\n", "\n")
+            for Line in string.gmatch(Content .. "\n", "(.-)\n") do
+                Line = string.gsub(Line, "^%s*(.-)%s*$", "%1")
+                if Line ~= "" then
+                    LineCount = LineCount + 1
+                    if string.sub(Line, 1, #"•") ~= "•" then
+                        Line = "• " .. Line
+                    end
+
+                    New("TextLabel", {
+                        LayoutOrder = LineCount,
+                        Size = UDim2.new(1, 0, 0, 0),
+                        AutomaticSize = "Y",
+                        BackgroundTransparency = 1,
+                        FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+                        Text = Line,
+                        TextSize = 18,
+                        TextTransparency = 0.2,
+                        TextXAlignment = "Left",
+                        TextWrapped = true,
+                        RichText = true,
+                        ThemeTag = {
+                            TextColor3 = "PopupContent",
+                        },
+                    }, {
+                        New("UIPadding", {
+                            PaddingLeft = UDim.new(0, 2),
+                            PaddingRight = UDim.new(0, 2),
+                        }),
+                    }).Parent = ContentLines
+                end
+            end
+
+            if LineCount > 0 then
+                local CurrentCamera = workspace.CurrentCamera
+                local ViewportHeight = CurrentCamera and CurrentCamera.ViewportSize.Y or 720
+                local MaxContentHeight = math.clamp(ViewportHeight - 220, 80, 320)
+
+                NoteText = New("ScrollingFrame", {
+                    Size = UDim2.new(1, 0, 0, 0),
+                    AutomaticSize = "Y",
+                    AutomaticCanvasSize = "Y",
+                    CanvasSize = UDim2.new(0, 0, 0, 0),
+                    ScrollingDirection = "Y",
+                    ScrollBarThickness = 0,
+                    ScrollBarImageTransparency = 1,
+                    ElasticBehavior = "Never",
+                    ClipsDescendants = true,
+                    BackgroundTransparency = 1,
+                }, {
+                    ContentLines,
+                    New("UISizeConstraint", {
+                        MinSize = Vector2.new(0, 0),
+                        MaxSize = Vector2.new(10000, MaxContentHeight),
+                    }),
+                })
+            end
+        else
+            NoteText = New("TextLabel", {
+                Size = UDim2.new(1,0,0,0),
+                AutomaticSize = "Y",
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+                TextXAlignment = "Left",
+                Text = Popup.Content,
+                TextSize = 18,
+                TextTransparency = .2,
+                ThemeTag = {
+                    TextColor3 = "PopupContent",
+                },
+                BackgroundTransparency = 1,
+                RichText = true,
+                TextWrapped = true,
+            })
+        end
     end
 
     local ButtonsContainer = New("Frame", {
