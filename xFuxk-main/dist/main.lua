@@ -2577,24 +2577,36 @@ end)
 end
 
 function aj.Close(ak)
-if not ae then
-ac(aj.UIElements.FullScreen,0.1,{BackgroundTransparency=1}):Play()
-aj.UIElements.FullScreen.Active=false
-task.spawn(function()
-task.wait(0.1)
-aj.UIElements.FullScreen.Visible=false
-end)
+if aj.IsClosing then
+return function()end
 end
-aj.UIElements.Main.Visible=false
+aj.IsClosing=true
 
-ac(aj.UIElements.MainContainer,0.1,{ImageTransparency=1}):Play()
+if aj.DragModule then
+aj.DragModule:Set(false)
+end
 
-task.spawn(function()
-task.wait(0.1)
 if not ae then
-aj.UIElements.FullScreen:Destroy()
-else
+ac(aj.UIElements.FullScreen,0.2,{BackgroundTransparency=1}):Play()
+aj.UIElements.FullScreen.Active=false
+end
+local al=aj.UIElements.MainContainer:FindFirstChildOfClass"UIScale"
+if not al then
+al=ab("UIScale",{
+Scale=1,
+Parent=aj.UIElements.MainContainer,
+})
+end
+
+ac(al,0.2,{Scale=0.94},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
+ac(aj.UIElements.MainContainer,0.2,{ImageTransparency=1}):Play()
+
+task.delay(0.2,function()
+if aj.UIElements.MainContainer.Parent then
 aj.UIElements.MainContainer:Destroy()
+end
+if not ae and aj.UIElements.FullScreen.Parent then
+aj.UIElements.FullScreen:Destroy()
 end
 end)
 
@@ -3591,66 +3603,75 @@ PaddingBottom=UDim.new(0,4),
 })
 end
 
-local ao=ac("Frame",{
+local ao=al and-(ag.IconSize+14)or 0
+if an then
+ao=ao-math.max(54,#ag.Version*8+18)-14
+end
+am.Size=UDim2.new(1,ao,0,0)
+
+local ap=ac("Frame",{
 BackgroundTransparency=1,
-AutomaticSize="XY",
+Size=UDim2.new(1,0,0,0),
+AutomaticSize="Y",
 },{
 ac("UIListLayout",{
 Padding=UDim.new(0,14),
 FillDirection="Horizontal",
 VerticalAlignment="Center"
 }),
-al,am
+al,am,an
 })
 
-local ap=ac("Frame",{
+local aq=ac("Frame",{
 AutomaticSize="Y",
 Size=UDim2.new(1,0,0,0),
 BackgroundTransparency=1,
+Active=true,
 },{
-ac("UIListLayout",{
-Padding=UDim.new(0,8),
-FillDirection="Vertical",
-SortOrder="LayoutOrder",
-}),
-ao,
-an,
+ap,
 })
 
-local aq
+local ar=ac("Frame",{
+Size=UDim2.new(1,0,0,1),
+BackgroundColor3=Color3.new(1,1,1),
+BackgroundTransparency=0.82,
+BorderSizePixel=0,
+})
+
+local as
 if ag.Content and ag.Content~=""then
 if ae.BulletPoints then
-local ar=ac("UIListLayout",{
+local at=ac("UIListLayout",{
 SortOrder="LayoutOrder",
 Padding=UDim.new(0,6),
 })
-local as=ac("Frame",{
+local au=ac("Frame",{
 Size=UDim2.new(1,0,0,0),
 AutomaticSize="Y",
 BackgroundTransparency=1,
 },{
-ar,
+at,
 })
 
-local at=0
-local au=string.gsub(tostring(ag.Content),"\r\n","\n")
-for av in string.gmatch(au.."\n","(.-)\n")do
-av=string.gsub(av,"^%s*(.-)%s*$","%1")
-if av~=""then
-at=at+1
-if string.sub(av,1,#"•")~="•"then
-av="• "..av
+local av=0
+local aw=string.gsub(tostring(ag.Content),"\r\n","\n")
+for ax in string.gmatch(aw.."\n","(.-)\n")do
+ax=string.gsub(ax,"^%s*(.-)%s*$","%1")
+if ax~=""then
+av=av+1
+if string.sub(ax,1,#"•")~="•"then
+ax="• "..ax
 end
 
 ac("TextLabel",{
-LayoutOrder=at,
+LayoutOrder=av,
 Size=UDim2.new(1,0,0,0),
 AutomaticSize="Y",
 BackgroundTransparency=1,
 FontFace=Font.new(ab.Font,Enum.FontWeight.Medium),
-Text=av,
+Text=ax,
 TextSize=18,
-TextTransparency=0.2,
+TextTransparency=0,
 TextXAlignment="Left",
 TextWrapped=true,
 RichText=true,
@@ -3662,16 +3683,16 @@ ac("UIPadding",{
 PaddingLeft=UDim.new(0,2),
 PaddingRight=UDim.new(0,2),
 }),
-}).Parent=as
+}).Parent=au
 end
 end
 
-if at>0 then
-local av=workspace.CurrentCamera
-local aw=av and av.ViewportSize.Y or 720
-local ax=math.clamp(aw-220,80,320)
+if av>0 then
+local ax=workspace.CurrentCamera
+local ay=ax and ax.ViewportSize.Y or 720
+local az=math.clamp(ay-220,80,320)
 
-aq=ac("ScrollingFrame",{
+as=ac("ScrollingFrame",{
 Size=UDim2.new(1,0,0,0),
 AutomaticSize="None",
 AutomaticCanvasSize="Y",
@@ -3683,30 +3704,30 @@ ElasticBehavior="Never",
 ClipsDescendants=true,
 BackgroundTransparency=1,
 },{
-as,
+au,
 })
 
 local function UpdateContentHeight()
-aq.Size=UDim2.new(
+as.Size=UDim2.new(
 1,
 0,
 0,
-math.min(ar.AbsoluteContentSize.Y,ax)
+math.min(at.AbsoluteContentSize.Y,az)
 )
 end
 
-ab.AddSignal(ar:GetPropertyChangedSignal"AbsoluteContentSize",UpdateContentHeight)
+ab.AddSignal(at:GetPropertyChangedSignal"AbsoluteContentSize",UpdateContentHeight)
 UpdateContentHeight()
 end
 else
-aq=ac("TextLabel",{
+as=ac("TextLabel",{
 Size=UDim2.new(1,0,0,0),
 AutomaticSize="Y",
 FontFace=Font.new(ab.Font,Enum.FontWeight.Medium),
 TextXAlignment="Left",
 Text=ag.Content,
 TextSize=18,
-TextTransparency=.2,
+TextTransparency=0,
 ThemeTag={
 TextColor3="PopupContent",
 },
@@ -3717,7 +3738,7 @@ TextWrapped=true,
 end
 end
 
-local ar=ac("Frame",{
+local at=ac("Frame",{
 Size=UDim2.new(1,0,0,46),
 BackgroundTransparency=1,
 },{
@@ -3728,11 +3749,11 @@ HorizontalAlignment="Right"
 })
 })
 
-local as
+local au
 if ag.Thumbnail and ag.Thumbnail.Image then
-local at
+local av
 if ag.Thumbnail.Title then
-at=ac("TextLabel",{
+av=ac("TextLabel",{
 Text=ag.Thumbnail.Title,
 ThemeTag={
 TextColor3="Text",
@@ -3745,14 +3766,14 @@ AnchorPoint=Vector2.new(0.5,0.5),
 Position=UDim2.new(0.5,0,0.5,0),
 })
 end
-as=ac("ImageLabel",{
+au=ac("ImageLabel",{
 Image=ag.Thumbnail.Image,
 BackgroundTransparency=1,
 Size=UDim2.new(0,aj,1,0),
 Parent=ai.UIElements.Main,
 ScaleType="Crop"
 },{
-at,
+av,
 ac("UICorner",{
 CornerRadius=UDim.new(0,0),
 })
@@ -3761,8 +3782,8 @@ end
 
 ac("Frame",{
 
-Size=UDim2.new(1,as and-aj or 0,1,0),
-Position=UDim2.new(0,as and aj or 0,0,0),
+Size=UDim2.new(1,au and-aj or 0,1,0),
+Position=UDim2.new(0,au and aj or 0,0,0),
 BackgroundTransparency=1,
 Parent=ai.UIElements.Main
 },{
@@ -3775,9 +3796,10 @@ ac("UIListLayout",{
 Padding=UDim.new(0,18),
 FillDirection="Vertical",
 }),
-ap,
 aq,
 ar,
+as,
+at,
 ac("UIPadding",{
 PaddingTop=UDim.new(0,18),
 PaddingLeft=UDim.new(0,16),
@@ -3789,19 +3811,20 @@ PaddingBottom=UDim.new(0,24),
 
 
 
-local at=a.load'l'.New
+local av=a.load'l'.New
 
-for au,av in next,ag.Buttons do
-at(av.Title,av.Icon,av.Callback,av.Variant,ar,ai,nil,nil,av.Color)
+for aw,ax in next,ag.Buttons do
+av(ax.Title,ax.Icon,ax.Callback,ax.Variant,at,ai,nil,nil,ax.Color)
 end
 
-local au=ac("UIScale",{
+local aw=ac("UIScale",{
 Scale=0.92,
 Parent=ai.UIElements.MainContainer,
 })
 
+ai.DragModule=ab.Drag(ai.UIElements.MainContainer,{aq})
 ai:Open()
-ad(au,0.42,{Scale=1},Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
+ad(aw,0.42,{Scale=1},Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
 
 return ag
 end
@@ -14077,7 +14100,9 @@ Buttons={
 Title=aB.ButtonText or"Thanks!",
 Variant="Primary",
 Callback=function()
+task.delay(0.2,function()
 b=true
+end)
 end,
 },
 },

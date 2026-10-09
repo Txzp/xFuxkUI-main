@@ -27,5 +27,6 @@ local Window = WindUI:CreateWindow({
 
 Each description line is shown as a separate bullet. Long descriptions can be
 scrolled inside a bounded description area without moving the button. The
-version is displayed in a glass-style badge, and the popup uses an animated
-entrance. Set `Enabled = false` to skip the popup.
+version is displayed next to the title in a glass-style badge. The popup can be
+dragged by its header and uses animated entrance and exit transitions. Set
+`Enabled = false` to skip the popup.

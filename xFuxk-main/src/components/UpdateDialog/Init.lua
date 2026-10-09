@@ -101,30 +101,39 @@ function PopupModule.new(PopupConfig, Parent)
         })
     end
 
+    local TitleWidthOffset = IconFrame and -(Popup.IconSize + 14) or 0
+    if VersionBadge then
+        TitleWidthOffset = TitleWidthOffset - math.max(54, #Popup.Version * 8 + 18) - 14
+    end
+    Title.Size = UDim2.new(1, TitleWidthOffset, 0, 0)
+
     local IconAndTitleContainer = New("Frame", {
         BackgroundTransparency = 1,
-        AutomaticSize = "XY",
+        Size = UDim2.new(1, 0, 0, 0),
+        AutomaticSize = "Y",
     }, {
         New("UIListLayout", {
             Padding = UDim.new(0,14),
             FillDirection = "Horizontal",
             VerticalAlignment = "Center"
         }),
-        IconFrame, Title
+        IconFrame, Title, VersionBadge
     })
     
     local TitleContainer = New("Frame", {
         AutomaticSize = "Y",
         Size = UDim2.new(1,0,0,0),
         BackgroundTransparency = 1,
+        Active = true,
     }, {
-        New("UIListLayout", {
-            Padding = UDim.new(0, 8),
-            FillDirection = "Vertical",
-            SortOrder = "LayoutOrder",
-        }),
         IconAndTitleContainer,
-        VersionBadge,
+    })
+
+    local Divider = New("Frame", {
+        Size = UDim2.new(1, 0, 0, 1),
+        BackgroundColor3 = Color3.new(1, 1, 1),
+        BackgroundTransparency = 0.82,
+        BorderSizePixel = 0,
     })
     
     local NoteText
@@ -160,7 +169,7 @@ function PopupModule.new(PopupConfig, Parent)
                         FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
                         Text = Line,
                         TextSize = 18,
-                        TextTransparency = 0.2,
+                        TextTransparency = 0,
                         TextXAlignment = "Left",
                         TextWrapped = true,
                         RichText = true,
@@ -216,7 +225,7 @@ function PopupModule.new(PopupConfig, Parent)
                 TextXAlignment = "Left",
                 Text = Popup.Content,
                 TextSize = 18,
-                TextTransparency = .2,
+                TextTransparency = 0,
                 ThemeTag = {
                     TextColor3 = "PopupContent",
                 },
@@ -286,6 +295,7 @@ function PopupModule.new(PopupConfig, Parent)
                 FillDirection = "Vertical",
             }),
             TitleContainer,
+            Divider,
             NoteText,
             ButtonsContainer,
             New("UIPadding", {
@@ -310,6 +320,7 @@ function PopupModule.new(PopupConfig, Parent)
         Parent = Dialog.UIElements.MainContainer,
     })
 
+    Dialog.DragModule = Creator.Drag(Dialog.UIElements.MainContainer, { TitleContainer })
     Dialog:Open()
     Tween(PopupScale, 0.42, { Scale = 1 }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
     

@@ -252,7 +252,7 @@ end
 
 function WindUI:Popup(PopupConfig)
 	PopupConfig.WindUI = WindUI
-	return require("src/components/popup/Init").new(PopupConfig, WindUI.ScreenGui.Popups)
+	return require("src/components/UpdateDialog/Init").new(PopupConfig, WindUI.ScreenGui.Popups)
 end
 
 WindUI.Themes = require("src/themes/Init")(WindUI, Creator)
@@ -382,7 +382,9 @@ function WindUI:CreateWindow(Config)
 					Title = UpdateDialog.ButtonText or "Thanks!",
 					Variant = "Primary",
 					Callback = function()
-						UpdateDialogClosed = true
+						task.delay(0.2, function()
+							UpdateDialogClosed = true
+						end)
 					end,
 				},
 			},

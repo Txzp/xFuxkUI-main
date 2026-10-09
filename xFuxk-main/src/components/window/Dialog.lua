@@ -117,24 +117,36 @@ function DialogModule.Create(Key, Type, Window, WindUI, Parent)
 	end
 
 	function Dialog:Close()
-		if not Key then
-			Tween(Dialog.UIElements.FullScreen, 0.1, { BackgroundTransparency = 1 }):Play()
-			Dialog.UIElements.FullScreen.Active = false
-			task.spawn(function()
-				task.wait(0.1)
-				Dialog.UIElements.FullScreen.Visible = false
-			end)
+		if Dialog.IsClosing then
+			return function() end
 		end
-		Dialog.UIElements.Main.Visible = false
+		Dialog.IsClosing = true
 
-		Tween(Dialog.UIElements.MainContainer, 0.1, { ImageTransparency = 1 }):Play()
+		if Dialog.DragModule then
+			Dialog.DragModule:Set(false)
+		end
 
-		task.spawn(function()
-			task.wait(0.1)
-			if not Key then
-				Dialog.UIElements.FullScreen:Destroy()
-			else
+		if not Key then
+			Tween(Dialog.UIElements.FullScreen, 0.2, { BackgroundTransparency = 1 }):Play()
+			Dialog.UIElements.FullScreen.Active = false
+		end
+		local Scale = Dialog.UIElements.MainContainer:FindFirstChildOfClass("UIScale")
+		if not Scale then
+			Scale = New("UIScale", {
+				Scale = 1,
+				Parent = Dialog.UIElements.MainContainer,
+			})
+		end
+
+		Tween(Scale, 0.2, { Scale = 0.94 }, Enum.EasingStyle.Quint, Enum.EasingDirection.In):Play()
+		Tween(Dialog.UIElements.MainContainer, 0.2, { ImageTransparency = 1 }):Play()
+
+		task.delay(0.2, function()
+			if Dialog.UIElements.MainContainer.Parent then
 				Dialog.UIElements.MainContainer:Destroy()
+			end
+			if not Key and Dialog.UIElements.FullScreen.Parent then
+				Dialog.UIElements.FullScreen:Destroy()
 			end
 		end)
 
