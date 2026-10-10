@@ -387,12 +387,9 @@ return function(Config)
 					}),
 				}),
 			}),
-			Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding / 2), "Squircle", {
+			New("Frame", {
 				Size = UDim2.new(1, 0, 1, 0),
-				ThemeTag = {
-					ImageColor3 = "Text",
-				},
-				ImageTransparency = 1, -- .95
+				BackgroundTransparency = 1,
 				Name = "UserIcon",
 			}, {
 				New("ImageLabel", {
@@ -402,7 +399,7 @@ return function(Config)
 					ThemeTag = {
 						BackgroundColor3 = "Text",
 					},
-					BackgroundTransparency = 0.93,
+					BackgroundTransparency = 1,
 				}, {
 					New("UICorner", {
 						CornerRadius = UDim.new(1, 0),
@@ -501,11 +498,9 @@ return function(Config)
 				Window.User.Callback()
 			end)
 			Creator.AddSignal(UserIcon.MouseEnter, function()
-				Tween(UserIcon.UserIcon, 0.04, { ImageTransparency = 0.95 }):Play()
 				Tween(UserIcon.Outline, 0.04, { ImageTransparency = 0.85 }):Play()
 			end)
 			Creator.AddSignal(UserIcon.InputEnded, function()
-				Tween(UserIcon.UserIcon, 0.04, { ImageTransparency = 1 }):Play()
 				Tween(UserIcon.Outline, 0.04, { ImageTransparency = 1 }):Play()
 			end)
 		end
@@ -747,7 +742,7 @@ return function(Config)
 					Name = "BackGlass",
 					Color = Color3.new(1, 1, 1),
 					Thickness = 8,
-					Transparency = 0.75,
+					Transparency = 0.7,
 				}, {
 					New("UIGradient", {
 						Transparency = NumberSequence.new({
@@ -765,7 +760,7 @@ return function(Config)
 					Name = "FrontGlass",
 					Color = Color3.new(1, 1, 1),
 					Thickness = 3,
-					Transparency = 0.85,
+					Transparency = 0.8,
 				}, {
 					New("UIGradient", {
 						Transparency = NumberSequence.new({
@@ -877,7 +872,7 @@ return function(Config)
 			New("Frame", {
 				Name = "HeaderDivider",
 				Size = UDim2.new(1, -(Window.UIPadding * 2), 0, 1),
-				Position = UDim2.new(0.5, 0, 0, Window.Topbar.Height - 3),
+				Position = UDim2.new(0.5, 0, 0, Window.Topbar.Height - 5),
 				AnchorPoint = Vector2.new(0.5, 0),
 				BackgroundTransparency = 0.9,
 				ThemeTag = {

@@ -1,17 +1,5 @@
 --[[
-     _      ___         ____  ______
-    | | /| / (_)__  ___/ / / / /  _/
-    | |/ |/ / / _ \/ _  / /_/ // /  
-    |__/|__/_/_//_/\_,_/\____/___/
-    
-    v{{VERSION}}  |  {{BUILD_DATE}}  |  {{DESCRIPTION}}
-    
-    To view the source code, see the `src/` folder on the official GitHub repository.
-    
-    Author: Footagesus (Footages, .ftgs, oftgs)
-    Github: {{REPOSITORY}}
-    Discord: {{DISCORD}}
-    License: {{LICENSE}}
+PEAKX MODDED LIBRARY
 ]]
 local a a={cache={}, load=function(b)if not a.cache[b]then a.cache[b]={c=a[b]()}end return a.cache[b].c end}do function a.a()local b=(cloneref or clonereference or function(b)return b end)
 
@@ -11827,12 +11815,9 @@ NumberSequenceKeypoint.new(1.0,0.1),
 },
 }),
 }),
-ak.NewRoundFrame(at.UICorner-(at.UIPadding/2),"Squircle",{
+al("Frame",{
 Size=UDim2.new(1,0,1,0),
-ThemeTag={
-ImageColor3="Text",
-},
-ImageTransparency=1,
+BackgroundTransparency=1,
 Name="UserIcon",
 },{
 al("ImageLabel",{
@@ -11842,7 +11827,7 @@ Size=UDim2.new(0,42,0,42),
 ThemeTag={
 BackgroundColor3="Text",
 },
-BackgroundTransparency=0.93,
+BackgroundTransparency=1,
 },{
 al("UICorner",{
 CornerRadius=UDim.new(1,0),
@@ -11941,11 +11926,9 @@ ak.AddSignal(aA.MouseButton1Click,function()
 at.User.Callback()
 end)
 ak.AddSignal(aA.MouseEnter,function()
-am(aA.UserIcon,0.04,{ImageTransparency=0.95}):Play()
 am(aA.Outline,0.04,{ImageTransparency=0.85}):Play()
 end)
 ak.AddSignal(aA.InputEnded,function()
-am(aA.UserIcon,0.04,{ImageTransparency=1}):Play()
 am(aA.Outline,0.04,{ImageTransparency=1}):Play()
 end)
 end
@@ -12187,7 +12170,7 @@ al("UIStroke",{
 Name="BackGlass",
 Color=Color3.new(1,1,1),
 Thickness=8,
-Transparency=0.75,
+Transparency=0.7,
 },{
 al("UIGradient",{
 Transparency=NumberSequence.new{
@@ -12205,7 +12188,7 @@ al("UIStroke",{
 Name="FrontGlass",
 Color=Color3.new(1,1,1),
 Thickness=3,
-Transparency=0.85,
+Transparency=0.8,
 },{
 al("UIGradient",{
 Transparency=NumberSequence.new{
@@ -12317,7 +12300,7 @@ PaddingBottom=UDim.new(0,at.UIPadding),
 al("Frame",{
 Name="HeaderDivider",
 Size=UDim2.new(1,-(at.UIPadding*2),0,1),
-Position=UDim2.new(0.5,0,0,at.Topbar.Height-3),
+Position=UDim2.new(0.5,0,0,at.Topbar.Height-5),
 AnchorPoint=Vector2.new(0.5,0),
 BackgroundTransparency=0.9,
 ThemeTag={
