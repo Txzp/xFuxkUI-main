@@ -2562,6 +2562,31 @@ aj.UIElements.FullScreen.Active=true
 end
 
 task.spawn(function()
+if af=="Dialog"then
+local al=aj.UIElements.MainContainer
+local am=al.Position
+local an=UDim2.new(
+am.X.Scale,
+am.X.Offset,
+am.Y.Scale,
+am.Y.Offset+10
+)
+local ao=ab("UIScale",{
+Scale=0.94,
+Parent=al,
+})
+
+al.Position=an
+ac(
+al,
+0.42,
+{Position=am},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.Out
+):Play()
+ac(ao,0.42,{Scale=1},Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
+end
+
 aj.UIElements.MainContainer.Visible=true
 
 if not ae then
@@ -12374,6 +12399,18 @@ PaddingRight=UDim.new(0,8),
 PaddingBottom=UDim.new(0,at.UIPadding),
 }),
 }),
+al("Frame",{
+Name="HeaderDivider",
+Size=UDim2.new(1,-(at.UIPadding*2),0,1),
+Position=UDim2.new(0.5,0,0,at.Topbar.Height-1),
+AnchorPoint=Vector2.new(0.5,0),
+BackgroundTransparency=0.9,
+ThemeTag={
+BackgroundColor3="Text",
+},
+Active=false,
+Selectable=false,
+}),
 }),
 })
 
@@ -12506,12 +12543,15 @@ Name=u,
 Object=G,
 }
 
+local H=u=="Minimize"or u=="Close"
+local J=false
 ak.AddSignal(G.MouseButton1Click,function()
 if x then
 x()
 end
 end)
 ak.AddSignal(G.MouseEnter,function()
+J=true
 if at.Topbar.ButtonsType=="Default"then
 am(G,0.15,{ImageTransparency=0.93}):Play()
 am(G.Outline,0.15,{ImageTransparency=0.75}):Play()
@@ -12534,13 +12574,24 @@ C or at.TopBarButtonIconSize
 ),
 },Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end
+if H then
+am(G.UIScale,0.24,{Scale=1.08},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+am(
+G,
+0.24,
+{Position=UDim2.new(0.5,0,0.5,-2)},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.Out
+):Play()
+end
 end)
 
 ak.AddSignal(G.MouseButton1Down,function()
-am(G.UIScale,0.2,{Scale=0.9},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+am(G.UIScale,0.2,{Scale=0.92},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end)
 
 ak.AddSignal(G.MouseLeave,function()
+J=false
 if at.Topbar.ButtonsType=="Default"then
 am(G,0.1,{ImageTransparency=1}):Play()
 am(G.Outline,0.1,{ImageTransparency=1}):Play()
@@ -12562,10 +12613,21 @@ Enum.EasingStyle.Quint,
 Enum.EasingDirection.Out
 ):Play()
 end
+if H then
+am(
+G,
+0.28,
+{Position=UDim2.new(0.5,0,0.5,0)},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.Out
+):Play()
+am(G.UIScale,0.28,{Scale=1},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+end
 end)
 
 ak.AddSignal(G.InputEnded,function()
-am(G.UIScale,0.2,{Scale=1},Enum.EasingStyle.Quint,Enum.EasingDirection.InOut):Play()
+local L=H and J and 1.08 or 1
+am(G.UIScale,0.24,{Scale=L},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end)
 
 return G
@@ -13405,8 +13467,24 @@ N,
 
 
 for P,Q in next,G.Buttons do
-
-ao(Q.Title,Q.Icon,Q.Callback,Q.Variant,O,H,true,nil,Q.Color)
+local R=
+ao(
+Q.Title,
+Q.Icon,
+Q.Callback,
+Q.Variant,
+O,
+H,
+true,
+nil,
+Q.Color
+)
+if Q.HideOutline then
+local S=R:FindFirstChild"Outline"
+if S then
+S:Destroy()
+end
+end
 end
 
 
@@ -13483,6 +13561,7 @@ Callback=function()
 C=false
 end,
 Variant="Secondary",
+HideOutline=true,
 },
 
 {
@@ -13492,7 +13571,8 @@ C=false
 at:Destroy()
 end,
 Variant="Primary",
-Color=Color3.fromHex"#b33b3b",
+Color=Color3.fromHex"#c8323b",
+HideOutline=true,
 },
 },
 }

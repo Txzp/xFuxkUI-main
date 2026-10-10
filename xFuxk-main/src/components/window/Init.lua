@@ -874,6 +874,18 @@ return function(Config)
 					PaddingBottom = UDim.new(0, Window.UIPadding),
 				}),
 			}),
+			New("Frame", {
+				Name = "HeaderDivider",
+				Size = UDim2.new(1, -(Window.UIPadding * 2), 0, 1),
+				Position = UDim2.new(0.5, 0, 0, Window.Topbar.Height - 1),
+				AnchorPoint = Vector2.new(0.5, 0),
+				BackgroundTransparency = 0.9,
+				ThemeTag = {
+					BackgroundColor3 = "Text",
+				},
+				Active = false,
+				Selectable = false,
+			}),
 		}),
 	})
 
@@ -1006,12 +1018,15 @@ return function(Config)
 			Object = Button,
 		}
 
+		local HasPremiumMotion = Name == "Minimize" or Name == "Close"
+		local IsHovered = false
 		Creator.AddSignal(Button.MouseButton1Click, function()
 			if Callback then
 				Callback()
 			end
 		end)
 		Creator.AddSignal(Button.MouseEnter, function()
+			IsHovered = true
 			if Window.Topbar.ButtonsType == "Default" then
 				Tween(Button, 0.15, { ImageTransparency = 0.93 }):Play()
 				Tween(Button.Outline, 0.15, { ImageTransparency = 0.75 }):Play()
@@ -1034,13 +1049,24 @@ return function(Config)
 					),
 				}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 			end
+			if HasPremiumMotion then
+				Tween(Button.UIScale, 0.24, { Scale = 1.08 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+				Tween(
+					Button,
+					0.24,
+					{ Position = UDim2.new(0.5, 0, 0.5, -2) },
+					Enum.EasingStyle.Quint,
+					Enum.EasingDirection.Out
+				):Play()
+			end
 		end)
 
 		Creator.AddSignal(Button.MouseButton1Down, function()
-			Tween(Button.UIScale, 0.2, { Scale = 0.9 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+			Tween(Button.UIScale, 0.2, { Scale = 0.92 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 		end)
 
 		Creator.AddSignal(Button.MouseLeave, function()
+			IsHovered = false
 			if Window.Topbar.ButtonsType == "Default" then
 				Tween(Button, 0.1, { ImageTransparency = 1 }):Play()
 				Tween(Button.Outline, 0.1, { ImageTransparency = 1 }):Play()
@@ -1062,10 +1088,21 @@ return function(Config)
 					Enum.EasingDirection.Out
 				):Play()
 			end
+			if HasPremiumMotion then
+				Tween(
+					Button,
+					0.28,
+					{ Position = UDim2.new(0.5, 0, 0.5, 0) },
+					Enum.EasingStyle.Quint,
+					Enum.EasingDirection.Out
+				):Play()
+				Tween(Button.UIScale, 0.28, { Scale = 1 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+			end
 		end)
 
 		Creator.AddSignal(Button.InputEnded, function()
-			Tween(Button.UIScale, 0.2, { Scale = 1 }, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
+			local Scale = HasPremiumMotion and IsHovered and 1.08 or 1
+			Tween(Button.UIScale, 0.24, { Scale = Scale }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 		end)
 
 		return Button
@@ -1906,7 +1943,23 @@ return function(Config)
 
 		for _, Button in next, DialogTable.Buttons do
 			local ButtonFrame =
-			CreateButton(Button.Title, Button.Icon, Button.Callback, Button.Variant, ButtonsContent, Dialog, true, nil, Button.Color)
+				CreateButton(
+					Button.Title,
+					Button.Icon,
+					Button.Callback,
+					Button.Variant,
+					ButtonsContent,
+					Dialog,
+					true,
+					nil,
+					Button.Color
+				)
+			if Button.HideOutline then
+				local Outline = ButtonFrame:FindFirstChild("Outline")
+				if Outline then
+					Outline:Destroy()
+				end
+			end
 		end
 
 		local function CheckButtonsOverflow()
@@ -1983,6 +2036,7 @@ Window:Dialog({
                 ClickedClose = false
             end,
             Variant = "Secondary",
+            HideOutline = true,
         },
 
         {
@@ -1992,7 +2046,8 @@ Window:Dialog({
                 Window:Destroy()
             end,
             Variant = "Primary",
-            Color = Color3.fromHex("#b33b3b"),
+            Color = Color3.fromHex("#c8323b"),
+            HideOutline = true,
         },
     },
 })

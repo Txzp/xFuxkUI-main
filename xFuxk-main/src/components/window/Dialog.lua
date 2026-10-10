@@ -102,6 +102,31 @@ function DialogModule.Create(Key, Type, Window, WindUI, Parent)
 		end
 
 		task.spawn(function()
+			if Type == "Dialog" then
+				local MainContainer = Dialog.UIElements.MainContainer
+				local TargetPosition = MainContainer.Position
+				local StartPosition = UDim2.new(
+					TargetPosition.X.Scale,
+					TargetPosition.X.Offset,
+					TargetPosition.Y.Scale,
+					TargetPosition.Y.Offset + 10
+				)
+				local Scale = New("UIScale", {
+					Scale = 0.94,
+					Parent = MainContainer,
+				})
+
+				MainContainer.Position = StartPosition
+				Tween(
+					MainContainer,
+					0.42,
+					{ Position = TargetPosition },
+					Enum.EasingStyle.Quint,
+					Enum.EasingDirection.Out
+				):Play()
+				Tween(Scale, 0.42, { Scale = 1 }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
+			end
+
 			Dialog.UIElements.MainContainer.Visible = true
 
 			if not Key then
