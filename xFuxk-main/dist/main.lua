@@ -5962,183 +5962,98 @@ return ag.__type,ag
 end
 
 return ac end function a.D()
-local aa={}
+local aa=a.load'c'
 
-local ab=a.load'c'
-local ac=ab.New
-local ad=ab.Tween
+local ab={}
 
-function aa.New(ae,af,ag,ah,ai,aj,ak,al)
-if type(ae)=="table"and type(af)=="table"and af.Window then
-local am=af
-local an={
+function ab.New(ac,ad)
+local ae={
 __type="Button",
-Title=am.Title or"Button",
-Icon=am.Icon,
-Callback=am.Callback,
-Variant=am.Variant,
+Title=ad.Title or"Button",
+Desc=ad.Desc,
+Icon=ad.Icon or"mouse-pointer-click",
+IconThemed=ad.IconThemed or false,
+IconColor=ad.IconColor,
+Color=ad.Color,
+Justify=ad.Justify or"Between",
+IconAlign=ad.IconAlign or"Right",
+Locked=ad.Locked or false,
+LockedTitle=ad.LockedTitle,
+Callback=ad.Callback or function()end,
 UIElements={},
 }
 
-an.ButtonFrame=a.load'B'{
-Title=an.Title,
-Desc=am.Desc,
-Window=am.Window,
-Parent=am.Parent,
-TextOffset=0,
-Hover=false,
-Tab=am.Tab,
-Index=am.Index,
-ElementTable=an,
-ParentConfig=am,
+local af=true
+
+ae.ButtonFrame=a.load'B'{
+Title=ae.Title,
+Desc=ae.Desc,
+Parent=ad.Parent,
+Window=ad.Window,
+Color=ae.Color,
+Justify=ae.Justify,
+TextOffset=20,
+Hover=true,
+Scalable=true,
+Tab=ad.Tab,
+Index=ad.Index,
+ElementTable=ae,
+ParentConfig=ad,
+Size=ad.Size,
+Tags=ad.Tags,
 }
 
-local ao=a.load'l'.New(
-an.Title,
-an.Icon,
-an.Callback,
-an.Variant,
-an.ButtonFrame.UIElements.Main,
-nil,
-am.Window.NewElements,
-am.Radius
+ae.UIElements.ButtonIcon=aa.Image(
+ae.Icon,
+ae.Icon,
+0,
+ad.Window.Folder,
+"Button",
+not(ae.Color or ae.IconColor)and true or nil,
+ae.IconThemed
 )
-ao.Size=UDim2.new(0,0,0,38)
-ao.AutomaticSize="X"
-ao.AnchorPoint=Vector2.new(1,am.Window.NewElements and 0 or 0.5)
-ao.Position=UDim2.new(1,0,am.Window.NewElements and 0 or 0.5,0)
 
-local ap=an.ButtonFrame.UIElements.Container.TitleFrame
-local function UpdateTextWidth()
-local aq=ao.AbsoluteSize.X
-if aq>0 then
-ap.Size=UDim2.new(1,-(aq+am.Window.ElementConfig.UIPadding),0,0)
-end
+if ae.IconColor then
+ae.UIElements.ButtonIcon.ImageLabel.ImageColor3=ae.IconColor
 end
 
-ao:GetPropertyChangedSignal"AbsoluteSize":Connect(UpdateTextWidth)
-task.defer(UpdateTextWidth)
+ae.UIElements.ButtonIcon.Size=UDim2.new(0,20,0,20)
+ae.UIElements.ButtonIcon.Parent=ae.Justify=="Between"and ae.ButtonFrame.UIElements.Main
+or ae.ButtonFrame.UIElements.Container.TitleFrame
+ae.UIElements.ButtonIcon.LayoutOrder=ae.IconAlign=="Left"and-99999 or 99999
+ae.UIElements.ButtonIcon.AnchorPoint=Vector2.new(1,0.5)
+ae.UIElements.ButtonIcon.Position=UDim2.new(1,0,0.5,0)
 
-an.Button=ao
-return an.__type,an
+ae.ButtonFrame:Colorize(ae.UIElements.ButtonIcon.ImageLabel,"ImageColor3")
+
+function ae.Lock(ag)
+ae.Locked=true
+af=false
+return ae.ButtonFrame:Lock(ae.LockedTitle)
 end
 
-ah=ah or"Primary"
-local am=al or(not ak and 10 or 99)
-local an
-if af and af~=""then
-an=ac("ImageLabel",{
-Image=ab.Icon(af)[1],
-ImageRectSize=ab.Icon(af)[2].ImageRectSize,
-ImageRectOffset=ab.Icon(af)[2].ImageRectPosition,
-Size=UDim2.new(0,21,0,21),
-BackgroundTransparency=1,
-ImageColor3=ah=="White"and Color3.new(0,0,0)or nil,
-ImageTransparency=ah=="White"and 0.4 or 0,
-ThemeTag={
-ImageColor3=ah~="White"and"Icon"or nil,
-},
-})
+function ae.Unlock(ag)
+ae.Locked=false
+af=true
+return ae.ButtonFrame:Unlock()
 end
 
-local ao=ac("TextButton",{
-Size=UDim2.new(0,0,1,0),
-AutomaticSize="X",
-Parent=ai,
-BackgroundTransparency=1,
-},{
-ab.NewRoundFrame(am,"Squircle",{
-ThemeTag={
-ImageColor3=ah=="Primary"and"Primary"or(ah=="White"and"White")or"Button",
-},
-ImageColor3=ah=="White"and Color3.new(1,1,1)or nil,
-Size=UDim2.new(1,0,1,0),
-Name="Squircle",
-ImageTransparency=ah=="Primary"and 0 or ah=="White"and 0 or 0.9,
-}),
+if ae.Locked then
+ae:Lock()
+end
 
-ab.NewRoundFrame(am,"Squircle",{
-ImageColor3=Color3.new(1,1,1),
-Size=UDim2.new(1,0,1,0),
-Name="Special",
-ImageTransparency=ah=="Secondary"and 0.95 or 1,
-}),
-
-ab.NewRoundFrame(am,"Shadow-sm",{
-ImageColor3=Color3.new(0,0,0),
-Size=UDim2.new(1,3,1,3),
-AnchorPoint=Vector2.new(0.5,0.5),
-Position=UDim2.new(0.5,0,0.5,0),
-Name="Shadow",
-ImageTransparency=1,
-Visible=not ak,
-}),
-
-
-ab.NewRoundFrame(am,not ak and"Glass-1"or"Glass-0.7",{
-ThemeTag={
-ImageColor3="White",
-},
-Size=UDim2.new(1,0,1,0),
-ImageTransparency=0.6,
-Name="Outline",
-}),
-
-ab.NewRoundFrame(am,"Squircle",{
-Size=UDim2.new(1,0,1,0),
-Name="Frame",
-ThemeTag={
-ImageColor3=ah~="White"and"Text"or nil,
-},
-ImageColor3=ah=="White"and Color3.new(0,0,0)or nil,
-ImageTransparency=1,
-},{
-ac("UIPadding",{
-PaddingLeft=UDim.new(0,16),
-PaddingRight=UDim.new(0,16),
-}),
-ac("UIListLayout",{
-FillDirection="Horizontal",
-Padding=UDim.new(0,8),
-VerticalAlignment="Center",
-HorizontalAlignment="Center",
-}),
-an,
-ac("TextLabel",{
-BackgroundTransparency=1,
-FontFace=Font.new(ab.Font,Enum.FontWeight.SemiBold),
-Text=ae or"Button",
-ThemeTag={
-TextColor3=(ah~="Primary"and ah~="White")and"Text",
-},
-TextColor3=ah=="Primary"and Color3.new(1,1,1)
-or ah=="White"and Color3.new(0,0,0)
-or nil,
-AutomaticSize="XY",
-TextSize=18,
-}),
-}),
-})
-
-ab.AddSignal(ao.MouseEnter,function()
-ad(ao.Frame,0.047,{ImageTransparency=0.95}):Play()
+aa.AddSignal(ae.ButtonFrame.UIElements.Main.MouseButton1Click,function()
+if af then
+task.spawn(function()
+aa.SafeCallback(ae.Callback)
 end)
-ab.AddSignal(ao.MouseLeave,function()
-ad(ao.Frame,0.047,{ImageTransparency=1}):Play()
-end)
-ab.AddSignal(ao.MouseButton1Up,function()
-if aj then
-aj:Close()()
-end
-if ag then
-ab.SafeCallback(ag)
 end
 end)
 
-return ao
+return ae.__type,ae
 end
 
-return aa end function a.E()
+return ab end function a.E()
 
 local aa={}
 
@@ -12402,7 +12317,7 @@ PaddingBottom=UDim.new(0,at.UIPadding),
 al("Frame",{
 Name="HeaderDivider",
 Size=UDim2.new(1,-(at.UIPadding*2),0,1),
-Position=UDim2.new(0.5,0,0,at.Topbar.Height-1),
+Position=UDim2.new(0.5,0,0,at.Topbar.Height-3),
 AnchorPoint=Vector2.new(0.5,0),
 BackgroundTransparency=0.9,
 ThemeTag={

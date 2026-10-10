@@ -1,177 +1,92 @@
-local Button = {}
+local Creator = require("../modules/Creator")
 
-local Creator = require("src/modules/Creator")
-local New = Creator.New
-local Tween = Creator.Tween
+local Element = {}
 
-function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded, Radius)
-	if type(Title) == "table" and type(Icon) == "table" and Icon.Window then
-		local Config = Icon
-		local Element = {
-			__type = "Button",
-			Title = Config.Title or "Button",
-			Icon = Config.Icon,
-			Callback = Config.Callback,
-			Variant = Config.Variant,
-			UIElements = {},
-		}
+function Element:New(Config)
+	local Button = {
+		__type = "Button",
+		Title = Config.Title or "Button",
+		Desc = Config.Desc,
+		Icon = Config.Icon or "mouse-pointer-click",
+		IconThemed = Config.IconThemed or false,
+		IconColor = Config.IconColor,
+		Color = Config.Color,
+		Justify = Config.Justify or "Between",
+		IconAlign = Config.IconAlign or "Right",
+		Locked = Config.Locked or false,
+		LockedTitle = Config.LockedTitle,
+		Callback = Config.Callback or function() end,
+		UIElements = {},
+	}
 
-		Element.ButtonFrame = require("../components/window/Element")({
-			Title = Element.Title,
-			Desc = Config.Desc,
-			Window = Config.Window,
-			Parent = Config.Parent,
-			TextOffset = 0,
-			Hover = false,
-			Tab = Config.Tab,
-			Index = Config.Index,
-			ElementTable = Element,
-			ParentConfig = Config,
-		})
+	local CanCallback = true
 
-		local ButtonFrame = require("../components/ui/Button").New(
-			Element.Title,
-			Element.Icon,
-			Element.Callback,
-			Element.Variant,
-			Element.ButtonFrame.UIElements.Main,
-			nil,
-			Config.Window.NewElements,
-			Config.Radius
-		)
-		ButtonFrame.Size = UDim2.new(0, 0, 0, 38)
-		ButtonFrame.AutomaticSize = "X"
-		ButtonFrame.AnchorPoint = Vector2.new(1, Config.Window.NewElements and 0 or 0.5)
-		ButtonFrame.Position = UDim2.new(1, 0, Config.Window.NewElements and 0 or 0.5, 0)
-
-		local TextFrame = Element.ButtonFrame.UIElements.Container.TitleFrame
-		local function UpdateTextWidth()
-			local ButtonWidth = ButtonFrame.AbsoluteSize.X
-			if ButtonWidth > 0 then
-				TextFrame.Size = UDim2.new(1, -(ButtonWidth + Config.Window.ElementConfig.UIPadding), 0, 0)
-			end
-		end
-
-		ButtonFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(UpdateTextWidth)
-		task.defer(UpdateTextWidth)
-
-		Element.Button = ButtonFrame
-		return Element.__type, Element
-	end
-
-	Variant = Variant or "Primary"
-	local Radius = Radius or (not FullRounded and 10 or 99)
-	local IconButtonFrame
-	if Icon and Icon ~= "" then
-		IconButtonFrame = New("ImageLabel", {
-			Image = Creator.Icon(Icon)[1],
-			ImageRectSize = Creator.Icon(Icon)[2].ImageRectSize,
-			ImageRectOffset = Creator.Icon(Icon)[2].ImageRectPosition,
-			Size = UDim2.new(0, 24 - 3, 0, 24 - 3),
-			BackgroundTransparency = 1,
-			ImageColor3 = Variant == "White" and Color3.new(0, 0, 0) or nil,
-			ImageTransparency = Variant == "White" and 0.4 or 0,
-			ThemeTag = {
-				ImageColor3 = Variant ~= "White" and "Icon" or nil,
-			},
-		})
-	end
-
-	local ButtonFrame = New("TextButton", {
-		Size = UDim2.new(0, 0, 1, 0),
-		AutomaticSize = "X",
-		Parent = Parent,
-		BackgroundTransparency = 1,
-	}, {
-		Creator.NewRoundFrame(Radius, "Squircle", {
-			ThemeTag = {
-				ImageColor3 = Variant == "Primary" and "Primary" or (Variant == "White" and "White") or "Button",
-			},
-			ImageColor3 = Variant == "White" and Color3.new(1, 1, 1) or nil,
-			Size = UDim2.new(1, 0, 1, 0),
-			Name = "Squircle",
-			ImageTransparency = Variant == "Primary" and 0 or Variant == "White" and 0 or 0.9,
-		}),
-
-		Creator.NewRoundFrame(Radius, "Squircle", {
-			ImageColor3 = Color3.new(1, 1, 1),
-			Size = UDim2.new(1, 0, 1, 0),
-			Name = "Special",
-			ImageTransparency = Variant == "Secondary" and 0.95 or 1,
-		}),
-
-		Creator.NewRoundFrame(Radius, "Shadow-sm", {
-			ImageColor3 = Color3.new(0, 0, 0),
-			Size = UDim2.new(1, 3, 1, 3),
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.new(0.5, 0, 0.5, 0),
-			Name = "Shadow",
-			ImageTransparency = 1,
-			Visible = not FullRounded,
-		}),
-
-		-- AQUÍ ESTÁ EL UIStroke AGREGADO
-		Creator.NewRoundFrame(Radius, not FullRounded and "Glass-1" or "Glass-0.7", {
-			ThemeTag = {
-				ImageColor3 = "White",
-			},
-			Size = UDim2.new(1, 0, 1, 0),
-			ImageTransparency = 0.6,
-			Name = "Outline",
-		}),
-
-		Creator.NewRoundFrame(Radius, "Squircle", {
-			Size = UDim2.new(1, 0, 1, 0),
-			Name = "Frame",
-			ThemeTag = {
-				ImageColor3 = Variant ~= "White" and "Text" or nil,
-			},
-			ImageColor3 = Variant == "White" and Color3.new(0, 0, 0) or nil,
-			ImageTransparency = 1,
-		}, {
-			New("UIPadding", {
-				PaddingLeft = UDim.new(0, 16),
-				PaddingRight = UDim.new(0, 16),
-			}),
-			New("UIListLayout", {
-				FillDirection = "Horizontal",
-				Padding = UDim.new(0, 8),
-				VerticalAlignment = "Center",
-				HorizontalAlignment = "Center",
-			}),
-			IconButtonFrame,
-			New("TextLabel", {
-				BackgroundTransparency = 1,
-				FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
-				Text = Title or "Button",
-				ThemeTag = {
-					TextColor3 = (Variant ~= "Primary" and Variant ~= "White") and "Text",
-				},
-				TextColor3 = Variant == "Primary" and Color3.new(1, 1, 1)
-					or Variant == "White" and Color3.new(0, 0, 0)
-					or nil,
-				AutomaticSize = "XY",
-				TextSize = 18,
-			}),
-		}),
+	Button.ButtonFrame = require("../components/window/Element")({
+		Title = Button.Title,
+		Desc = Button.Desc,
+		Parent = Config.Parent,
+		Window = Config.Window,
+		Color = Button.Color,
+		Justify = Button.Justify,
+		TextOffset = 20,
+		Hover = true,
+		Scalable = true,
+		Tab = Config.Tab,
+		Index = Config.Index,
+		ElementTable = Button,
+		ParentConfig = Config,
+		Size = Config.Size,
+		Tags = Config.Tags,
 	})
 
-	Creator.AddSignal(ButtonFrame.MouseEnter, function()
-		Tween(ButtonFrame.Frame, 0.047, { ImageTransparency = 0.95 }):Play()
-	end)
-	Creator.AddSignal(ButtonFrame.MouseLeave, function()
-		Tween(ButtonFrame.Frame, 0.047, { ImageTransparency = 1 }):Play()
-	end)
-	Creator.AddSignal(ButtonFrame.MouseButton1Up, function()
-		if Dialog then
-			Dialog:Close()()
-		end
-		if Callback then
-			Creator.SafeCallback(Callback)
+	Button.UIElements.ButtonIcon = Creator.Image(
+		Button.Icon,
+		Button.Icon,
+		0,
+		Config.Window.Folder,
+		"Button",
+		not (Button.Color or Button.IconColor) and true or nil,
+		Button.IconThemed
+	)
+
+	if Button.IconColor then
+		Button.UIElements.ButtonIcon.ImageLabel.ImageColor3 = Button.IconColor
+	end
+
+	Button.UIElements.ButtonIcon.Size = UDim2.new(0, 20, 0, 20)
+	Button.UIElements.ButtonIcon.Parent = Button.Justify == "Between" and Button.ButtonFrame.UIElements.Main
+		or Button.ButtonFrame.UIElements.Container.TitleFrame
+	Button.UIElements.ButtonIcon.LayoutOrder = Button.IconAlign == "Left" and -99999 or 99999
+	Button.UIElements.ButtonIcon.AnchorPoint = Vector2.new(1, 0.5)
+	Button.UIElements.ButtonIcon.Position = UDim2.new(1, 0, 0.5, 0)
+
+	Button.ButtonFrame:Colorize(Button.UIElements.ButtonIcon.ImageLabel, "ImageColor3")
+
+	function Button:Lock()
+		Button.Locked = true
+		CanCallback = false
+		return Button.ButtonFrame:Lock(Button.LockedTitle)
+	end
+
+	function Button:Unlock()
+		Button.Locked = false
+		CanCallback = true
+		return Button.ButtonFrame:Unlock()
+	end
+
+	if Button.Locked then
+		Button:Lock()
+	end
+
+	Creator.AddSignal(Button.ButtonFrame.UIElements.Main.MouseButton1Click, function()
+		if CanCallback then
+			task.spawn(function()
+				Creator.SafeCallback(Button.Callback)
+			end)
 		end
 	end)
 
-	return ButtonFrame
+	return Button.__type, Button
 end
 
-return Button
+return Element

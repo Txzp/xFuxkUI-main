@@ -877,7 +877,7 @@ return function(Config)
 			New("Frame", {
 				Name = "HeaderDivider",
 				Size = UDim2.new(1, -(Window.UIPadding * 2), 0, 1),
-				Position = UDim2.new(0.5, 0, 0, Window.Topbar.Height - 1),
+				Position = UDim2.new(0.5, 0, 0, Window.Topbar.Height - 3),
 				AnchorPoint = Vector2.new(0.5, 0),
 				BackgroundTransparency = 0.9,
 				ThemeTag = {
