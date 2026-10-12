@@ -148,7 +148,7 @@ function NotificationModule.New(Config)
     local DurationTrack = New("Frame", {
         Name = "DurationTrack",
         AnchorPoint = Vector2.new(0,1),
-        Position = UDim2.new(0,NotificationModule.UIPadding,1,-NotificationModule.UIPadding),
+        Position = UDim2.new(0,NotificationModule.UIPadding,1,-6),
         Size = UDim2.new(1,-NotificationModule.UIPadding*2,0,3),
         BackgroundColor3 = Color3.fromRGB(248,249,252),
         BackgroundTransparency = .9,
