@@ -140,14 +140,20 @@ function NotificationModule.New(Config)
         })
     end
     
+    local DurationStroke = New("UIStroke", {
+        Color = Color3.fromRGB(248,249,252),
+        Transparency = .9,
+        Thickness = .75,
+    })
     local DurationTrack = New("Frame", {
         Name = "DurationTrack",
         AnchorPoint = Vector2.new(0,1),
-        Position = UDim2.new(0,NotificationModule.UIPadding,1,-8),
-        Size = UDim2.new(1,-NotificationModule.UIPadding*2,0,2),
-        BackgroundColor3 = Color3.new(1,1,1),
-        BackgroundTransparency = .82,
+        Position = UDim2.new(0,NotificationModule.UIPadding,1,-NotificationModule.UIPadding),
+        Size = UDim2.new(1,-NotificationModule.UIPadding*2,0,3),
+        BackgroundColor3 = Color3.fromRGB(248,249,252),
+        BackgroundTransparency = .9,
         BorderSizePixel = 0,
+        ClipsDescendants = true,
     }, {
         New("UICorner", {
             CornerRadius = UDim.new(1,0),
@@ -155,14 +161,15 @@ function NotificationModule.New(Config)
         New("Frame", {
             Name = "Bar",
             Size = UDim2.new(1,0,1,0),
-            BackgroundColor3 = Color3.new(1,1,1),
-            BackgroundTransparency = .08,
+            BackgroundColor3 = Color3.fromRGB(248,249,252),
+            BackgroundTransparency = .12,
             BorderSizePixel = 0,
         }, {
             New("UICorner", {
                 CornerRadius = UDim.new(1,0),
             }),
         }),
+        DurationStroke,
     })
     local DurationBar = DurationTrack.Bar
     
@@ -281,6 +288,9 @@ function NotificationModule.New(Config)
                 ImageTransparency = 1,
             }, Enum.EasingStyle.Quint, Enum.EasingDirection.In):Play()
             Tween(MainScale, 0.32, {Scale = .92}, Enum.EasingStyle.Back, Enum.EasingDirection.In):Play()
+            Tween(DurationTrack, 0.24, {BackgroundTransparency = 1}, Enum.EasingStyle.Quad, Enum.EasingDirection.In):Play()
+            Tween(DurationBar, 0.24, {BackgroundTransparency = 1}, Enum.EasingStyle.Quad, Enum.EasingDirection.In):Play()
+            Tween(DurationStroke, 0.24, {Transparency = 1}, Enum.EasingStyle.Quad, Enum.EasingDirection.In):Play()
             task.wait(.34)
             MainContainer:Destroy()
         end
