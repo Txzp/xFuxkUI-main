@@ -127,6 +127,9 @@ function NotificationModule.New(Config)
             },
             ImageTransparency = .4,
         }, {
+            New("UIScale", {
+                Scale = 1,
+            }),
             New("TextButton", {
                 Size = UDim2.new(1,8,1,8),
                 BackgroundTransparency = 1,
@@ -137,14 +140,31 @@ function NotificationModule.New(Config)
         })
     end
     
-    local Duration = Creator.NewRoundFrame(NotificationModule.UICorner, "Squircle", {
-        Size = UDim2.new(0,0,1,0),
-        ThemeTag = {
-            ImageTransparency = "NotificationDurationTransparency",
-            ImageColor3 = "NotificationDuration",
-        },
-        --Visible = false,
+    local DurationTrack = New("Frame", {
+        Name = "DurationTrack",
+        AnchorPoint = Vector2.new(0,1),
+        Position = UDim2.new(0,NotificationModule.UIPadding,1,-8),
+        Size = UDim2.new(1,-NotificationModule.UIPadding*2,0,2),
+        BackgroundColor3 = Color3.new(1,1,1),
+        BackgroundTransparency = .82,
+        BorderSizePixel = 0,
+    }, {
+        New("UICorner", {
+            CornerRadius = UDim.new(1,0),
+        }),
+        New("Frame", {
+            Name = "Bar",
+            Size = UDim2.new(1,0,1,0),
+            BackgroundColor3 = Color3.new(1,1,1),
+            BackgroundTransparency = .08,
+            BorderSizePixel = 0,
+        }, {
+            New("UICorner", {
+                CornerRadius = UDim.new(1,0),
+            }),
+        }),
     })
+    local DurationBar = DurationTrack.Bar
     
     local TextContainer = New("Frame", {
         Size = UDim2.new(1,
@@ -204,10 +224,10 @@ function NotificationModule.New(Config)
     
     local Main = Creator.NewRoundFrame(NotificationModule.UICorner, "Squircle", {
         Size = UDim2.new(1,0,0,0),
-        Position = UDim2.new(2,0,1,0),
+        Position = UDim2.new(1.08,0,1,0),
         AnchorPoint = Vector2.new(0,1),
         AutomaticSize = "Y",
-        ImageTransparency = .05,
+        ImageTransparency = 1,
         ThemeTag = {
             ImageColor3 = "Notification"
         },
@@ -219,24 +239,6 @@ function NotificationModule.New(Config)
                 ImageColor3 = "NotificationBorder",
                 ImageTransparency = "NotificationBorderTransparency",
             },
-        }),
-        New("Frame", {
-            Size = UDim2.new(1,0,1,0),
-            BackgroundTransparency = 1,
-            Name = "DurationFrame",
-        }, {
-            New("Frame", {
-                Size = UDim2.new(1,0,1,0), -- 0,0,1,0
-                BackgroundTransparency = 1,
-                ClipsDescendants = true,
-            }, {
-                Duration,
-            }),
-        
-            -- New("UICorner", {
-            --     CornerRadius = UDim.new(0,NotificationModule.UICorner),
-            -- })
-    
         }),
         New("ImageLabel", {
             Name = "Background",
@@ -254,7 +256,13 @@ function NotificationModule.New(Config)
         
         TextContainer,
         Icon, CloseButton,
+        New("UIScale", {
+            Name = "AnimationScale",
+            Scale = .94,
+        }),
+        DurationTrack,
     })
+    local MainScale = Main.AnimationScale
 
     local MainContainer = New("Frame", {
         BackgroundTransparency = 1,
@@ -267,31 +275,49 @@ function NotificationModule.New(Config)
     function Notification:Close()
         if not Notification.Closed then
             Notification.Closed = true
-            Tween(MainContainer, 0.45, {Size = UDim2.new(1, 0, 0, -8)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-            Tween(Main, 0.55, {Position = UDim2.new(2,0,1,0)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-            task.wait(.45)
+            Tween(MainContainer, 0.32, {Size = UDim2.new(1,0,0,0)}, Enum.EasingStyle.Quint, Enum.EasingDirection.In):Play()
+            Tween(Main, 0.32, {
+                Position = UDim2.new(1.08,0,1,0),
+                ImageTransparency = 1,
+            }, Enum.EasingStyle.Quint, Enum.EasingDirection.In):Play()
+            Tween(MainScale, 0.32, {Scale = .92}, Enum.EasingStyle.Back, Enum.EasingDirection.In):Play()
+            task.wait(.34)
             MainContainer:Destroy()
         end
     end
     
     task.spawn(function()
         task.wait()
-        Tween(MainContainer, 0.45, {Size = UDim2.new(
+        Tween(MainContainer, 0.48, {Size = UDim2.new(
             1,
             0,
             0,
             Main.AbsoluteSize.Y
         )}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-        Tween(Main, 0.45, {Position = UDim2.new(0,0,1,0)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+        Tween(Main, 0.48, {
+            Position = UDim2.new(0,0,1,0),
+            ImageTransparency = .05,
+        }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+        Tween(MainScale, 0.55, {Scale = 1}, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
         if Notification.Duration then
-            Duration.Size = UDim2.new(0,Main.DurationFrame.AbsoluteSize.X,1,0)
-            Tween(Main.DurationFrame.Frame, Notification.Duration, {Size = UDim2.new(0,0,1,0)}, Enum.EasingStyle.Linear,Enum.EasingDirection.InOut):Play()
+            Tween(DurationBar, Notification.Duration, {Size = UDim2.new(0,0,1,0)}, Enum.EasingStyle.Linear,Enum.EasingDirection.InOut):Play()
             task.wait(Notification.Duration)
             Notification:Close()
         end
     end)
     
     if CloseButton then
+        local CloseScale = CloseButton.UIScale
+        Creator.AddSignal(CloseButton.MouseEnter, function()
+            Tween(CloseButton, 0.2, {Rotation = 45}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+            Tween(CloseScale, 0.2, {Scale = 1.15}, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
+            Tween(CloseButton, 0.15, {ImageTransparency = 0}, Enum.EasingStyle.Quad, Enum.EasingDirection.Out):Play()
+        end)
+        Creator.AddSignal(CloseButton.MouseLeave, function()
+            Tween(CloseButton, 0.2, {Rotation = 0}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+            Tween(CloseScale, 0.2, {Scale = 1}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+            Tween(CloseButton, 0.15, {ImageTransparency = .4}, Enum.EasingStyle.Quad, Enum.EasingDirection.Out):Play()
+        end)
         Creator.AddSignal(CloseButton.TextButton.MouseButton1Click, function()
             Notification:Close()
         end)

@@ -1451,6 +1451,9 @@ ImageColor3="Text"
 },
 ImageTransparency=.4,
 },{
+d("UIScale",{
+Scale=1,
+}),
 d("TextButton",{
 Size=UDim2.new(1,8,1,8),
 BackgroundTransparency=1,
@@ -1461,16 +1464,33 @@ Text="",
 })
 end
 
-local m=b.NewRoundFrame(f.UICorner,"Squircle",{
-Size=UDim2.new(0,0,1,0),
-ThemeTag={
-ImageTransparency="NotificationDurationTransparency",
-ImageColor3="NotificationDuration",
-},
-
+local m=d("Frame",{
+Name="DurationTrack",
+AnchorPoint=Vector2.new(0,1),
+Position=UDim2.new(0,f.UIPadding,1,-8),
+Size=UDim2.new(1,-f.UIPadding*2,0,2),
+BackgroundColor3=Color3.new(1,1,1),
+BackgroundTransparency=.82,
+BorderSizePixel=0,
+},{
+d("UICorner",{
+CornerRadius=UDim.new(1,0),
+}),
+d("Frame",{
+Name="Bar",
+Size=UDim2.new(1,0,1,0),
+BackgroundColor3=Color3.new(1,1,1),
+BackgroundTransparency=.08,
+BorderSizePixel=0,
+},{
+d("UICorner",{
+CornerRadius=UDim.new(1,0),
+}),
+}),
 })
+local p=m.Bar
 
-local p=d("Frame",{
+local r=d("Frame",{
 Size=UDim2.new(1,
 h.Icon and-28-f.UIPadding or 0,
 1,0),
@@ -1521,17 +1541,17 @@ TextTransparency="NotificationContentTransparency",
 },
 Text=h.Content,
 FontFace=Font.new(b.Font,Enum.FontWeight.Medium),
-Parent=p
+Parent=r
 })
 end
 
 
-local r=b.NewRoundFrame(f.UICorner,"Squircle",{
+local u=b.NewRoundFrame(f.UICorner,"Squircle",{
 Size=UDim2.new(1,0,0,0),
-Position=UDim2.new(2,0,1,0),
+Position=UDim2.new(1.08,0,1,0),
 AnchorPoint=Vector2.new(0,1),
 AutomaticSize="Y",
-ImageTransparency=.05,
+ImageTransparency=1,
 ThemeTag={
 ImageColor3="Notification"
 },
@@ -1543,24 +1563,6 @@ ThemeTag={
 ImageColor3="NotificationBorder",
 ImageTransparency="NotificationBorderTransparency",
 },
-}),
-d("Frame",{
-Size=UDim2.new(1,0,1,0),
-BackgroundTransparency=1,
-Name="DurationFrame",
-},{
-d("Frame",{
-Size=UDim2.new(1,0,1,0),
-BackgroundTransparency=1,
-ClipsDescendants=true,
-},{
-m,
-}),
-
-
-
-
-
 }),
 d("ImageLabel",{
 Name="Background",
@@ -1576,46 +1578,70 @@ CornerRadius=UDim.new(0,f.UICorner),
 })
 }),
 
-p,
+r,
 i,l,
+d("UIScale",{
+Name="AnimationScale",
+Scale=.94,
+}),
+m,
 })
+local v=u.AnimationScale
 
-local u=d("Frame",{
+local x=d("Frame",{
 BackgroundTransparency=1,
 Size=UDim2.new(1,0,0,0),
 Parent=g.Holder
 },{
-r
+u
 })
 
-function h.Close(v)
+function h.Close(z)
 if not h.Closed then
 h.Closed=true
-e(u,0.45,{Size=UDim2.new(1,0,0,-8)},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
-e(r,0.55,{Position=UDim2.new(2,0,1,0)},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
-task.wait(.45)
-u:Destroy()
+e(x,0.32,{Size=UDim2.new(1,0,0,0)},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
+e(u,0.32,{
+Position=UDim2.new(1.08,0,1,0),
+ImageTransparency=1,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.In):Play()
+e(v,0.32,{Scale=.92},Enum.EasingStyle.Back,Enum.EasingDirection.In):Play()
+task.wait(.34)
+x:Destroy()
 end
 end
 
 task.spawn(function()
 task.wait()
-e(u,0.45,{Size=UDim2.new(
+e(x,0.48,{Size=UDim2.new(
 1,
 0,
 0,
-r.AbsoluteSize.Y
+u.AbsoluteSize.Y
 )},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
-e(r,0.45,{Position=UDim2.new(0,0,1,0)},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+e(u,0.48,{
+Position=UDim2.new(0,0,1,0),
+ImageTransparency=.05,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+e(v,0.55,{Scale=1},Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
 if h.Duration then
-m.Size=UDim2.new(0,r.DurationFrame.AbsoluteSize.X,1,0)
-e(r.DurationFrame.Frame,h.Duration,{Size=UDim2.new(0,0,1,0)},Enum.EasingStyle.Linear,Enum.EasingDirection.InOut):Play()
+e(p,h.Duration,{Size=UDim2.new(0,0,1,0)},Enum.EasingStyle.Linear,Enum.EasingDirection.InOut):Play()
 task.wait(h.Duration)
 h:Close()
 end
 end)
 
 if l then
+local z=l.UIScale
+b.AddSignal(l.MouseEnter,function()
+e(l,0.2,{Rotation=45},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+e(z,0.2,{Scale=1.15},Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
+e(l,0.15,{ImageTransparency=0},Enum.EasingStyle.Quad,Enum.EasingDirection.Out):Play()
+end)
+b.AddSignal(l.MouseLeave,function()
+e(l,0.2,{Rotation=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+e(z,0.2,{Scale=1},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+e(l,0.15,{ImageTransparency=.4},Enum.EasingStyle.Quad,Enum.EasingDirection.Out):Play()
+end)
 b.AddSignal(l.TextButton.MouseButton1Click,function()
 h:Close()
 end)
