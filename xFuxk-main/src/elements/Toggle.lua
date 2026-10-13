@@ -115,14 +115,6 @@ local SwitchFrame = Creator.NewRoundFrame(Radius, "Squircle", {
     Position = UDim2.new(1,0,0.5,0),
     Name = "ToggleFrame",
 }, {
-        Creator.NewRoundFrame(Radius, "Squircle", {
-            Size = UDim2.new(1,0,1,0),
-            Name = "Layer",
-            ThemeTag = {
-                ImageColor3 = "Toggle",
-            },
-            ImageTransparency = 1, -- 0
-        }),
         Creator.NewRoundFrame(Radius, "SquircleOutline", {
             Size = UDim2.new(1,0,1,0),
             Name = "Stroke",
@@ -201,9 +193,7 @@ local SwitchFrame = Creator.NewRoundFrame(Radius, "Squircle", {
                     Creator.NewRoundFrame(Radius, "Squircle", {
                         Size = UDim2.new(1,0,1,0),
                         Name = "BarOverlay",
-                        ThemeTag = {
-                            ImageColor3 = "ToggleBar",
-                        },
+                        ImageColor3 = Color3.new(1,1,1),
                         ZIndex = 999,
                     })
                 }),
@@ -246,14 +236,10 @@ local SwitchFrame = Creator.NewRoundFrame(Radius, "Squircle", {
                 Tween(SwitchFrame.Frame, 0.35, {
                     Position = UDim2.new(0, ToggleWidth - FrameWidth - 2, 0.5, 0),
                 }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
-                Creator.SetThemeTag(SwitchFrame.Frame.Bar.Highlight.Glass, { ImageColor3 = Color3.fromRGB(255, 255, 255) }, 0.15)
-                Tween(SwitchFrame.Frame.Bar.Highlight.Glass, 0.15, { ImageTransparency = 0 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             else
                 Tween(SwitchFrame.Frame, 0.35, {
                     Position = UDim2.new(0, 2, 0.5, 0),
                 }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
-                Creator.SetThemeTag(SwitchFrame.Frame.Bar.Highlight.Glass, { ImageColor3 = Color3.fromRGB(145, 145, 145) }, 0.15)
-                Tween(SwitchFrame.Frame.Bar.Highlight.Glass, 0.15, { ImageTransparency = 0.85 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             end
         else
             if Toggled then
@@ -263,13 +249,24 @@ local SwitchFrame = Creator.NewRoundFrame(Radius, "Squircle", {
             end
         end
     
+        local KnobColor = Toggled and Color3.new(1,1,1) or Color3.fromRGB(145,145,145)
+        local Glass = SwitchFrame.Frame.Bar.Highlight.Glass
+        local BarOverlay = SwitchFrame.Frame.Bar.Highlight.BarOverlay
+        if isAnim then
+            BarOverlay.ImageColor3 = KnobColor
+            Glass.ImageColor3 = KnobColor
+            Glass.ImageTransparency = Toggled and 0 or 0.15
+        else
+            Tween(BarOverlay, 0.15, {
+                ImageColor3 = KnobColor,
+            }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+            Creator.SetThemeTag(Glass, { ImageColor3 = KnobColor }, 0.15)
+            Tween(Glass, 0.15, {
+                ImageTransparency = Toggled and 0 or 0.15,
+            }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+        end
+
         if Toggled then
-            Tween(SwitchFrame.Layer, 0.1, {
-                ImageTransparency = 0,
-            }):Play()
-            Creator.SetThemeTag(SwitchFrame.Frame.Bar.Highlight.Glass, { ImageColor3 = Color3.fromRGB(255, 255, 255) }, 0.1)
-            Tween(SwitchFrame.Frame.Bar.Highlight.Glass, 0.1, { ImageTransparency = 0 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-        
             if IconToggleFrame then 
                 Tween(IconToggleFrame, 0.1, {
                     ImageTransparency = 0,
@@ -282,12 +279,6 @@ local SwitchFrame = Creator.NewRoundFrame(Radius, "Squircle", {
             SwitchFrame.Frame.Bar.Highlight.Glass.ImageRectSize = RectSize
             SwitchFrame.Frame.Bar.Highlight.Glass.ImageRectOffset = RectOffset
         else
-            Tween(SwitchFrame.Layer, 0.1, {
-                ImageTransparency = 1,
-            }):Play()
-            Creator.SetThemeTag(SwitchFrame.Frame.Bar.Highlight.Glass, { ImageColor3 = Color3.fromRGB(145, 145, 145) }, 0.1)
-            Tween(SwitchFrame.Frame.Bar.Highlight.Glass, 0.1, { ImageTransparency = 0.85 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-        
             if IconToggleFrame then 
                 Tween(IconToggleFrame, 0.1, {
                     ImageTransparency = 1,

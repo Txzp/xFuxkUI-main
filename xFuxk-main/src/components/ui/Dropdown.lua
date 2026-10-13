@@ -72,6 +72,10 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 			}),
 		}),
 	})
+	local MenuScale = New("UIScale", {
+		Scale = 1,
+		Parent = Dropdown.UIElements.Menu,
+	})
 
 	Dropdown.UIElements.MenuCanvas = New("Frame", {
 		Size = UDim2.new(0, Dropdown.MenuWidth, 0, 300),
@@ -605,49 +609,53 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 	RecalculateCanvasSize()
 
 	function DropdownModule:Open()
-		if CanCallback then
+		if CanCallback and not Dropdown.Opened then
+			Dropdown.Opened = true
+			UpdatePosition()
 			Dropdown.UIElements.Menu.Visible = true
 			Dropdown.UIElements.MenuCanvas.Visible = true
 			Dropdown.UIElements.MenuCanvas.Active = true
 			Dropdown.UIElements.Menu.Size = UDim2.new(1, 0, 0, 0)
-			Tween(Dropdown.UIElements.Menu, 0.1, {
+			Dropdown.UIElements.Menu.ImageTransparency = 1
+			MenuScale.Scale = 0.96
+			Tween(Dropdown.UIElements.Menu, 0.2, {
 				Size = UDim2.new(1, 0, 1, 0),
 				ImageTransparency = 0.05,
-			}, Enum.EasingStyle.Quart, Enum.EasingDirection.Out):Play()
-
-			task.spawn(function()
-				task.wait(0.1)
-				Dropdown.Opened = true
-			end)
-
-			UpdatePosition()
+			}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+			Tween(MenuScale, 0.24, {
+				Scale = 1,
+			}, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
 		end
 	end
 
-function DropdownModule:Close(immediate)
-	Dropdown.Opened = false
+	function DropdownModule:Close(immediate)
+		Dropdown.Opened = false
 
-	if immediate then
-		Dropdown.UIElements.Menu.Visible = false
-		Dropdown.UIElements.MenuCanvas.Visible = false
-		Dropdown.UIElements.MenuCanvas.Active = false
-		return
-	end
-
-		Tween(Dropdown.UIElements.Menu, 0.25, {
-			Size = UDim2.new(1, 0, 0, 0),
-			ImageTransparency = 1,
-		}, Enum.EasingStyle.Quart, Enum.EasingDirection.Out):Play()
-
-		task.spawn(function()
-			task.wait(0.1)
+		if immediate then
 			Dropdown.UIElements.Menu.Visible = false
-		end)
-
-		task.spawn(function()
-			task.wait(0.25)
 			Dropdown.UIElements.MenuCanvas.Visible = false
 			Dropdown.UIElements.MenuCanvas.Active = false
+			MenuScale.Scale = 1
+			return
+		end
+
+		Tween(Dropdown.UIElements.Menu, 0.18, {
+			Size = UDim2.new(1, 0, 0, 0),
+			ImageTransparency = 1,
+		}, Enum.EasingStyle.Quint, Enum.EasingDirection.In):Play()
+		Tween(MenuScale, 0.18, {
+			Scale = 0.96,
+		}, Enum.EasingStyle.Quad, Enum.EasingDirection.In):Play()
+
+		task.spawn(function()
+			task.wait(0.18)
+			if Dropdown.Opened then
+				return
+			end
+			Dropdown.UIElements.Menu.Visible = false
+			Dropdown.UIElements.MenuCanvas.Visible = false
+			Dropdown.UIElements.MenuCanvas.Active = false
+			MenuScale.Scale = 1
 		end)
 	end
 
