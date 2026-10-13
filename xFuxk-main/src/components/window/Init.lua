@@ -892,6 +892,53 @@ return function(Config)
 		end
 	)
 
+	if Window.IsPC ~= nil then
+		local DeviceIcon = Creator.Icon(Window.IsPC and "monitor" or "smartphone")
+		New("Frame", {
+			Name = "DeviceIndicator",
+			AutomaticSize = "X",
+			Size = UDim2.new(0, 0, 0, 24),
+			BackgroundTransparency = 1,
+			LayoutOrder = Window.Topbar.ButtonsType == "Default" and 996 or 998,
+			Parent = Window.UIElements.Main.Main.Topbar.Right,
+		}, {
+			New("UIListLayout", {
+				FillDirection = "Horizontal",
+				HorizontalAlignment = "Center",
+				VerticalAlignment = "Center",
+				SortOrder = "LayoutOrder",
+				Padding = UDim.new(0, 5),
+			}),
+			New("UIPadding", {
+				PaddingLeft = UDim.new(0, 7),
+				PaddingRight = UDim.new(0, 12),
+			}),
+			New("ImageLabel", {
+				BackgroundTransparency = 1,
+				Size = UDim2.new(0, 14, 0, 14),
+				Image = DeviceIcon[1],
+				ImageRectOffset = DeviceIcon[2].ImageRectPosition,
+				ImageRectSize = DeviceIcon[2].ImageRectSize,
+				ThemeTag = {
+					ImageColor3 = "Text",
+				},
+			}),
+			New("TextLabel", {
+				AutomaticSize = "X",
+				Size = UDim2.new(0, 0, 1, 0),
+				BackgroundTransparency = 1,
+				Text = Window.IsPC and "PC" or "Mobile",
+				TextSize = 12,
+				TextTransparency = 0.15,
+				TextXAlignment = "Left",
+				ThemeTag = {
+					TextColor3 = "Text",
+				},
+				FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+			}),
+		})
+	end
+
 	Tween(
 		Window.UIElements.Main.Main.GlassSweep.BackGlass.UIGradient,
 		5.5,
@@ -1323,7 +1370,7 @@ return function(Config)
 		--         Duration = 5,
 		--     })
 		-- end
-	end, (Window.Topbar.ButtonsType == "Default" and 997 or 998), nil, Color3.fromHex("#F4C948"))
+	end, (Window.Topbar.ButtonsType == "Default" and 997 or 999), nil, Color3.fromHex("#F4C948"))
 
 	function Window:OnOpen(func)
 		Window.OnOpenCallback = func

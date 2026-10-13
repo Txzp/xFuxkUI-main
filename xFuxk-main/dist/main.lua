@@ -4822,10 +4822,8 @@ Size=UDim2.new(0,18,0,18),
 BackgroundTransparency=1,
 Position=UDim2.new(0.5,0,0.5,0),
 AnchorPoint=Vector2.new(0.5,0.5),
-ThemeTag={
-ImageColor3="Icon",
-},
-ImageTransparency=.3,
+ImageColor3=Color3.new(1,1,1),
+ImageTransparency=0,
 })
 })
 local ak=ac("Frame",{
@@ -4856,7 +4854,7 @@ Size=UDim2.new(0,0,0,44),
 AutomaticSize="X",
 Parent=al,
 Active=false,
-BackgroundTransparency=.25,
+BackgroundTransparency=0,
 ZIndex=99,
 BackgroundColor3=Color3.new(0,0,0),
 },{
@@ -12356,6 +12354,53 @@ at.UIElements.Main.Main.GlassSweep.BackGlass.UIGradient.Offset
 end
 )
 
+if at.IsPC~=nil then
+local r=ak.Icon(at.IsPC and"monitor"or"smartphone")
+al("Frame",{
+Name="DeviceIndicator",
+AutomaticSize="X",
+Size=UDim2.new(0,0,0,24),
+BackgroundTransparency=1,
+LayoutOrder=at.Topbar.ButtonsType=="Default"and 996 or 998,
+Parent=at.UIElements.Main.Main.Topbar.Right,
+},{
+al("UIListLayout",{
+FillDirection="Horizontal",
+HorizontalAlignment="Center",
+VerticalAlignment="Center",
+SortOrder="LayoutOrder",
+Padding=UDim.new(0,5),
+}),
+al("UIPadding",{
+PaddingLeft=UDim.new(0,7),
+PaddingRight=UDim.new(0,12),
+}),
+al("ImageLabel",{
+BackgroundTransparency=1,
+Size=UDim2.new(0,14,0,14),
+Image=r[1],
+ImageRectOffset=r[2].ImageRectPosition,
+ImageRectSize=r[2].ImageRectSize,
+ThemeTag={
+ImageColor3="Text",
+},
+}),
+al("TextLabel",{
+AutomaticSize="X",
+Size=UDim2.new(0,0,1,0),
+BackgroundTransparency=1,
+Text=at.IsPC and"PC"or"Mobile",
+TextSize=12,
+TextTransparency=0.15,
+TextXAlignment="Left",
+ThemeTag={
+TextColor3="Text",
+},
+FontFace=Font.new(ak.Font,Enum.FontWeight.Medium),
+}),
+})
+end
+
 am(
 at.UIElements.Main.Main.GlassSweep.BackGlass.UIGradient,
 5.5,
@@ -12787,7 +12832,7 @@ at:Close()
 
 
 
-end,(at.Topbar.ButtonsType=="Default"and 997 or 998),nil,Color3.fromHex"#F4C948")
+end,(at.Topbar.ButtonsType=="Default"and 997 or 999),nil,Color3.fromHex"#F4C948")
 
 function at.OnOpen(x,z)
 at.OnOpenCallback=z

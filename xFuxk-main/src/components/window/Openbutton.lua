@@ -51,10 +51,8 @@ function OpenButton.New(Window)
             BackgroundTransparency = 1,
             Position = UDim2.new(0.5,0,0.5,0),
             AnchorPoint = Vector2.new(0.5,0.5),
-            ThemeTag = {
-                ImageColor3 = "Icon",
-            },
-            ImageTransparency = .3,
+            ImageColor3 = Color3.new(1,1,1),
+            ImageTransparency = 0,
         })
     })
     local Divider = New("Frame", {
@@ -85,7 +83,7 @@ function OpenButton.New(Window)
         AutomaticSize = "X",
         Parent = Container,
         Active = false,
-        BackgroundTransparency = .25,
+        BackgroundTransparency = 0,
         ZIndex = 99,
         BackgroundColor3 = Color3.new(0,0,0),
     }, {
