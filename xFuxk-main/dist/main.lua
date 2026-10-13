@@ -12372,6 +12372,7 @@ SortOrder="LayoutOrder",
 Padding=UDim.new(0,5),
 }),
 al("UIPadding",{
+PaddingTop=UDim.new(0,2),
 PaddingLeft=UDim.new(0,7),
 PaddingRight=UDim.new(0,12),
 }),
