@@ -111,34 +111,26 @@ function Element:New(Config)
         ParentConfig = Config,
     })
     
-    -- ==========================================
-    -- CAMBIO DE COLOR AQUÍ: BARRA VERDE
-    -- ==========================================
-    
     Slider.UIElements.SliderIcon = Creator.NewRoundFrame(99, "Squircle", {
         ImageTransparency = .95,
-        Size = UDim2.new(1, not Slider.IsTextbox and -TotalSliderWidth or (-Slider.TextBoxWidth-8), 0, 4),
+        Size = UDim2.new(1, not Slider.IsTextbox and -TotalSliderWidth or (-Slider.TextBoxWidth-8), 0, 6),
         AnchorPoint = Vector2.new(0.5,0.5),
         Position = UDim2.new(0.5,0,0.5,0),
         Name = "Frame",
         ThemeTag = {
-            ImageColor3 = "Text", -- El fondo sigue siendo del tema (gris oscuro/negro)
+            ImageColor3 = "Text",
         },
     }, {
-        -- ESTA ES LA PARTE QUE SE LLENA (ANTES ERA AZUL POR "Slider")
         Creator.NewRoundFrame(99, "Squircle", {
             Name = "Frame",
             Size = UDim2.new(delta, 0, 1, 0),
             ImageTransparency = .1,
-            -- CAMBIADO A VERDE NEÓN DIRECTO
-            ImageColor3 = Color3.fromRGB(0, 255, 106), 
+            ImageColor3 = Color3.fromRGB(248, 249, 252),
         }, {
-            -- La bolita (Thumb)
             Creator.NewRoundFrame(99, "Squircle", {
                 Size = UDim2.new(0, Config.Window.NewElements and (Slider.ThumbSize*2) or (Slider.ThumbSize+2), 0, Config.Window.NewElements and (Slider.ThumbSize+4) or (Slider.ThumbSize+2)),
                 Position = UDim2.new(1, 0, 0.5, 0),
                 AnchorPoint = Vector2.new(0.5, 0.5),
-                -- Bolita blanca para contraste
                 ImageColor3 = Color3.fromRGB(255, 255, 255),
                 Name = "Thumb",
             }, {
@@ -148,13 +140,12 @@ function Element:New(Config)
                     Name = "Highlight",
                     ImageTransparency = .6,
                 }),
+                New("UIScale", {
+                    Scale = 1,
+                }),
             })
         })
     })
-    
-    -- ==========================================
-    -- FIN DEL CAMBIO DE COLOR
-    -- ==========================================
 
     Slider.UIElements.SliderContainer = New("Frame", {
         Size = UDim2.new(Slider.Title == nil and 1 or 0, Slider.Title == nil and 0 or Slider.Width, 0, 0),
@@ -191,6 +182,7 @@ function Element:New(Config)
     })
     
     local Tooltip
+    local ThumbScale = Slider.UIElements.SliderIcon.Frame.Thumb.UIScale
     if Slider.IsTooltip then
         Tooltip = require("../components/ui/Tooltip").New(Value, Slider.UIElements.SliderIcon.Frame.Thumb, true, "Secondary", "Small", false)
         Tooltip.Container.AnchorPoint = Vector2.new(0.5,1)
@@ -226,9 +218,10 @@ function Element:New(Config)
                     local delta = math.clamp((inputPosition - Slider.UIElements.SliderIcon.AbsolutePosition.X) / Slider.UIElements.SliderIcon.AbsoluteSize.X, 0, 1)
                     Value = CalculateValue(Slider.Value.Min + delta * (Slider.Value.Max - Slider.Value.Min))
                     Value = math.clamp(Value, Slider.Value.Min or 0, Slider.Value.Max or 100)
+                    delta = math.clamp((Value - (Slider.Value.Min or 0)) / ((Slider.Value.Max or 100) - (Slider.Value.Min or 0)), 0, 1)
                     
                     if Value ~= LastValue then
-                        Tween(Slider.UIElements.SliderIcon.Frame, 0.05, {Size = UDim2.new(delta,0,1,0)}):Play()
+                        Slider.UIElements.SliderIcon.Frame.Size = UDim2.new(delta,0,1,0)
                         Slider.UIElements.SliderContainer.TextBox.Text = FormatValue(Value)
                         if Tooltip then Tooltip.TitleFrame.Text = FormatValue(Value) end
                         Slider.Value.Default = FormatValue(Value)
@@ -241,9 +234,11 @@ function Element:New(Config)
                         local inputPosition = isTouch and input.Position.X or UserInputService:GetMouseLocation().X
                         local delta = math.clamp((inputPosition - Slider.UIElements.SliderIcon.AbsolutePosition.X) / Slider.UIElements.SliderIcon.AbsoluteSize.X, 0, 1)
                         Value = CalculateValue(Slider.Value.Min + delta * (Slider.Value.Max - Slider.Value.Min))
-                        
+                        Value = math.clamp(Value, Slider.Value.Min or 0, Slider.Value.Max or 100)
+                        delta = math.clamp((Value - (Slider.Value.Min or 0)) / ((Slider.Value.Max or 100) - (Slider.Value.Min or 0)), 0, 1)
+
                         if Value ~= LastValue then
-                            Tween(Slider.UIElements.SliderIcon.Frame, 0.05, {Size = UDim2.new(delta,0,1,0)}):Play()
+                            Slider.UIElements.SliderIcon.Frame.Size = UDim2.new(delta,0,1,0)
                             Slider.UIElements.SliderContainer.TextBox.Text = FormatValue(Value)
                             if Tooltip then Tooltip.TitleFrame.Text = FormatValue(Value) end
                             Slider.Value.Default = FormatValue(Value)
@@ -259,9 +254,10 @@ function Element:New(Config)
                             releaseconnection:Disconnect()
                             IsSliderHolding = false
                             ScrollingFrameParent.ScrollingEnabled = true
+                            Tween(ThumbScale, 0.2, {Scale = 1}, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
                             
                             if Config.Window.NewElements then
-                                Tween(Slider.UIElements.SliderIcon.Frame.Thumb, .2, { ImageTransparency = 0, Size = UDim2.new(0,Config.Window.NewElements and (Slider.ThumbSize*2) or (Slider.ThumbSize+2),0,Config.Window.NewElements and (Slider.ThumbSize+4) or (Slider.ThumbSize+2)) }, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
+                                Tween(Slider.UIElements.SliderIcon.Frame.Thumb, .2, { ImageTransparency = 0, Size = UDim2.new(0,Config.Window.NewElements and (Slider.ThumbSize*2) or (Slider.ThumbSize+2),0,Config.Window.NewElements and (Slider.ThumbSize+4) or (Slider.ThumbSize+2)) }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
                             end
                             if Tooltip then Tooltip:Close(false) end
                         end
@@ -271,9 +267,13 @@ function Element:New(Config)
                     
                     local delta = math.clamp((Value - (Slider.Value.Min or 0)) / ((Slider.Value.Max or 100) - (Slider.Value.Min or 0)), 0, 1)
                     Value = CalculateValue(Slider.Value.Min + delta * (Slider.Value.Max - Slider.Value.Min))
+                    Value = math.clamp(Value, Slider.Value.Min or 0, Slider.Value.Max or 100)
+                    delta = math.clamp((Value - (Slider.Value.Min or 0)) / ((Slider.Value.Max or 100) - (Slider.Value.Min or 0)), 0, 1)
                     
                     if Value ~= LastValue then
-                        Tween(Slider.UIElements.SliderIcon.Frame, 0.05, {Size = UDim2.new(delta,0,1,0)}):Play()
+                        Tween(Slider.UIElements.SliderIcon.Frame, 0.12, {
+                            Size = UDim2.new(delta,0,1,0),
+                        }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
                         Slider.UIElements.SliderContainer.TextBox.Text = FormatValue(Value)
                         if Tooltip then Tooltip.TitleFrame.Text = FormatValue(Value) end
                         Slider.Value.Default = FormatValue(Value)
@@ -330,8 +330,9 @@ function Element:New(Config)
         Slider:Set(Value, input)
         
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            Tween(ThumbScale, 0.2, {Scale = 1.18}, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
             if Config.Window.NewElements then 
-                Tween(Slider.UIElements.SliderIcon.Frame.Thumb, .24, { ImageTransparency = .85, Size = UDim2.new(0,(Config.Window.NewElements and (Slider.ThumbSize*2) or (Slider.ThumbSize))+8,0,Slider.ThumbSize+8) }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                Tween(Slider.UIElements.SliderIcon.Frame.Thumb, .24, { ImageTransparency = .85, Size = UDim2.new(0,(Config.Window.NewElements and (Slider.ThumbSize*2) or (Slider.ThumbSize))+8,0,Slider.ThumbSize+8) }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
             end
             if Tooltip then Tooltip:Open() end
         end
