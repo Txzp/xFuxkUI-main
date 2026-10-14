@@ -1,6 +1,7 @@
 local WindUI = {
 	Window = nil,
 	Theme = nil,
+	StartedAt = os.clock(),
 	Creator = require("src/modules/Creator"),
 	LocalizationModule = require("src/modules/Localization"),
 	NotificationModule = require("src/components/Notification"),

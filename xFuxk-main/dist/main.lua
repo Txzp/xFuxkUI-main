@@ -5984,6 +5984,298 @@ return ag.__type,ag
 end
 
 return ac end function a.D()
+local aa=game:GetService"Players"
+local ab=game:GetService"RunService"
+
+local ac=a.load'c'
+local ad=ac.New
+
+local ae=aa.LocalPlayer
+local af=ac.Icon"terminal"
+
+local ag={}
+
+local function FormatElapsedTime(ah)
+ah=math.max(0,math.floor(ah))
+local ai=math.floor(ah/3600)
+local aj=math.floor(ah%3600/60)
+local ak=ah%60
+return string.format("%02d:%02d:%02d",ai,aj,ak)
+end
+
+local function GetExecutorName()
+if ab:IsStudio()then
+return"Studio"
+end
+
+local ah=identifyexecutor
+if type(ah)~="function"then
+ah=getexecutorname
+end
+
+if type(ah)~="function"then
+return"Unknown"
+end
+
+local ai,aj=pcall(ah)
+if not ai then
+warn("[ WindUI.PlayerInfo ] Executor identification failed: "..tostring(aj))
+return"Unknown"
+end
+
+if type(aj)~="string"or aj:match"^%s*$"then
+return"Unknown"
+end
+
+return aj
+end
+
+function ag.New(ah,ai)
+local aj=ai.ShowAvatar~=false
+local ak=ai.ShowDisplayName~=false
+local al=ai.ShowUsername~=false
+local am=ai.ShowSessionTime~=false
+local an=ai.ShowExecutor~=false
+
+local ao={
+__type="PlayerInfo",
+Title=ai.Title or"Player",
+Locked=ai.Locked or false,
+Player=ae,
+UIElements={},
+}
+
+local ap={
+Title="",
+Desc=nil,
+Hover=false,
+TextOffset=0,
+ParentConfig=ai,
+Parent=ai.Parent,
+Tab=ai.Tab,
+Index=ai.Index,
+Window=ai.Window,
+ElementTable=ao,
+}
+
+local aq=a.load'B'(ap)
+aq.UIElements.Container.Size=UDim2.new(1,0,0,0)
+aq.UIElements.Container.TitleFrame.Visible=false
+
+local ar=70
+local as=82
+local at=10
+local au={}
+local av=0
+local aw=0
+
+local function AddColumn(ax,ay)
+table.insert(au,ax)
+aw+=1
+if ay then
+av+=ay
+end
+end
+
+if aj then
+local ax=ad("ImageLabel",{
+Name="Avatar",
+Size=UDim2.new(0,ar,0,ar),
+BackgroundTransparency=1,
+Image=string.format(
+"rbxthumb://type=AvatarHeadShot&id=%d&w=150&h=150",
+ae.UserId
+),
+ScaleType="Crop",
+LayoutOrder=1,
+},{
+ad("UICorner",{
+CornerRadius=UDim.new(0,math.max(ai.Window.ElementConfig.UICorner-4,0)),
+}),
+})
+AddColumn(ax,ar)
+end
+
+local ax={}
+local ay
+local az
+local function AddInfoLabel(aA,aB,b,d,f)
+local g=ad("TextLabel",{
+Size=UDim2.new(1,0,0,20),
+BackgroundTransparency=1,
+Text=aA,
+TextSize=b,
+TextTransparency=f or 0,
+TextXAlignment="Left",
+TextTruncate="AtEnd",
+FontFace=Font.new(ac.Font,d),
+ThemeTag={
+TextColor3="Text",
+},
+LayoutOrder=aB,
+})
+table.insert(ax,g)
+return g
+end
+
+if ak then
+ay=AddInfoLabel(ae.DisplayName,1,17,Enum.FontWeight.SemiBold)
+end
+
+if al then
+az=AddInfoLabel("@"..ae.Name,2,14,Enum.FontWeight.Medium,0.2)
+end
+
+if an then
+local aA=GetExecutorName()
+local aB=ad("Frame",{
+Name="Executor",
+Size=UDim2.new(1,0,0,20),
+BackgroundTransparency=1,
+LayoutOrder=3,
+},{
+ad("UIListLayout",{
+FillDirection="Horizontal",
+VerticalAlignment="Center",
+Padding=UDim.new(0,5),
+}),
+ad("ImageLabel",{
+Size=UDim2.new(0,14,0,14),
+BackgroundTransparency=1,
+Image=af[1],
+ImageRectOffset=af[2].ImageRectPosition,
+ImageRectSize=af[2].ImageRectSize,
+ThemeTag={
+ImageColor3="Text",
+},
+}),
+ad("TextLabel",{
+Name="Value",
+Size=UDim2.new(1,-19,1,0),
+BackgroundTransparency=1,
+Text="Exe: "..aA,
+TextSize=13,
+TextTransparency=0.2,
+TextXAlignment="Left",
+TextTruncate="AtEnd",
+FontFace=Font.new(ac.Font,Enum.FontWeight.Medium),
+ThemeTag={
+TextColor3="Text",
+},
+}),
+})
+table.insert(ax,aB)
+end
+
+local aA
+if#ax>0 or am then
+aA=ad("Frame",{
+Name="PlayerDetails",
+Size=UDim2.new(1,0,0,0),
+AutomaticSize="Y",
+BackgroundTransparency=1,
+LayoutOrder=2,
+},{
+ad("UIListLayout",{
+FillDirection="Vertical",
+VerticalAlignment="Center",
+HorizontalAlignment="Left",
+Padding=UDim.new(0,3),
+}),
+})
+for aB,b in ipairs(ax)do
+b.Parent=aA
+end
+AddColumn(aA)
+end
+
+local aB
+if am then
+local b=ad("Frame",{
+Name="Session",
+Size=UDim2.new(0,as,0,42),
+BackgroundTransparency=1,
+LayoutOrder=3,
+},{
+ad("UIListLayout",{
+FillDirection="Vertical",
+VerticalAlignment="Center",
+HorizontalAlignment="Right",
+Padding=UDim.new(0,2),
+}),
+ad("TextLabel",{
+Size=UDim2.new(1,0,0,18),
+BackgroundTransparency=1,
+Text="Session",
+TextSize=12,
+TextTransparency=0.35,
+TextXAlignment="Right",
+FontFace=Font.new(ac.Font,Enum.FontWeight.Medium),
+ThemeTag={
+TextColor3="Text",
+},
+}),
+ad("TextLabel",{
+Name="Time",
+Size=UDim2.new(1,0,0,22),
+BackgroundTransparency=1,
+Text="00:00:00",
+TextSize=16,
+TextXAlignment="Right",
+FontFace=Font.new(ac.Font,Enum.FontWeight.SemiBold),
+TextColor3=Color3.fromRGB(46,204,113),
+}),
+})
+aB=b.Time
+AddColumn(b,as)
+end
+
+local b=ad("Frame",{
+Name="PlayerInfo",
+Size=UDim2.new(1,0,0,0),
+AutomaticSize="Y",
+BackgroundTransparency=1,
+},{
+ad("UIListLayout",{
+FillDirection="Horizontal",
+VerticalAlignment="Center",
+HorizontalAlignment="Left",
+Padding=UDim.new(0,at),
+}),
+})
+
+local d=math.max(aw-1,0)
+if aA then
+aA.Size=UDim2.new(1,-av-d*at,0,0)
+end
+
+for f,g in ipairs(au)do
+g.Parent=b
+end
+
+b.Parent=aq.UIElements.Container
+aq.UIElements.Container.Visible=true
+
+ao.PlayerInfoFrame=aq
+ao.UIElements.Avatar=aq.UIElements.Container:FindFirstChild("Avatar",true)
+ao.UIElements.DisplayName=ay
+ao.UIElements.Username=az
+ao.UIElements.SessionTime=aB
+
+if aB then
+task.spawn(function()
+while aq.UIElements.Main.Parent do
+aB.Text=FormatElapsedTime(os.clock()-ai.WindUI.StartedAt)
+task.wait(1)
+end
+end)
+end
+
+return ao.__type,ao
+end
+
+return ag end function a.E()
+
 local aa=a.load'c'
 
 local ab={}
@@ -6075,7 +6367,7 @@ end)
 return ae.__type,ae
 end
 
-return ab end function a.E()
+return ab end function a.F()
 
 local aa={}
 
@@ -6486,7 +6778,7 @@ an:Set(an.Value,false,true)
 return an.__type,an
 end
 
-return aa end function a.F()
+return aa end function a.G()
 local aa=(cloneref or clonereference or function(aa)return aa end)
 
 local ab=aa(game:GetService"UserInputService")
@@ -6830,7 +7122,7 @@ end)
 return ak.__type,ak
 end
 
-return ag end function a.G()
+return ag end function a.H()
 
 local aa=(cloneref or clonereference or function(aa)return aa end)
 
@@ -6998,7 +7290,7 @@ end)
 return aj.__type,aj
 end
 
-return af end function a.H()
+return af end function a.I()
 local aa=a.load'c'
 local ab=aa.New local ac=
 aa.Tween
@@ -7111,7 +7403,7 @@ end
 return ai.__type,ai
 end
 
-return ad end function a.I()
+return ad end function a.J()
 local aa=a.load'c'
 local ab=aa.New
 
@@ -7138,7 +7430,7 @@ ag
 return"Divider",{__type="Divider",ElementFrame=ah}
 end
 
-return ad end function a.J()
+return ad end function a.K()
 local aa={}
 
 local ab=(cloneref or clonereference or function(ab)
@@ -7703,7 +7995,7 @@ end
 
 RecalculateCanvasSize()
 RecalculateListSize()
-else a.load'I'
+else a.load'J'
 :New{Parent=am.UIElements.Menu.Frame.ScrollingFrame}
 end
 end
@@ -7847,7 +8139,7 @@ UpdatePosition
 return aq
 end
 
-return aa end function a.K()
+return aa end function a.L()
 
 local aa=(cloneref or clonereference or function(aa)
 return aa
@@ -7863,7 +8155,7 @@ ad.Tween
 
 local ag=a.load'v'.New local ah=a.load'm'
 .New
-local ai=a.load'J'.New local aj=
+local ai=a.load'K'.New local aj=
 
 workspace.CurrentCamera
 
@@ -7980,7 +8272,7 @@ end
 return an.__type,an
 end
 
-return ak end function a.L()
+return ak end function a.M()
 
 
 
@@ -8153,14 +8445,14 @@ end
 return table.concat(aq)
 end
 
-return aa end function a.M()
+return aa end function a.N()
 local aa={}
 
 local ad=a.load'c'
 local ae=ad.New
 local ag=ad.Tween
 
-local ai=a.load'L'
+local ai=a.load'M'
 
 function aa.New(aj,ak,al,am,an)
 local ao={
@@ -8363,12 +8655,12 @@ return ao
 end
 
 
-return aa end function a.N()
+return aa end function a.O()
 local aa=a.load'c'local ad=
 aa.New
 
 
-local ae=a.load'M'
+local ae=a.load'N'
 
 local ag={}
 
@@ -8430,7 +8722,7 @@ ak.ElementFrame=am.CodeFrame
 return ak.__type,ak
 end
 
-return ag end function a.O()
+return ag end function a.P()
 local aa=a.load'c'
 local ad=aa.New local ae=
 aa.Tween
@@ -9145,7 +9437,7 @@ end)
 return at.__type,at
 end
 
-return aq end function a.P()
+return aq end function a.Q()
 local aa=a.load'c'
 local ad=aa.New
 local ae=aa.Tween
@@ -9474,7 +9766,7 @@ end)
 return ak.__type,ak
 end
 
-return ag end function a.Q()
+return ag end function a.R()
 
 local aa=a.load'c'
 local ad=aa.New
@@ -9491,7 +9783,7 @@ BackgroundTransparency=1,
 return"Space",{__type="Space",ElementFrame=aj}
 end
 
-return ae end function a.R()
+return ae end function a.S()
 local aa=a.load'c'
 local ad=aa.New
 
@@ -9550,7 +9842,7 @@ end
 return aj.__type,aj
 end
 
-return ae end function a.S()
+return ae end function a.T()
 local aa=a.load'c'
 local ad=aa.New
 
@@ -9635,7 +9927,7 @@ ai.Tab
 return aj.__type,aj
 end
 
-return ae end function a.T()
+return ae end function a.U()
 local aa=a.load'c'
 local ad=aa.New
 
@@ -9734,7 +10026,7 @@ end
 return aj.__type,aj
 end
 
-return ae end function a.U()
+return ae end function a.V()
 local aa=a.load'c'
 local ad=aa.New
 
@@ -9820,25 +10112,26 @@ ai.Tab
 return aj.__type,aj
 end
 
-return ae end function a.V()
+return ae end function a.W()
 return{
 Elements={
 Paragraph=a.load'C',
-Button=a.load'D',
-Toggle=a.load'E',
-Slider=a.load'F',
-Keybind=a.load'G',
-Input=a.load'H',
-Dropdown=a.load'K',
-Code=a.load'N',
-Colorpicker=a.load'O',
-Section=a.load'P',
-Divider=a.load'I',
-Space=a.load'Q',
-Image=a.load'R',
-Group=a.load'S',
-HStack=a.load'T',
-VStack=a.load'U',
+PlayerInfo=a.load'D',
+Button=a.load'E',
+Toggle=a.load'F',
+Slider=a.load'G',
+Keybind=a.load'H',
+Input=a.load'I',
+Dropdown=a.load'L',
+Code=a.load'O',
+Colorpicker=a.load'P',
+Section=a.load'Q',
+Divider=a.load'J',
+Space=a.load'R',
+Image=a.load'S',
+Group=a.load'T',
+HStack=a.load'U',
+VStack=a.load'V',
 
 },
 Load=function(aa,ad,ae,ag,ai,aj,ak,al,am)
@@ -9995,7 +10288,7 @@ end
 end
 end
 end,
-}end function a.W()
+}end function a.X()
 
 local aa=(cloneref or clonereference or function(aa)
 return aa
@@ -10495,7 +10788,7 @@ end
 
 
 
-local az=a.load'V'
+local az=a.load'W'
 
 az.Load(
 ao,
@@ -10734,7 +11027,7 @@ al.OnChangeFunc(an)
 end
 end
 
-return al end function a.X()
+return al end function a.Y()
 
 local aa={}
 
@@ -10743,7 +11036,7 @@ local ad=a.load'c'
 local ae=ad.New
 local ag=ad.Tween
 
-local ai=a.load'W'
+local ai=a.load'X'
 
 function aa.New(aj,ak,al,am,an)
 local ao={
@@ -10911,7 +11204,7 @@ return ao
 end
 
 
-return aa end function a.Y()
+return aa end function a.Z()
 return{
 Tab="table-of-contents",
 Paragraph="type",
@@ -10923,7 +11216,7 @@ Input="text-cursor-input",
 Dropdown="chevrons-up-down",
 Code="terminal",
 Colorpicker="palette",
-}end function a.Z()
+}end function a._()
 local aa=(cloneref or clonereference or function(aa)
 return aa
 end)
@@ -10947,7 +11240,7 @@ Radius=22,
 Width=400,
 MaxHeight=380,
 
-Icons=a.load'Y',
+Icons=a.load'Z',
 }
 
 local an=ag("TextBox",{
@@ -11458,7 +11751,7 @@ end)
 return am
 end
 
-return ad end function a._()
+return ad end function a.aa()
 
 
 
@@ -12354,54 +12647,6 @@ at.UIElements.Main.Main.GlassSweep.BackGlass.UIGradient.Offset
 end
 )
 
-if at.IsPC~=nil then
-local r=ak.Icon(at.IsPC and"monitor"or"smartphone")
-al("Frame",{
-Name="DeviceIndicator",
-AutomaticSize="X",
-Size=UDim2.new(0,0,0,24),
-BackgroundTransparency=1,
-LayoutOrder=at.Topbar.ButtonsType=="Default"and 996 or 998,
-Parent=at.UIElements.Main.Main.Topbar.Right,
-},{
-al("UIListLayout",{
-FillDirection="Horizontal",
-HorizontalAlignment="Center",
-VerticalAlignment="Center",
-SortOrder="LayoutOrder",
-Padding=UDim.new(0,5),
-}),
-al("UIPadding",{
-PaddingTop=UDim.new(0,2),
-PaddingLeft=UDim.new(0,7),
-PaddingRight=UDim.new(0,12),
-}),
-al("ImageLabel",{
-BackgroundTransparency=1,
-Size=UDim2.new(0,14,0,14),
-Image=r[1],
-ImageRectOffset=r[2].ImageRectPosition,
-ImageRectSize=r[2].ImageRectSize,
-ThemeTag={
-ImageColor3="Text",
-},
-}),
-al("TextLabel",{
-AutomaticSize="X",
-Size=UDim2.new(0,0,1,0),
-BackgroundTransparency=1,
-Text=at.IsPC and"PC"or"Mobile",
-TextSize=12,
-TextTransparency=0.15,
-TextXAlignment="Left",
-ThemeTag={
-TextColor3="Text",
-},
-FontFace=Font.new(ak.Font,Enum.FontWeight.Medium),
-}),
-})
-end
-
 am(
 at.UIElements.Main.Main.GlassSweep.BackGlass.UIGradient,
 5.5,
@@ -13224,8 +13469,8 @@ if at.OpenButton and typeof(at.OpenButton)=="table"then
 at:EditOpenButton(at.OpenButton)
 end
 
-local x=a.load'W'
-local z=a.load'X'
+local x=a.load'X'
+local z=a.load'Y'
 local A=x.Init(at,as.WindUI,as.WindUI.TooltipGui)
 A:OnChange(function(B)
 at.CurrentTab=B
@@ -13685,7 +13930,7 @@ end)
 
 
 if not at.HideSearchBar then
-local L=a.load'Z'
+local L=a.load'_'
 local M=false
 
 
@@ -13779,6 +14024,7 @@ end end end
 local aa={
 Window=nil,
 Theme=nil,
+StartedAt=os.clock(),
 Creator=a.load'c',
 LocalizationModule=a.load'd',
 NotificationModule=a.load'e',
@@ -14041,7 +14287,7 @@ aa:SetTheme"Dark"
 aa:SetLanguage(an.Language)
 
 function aa.CreateWindow(au,av)
-local aw=a.load'_'
+local aw=a.load'aa'
 
 if not aj:IsStudio()and writefile then
 if not isfolder"WindUI"then
