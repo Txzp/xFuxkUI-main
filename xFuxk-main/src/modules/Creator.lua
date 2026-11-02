@@ -45,18 +45,58 @@ local function CreateFallbackIcons()
 end
 
 local Icons
-local RemoteIcons = ReplicatedStorage:WaitForChild("GetIcons", 2)
+local RemoteIcons = ReplicatedStorage:FindFirstChild("GetIcons")
 if RemoteIcons then
 	Icons = require("./Icons")
 elseif RunService:IsStudio() or not writefile then
 	Icons = CreateFallbackIcons()
 else
 	local success, result = pcall(function()
-		return loadstring(
-			game.HttpGetAsync and game:HttpGetAsync(IconsURL) or HttpService:GetAsync(IconsURL)
-		)()
+		local cachePath = "WindUI/Temp/assets/.Icons-Main-v2.lua"
+		local cacheTimePath = cachePath .. ".time"
+		local cacheLifetime = 6 * 60 * 60
+		local source
+
+		local cacheReadSuccess, cachedSource = pcall(function()
+			if isfile and readfile and isfile(cachePath) and isfile(cacheTimePath) then
+				local cachedAt = tonumber(readfile(cacheTimePath))
+				if cachedAt and os.time() >= cachedAt and os.time() - cachedAt < cacheLifetime then
+					return readfile(cachePath)
+				end
+			end
+		end)
+		if cacheReadSuccess then
+			source = cachedSource
+		end
+
+		if not source then
+			source = game.HttpGetAsync and game:HttpGetAsync(IconsURL) or HttpService:GetAsync(IconsURL)
+
+			pcall(function()
+				if isfolder and makefolder then
+					if not isfolder("WindUI") then
+						makefolder("WindUI")
+					end
+					if not isfolder("WindUI/Temp") then
+						makefolder("WindUI/Temp")
+					end
+					if not isfolder("WindUI/Temp/assets") then
+						makefolder("WindUI/Temp/assets")
+					end
+					writefile(cachePath, source)
+					writefile(cacheTimePath, tostring(os.time()))
+				end
+			end)
+		end
+
+		return loadstring(source)()
 	end)
-	Icons = success and result or CreateFallbackIcons()
+	if success and result then
+		Icons = result
+	else
+		warn("[ WindUI.Creator ] Failed to load remote icons; using fallback icons: " .. tostring(result))
+		Icons = CreateFallbackIcons()
+	end
 end
 
 Icons.SetIconsType("lucide")

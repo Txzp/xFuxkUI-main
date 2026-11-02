@@ -3,7 +3,7 @@
 -- ============================================================
 
 -- 1. Cargar la librería
-local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/xFuxkUI-main/main/xFuxk-main/dist/main.lua?t=" .. os.time()))()
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Txzp/xFuxkUI-main/main/xFuxk-main/dist/main.lua"))()
 
 -- 2. Crear la ventana principal
 

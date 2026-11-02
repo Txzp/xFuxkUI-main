@@ -391,18 +391,58 @@ return m
 end
 
 local m
-local p=i:WaitForChild("GetIcons",2)
+local p=i:FindFirstChild"GetIcons"
 if p then
 m=a.load'a'
 elseif d:IsStudio()or not writefile then
 m=CreateFallbackIcons()
 else
 local r,u=pcall(function()
-return loadstring(
-game.HttpGetAsync and game:HttpGetAsync(l)or h:GetAsync(l)
-)()
+local r="WindUI/Temp/assets/.Icons-Main-v2.lua"
+local u=r..".time"
+local v=216E2
+local x
+
+local z,A=pcall(function()
+if isfile and readfile and isfile(r)and isfile(u)then
+local z=tonumber(readfile(u))
+if z and os.time()>=z and os.time()-z<v then
+return readfile(r)
+end
+end
 end)
-m=r and u or CreateFallbackIcons()
+if z then
+x=A
+end
+
+if not x then
+x=game.HttpGetAsync and game:HttpGetAsync(l)or h:GetAsync(l)
+
+pcall(function()
+if isfolder and makefolder then
+if not isfolder"WindUI"then
+makefolder"WindUI"
+end
+if not isfolder"WindUI/Temp"then
+makefolder"WindUI/Temp"
+end
+if not isfolder"WindUI/Temp/assets"then
+makefolder"WindUI/Temp/assets"
+end
+writefile(r,x)
+writefile(u,tostring(os.time()))
+end
+end)
+end
+
+return loadstring(x)()
+end)
+if r and u then
+m=u
+else
+warn("[ WindUI.Creator ] Failed to load remote icons; using fallback icons: "..tostring(u))
+m=CreateFallbackIcons()
+end
 end
 
 m.SetIconsType"lucide"
