@@ -127,7 +127,18 @@ return {
 						frame:Highlight()
 					end
 					function content:Destroy()
+						if content.CancelPicking then
+							content:CancelPicking()
+						end
 						frame:Destroy()
+						if content.__type == "Keybind" then
+							for index = #Window.Keybinds, 1, -1 do
+								if Window.Keybinds[index] == content then
+									table.remove(Window.Keybinds, index)
+									break
+								end
+							end
+						end
 
 						table.remove(Window.AllElements, config.GlobalIndex)
 						table.remove(tbl.Elements, config.Index)

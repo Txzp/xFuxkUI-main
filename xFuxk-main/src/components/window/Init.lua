@@ -7,6 +7,7 @@ end)
 local UserInputService = cloneref(game:GetService("UserInputService"))
 local RunService = cloneref(game:GetService("RunService"))
 local Players = cloneref(game:GetService("Players"))
+local GuiService = cloneref(game:GetService("GuiService"))
 
 local CurrentCamera = workspace.CurrentCamera
 
@@ -94,6 +95,7 @@ return function(Config)
 
 		TopBarButtons = {},
 		AllElements = {},
+		Keybinds = {},
 
 		ElementConfig = {},
 
@@ -1125,6 +1127,56 @@ return function(Config)
 
 	-- local Dragged = false
 
+	local IsClampingWindow = false
+
+	local function GetSafeViewportBounds()
+		local viewportSize = CurrentCamera.ViewportSize
+		local topLeftInset, bottomRightInset = GuiService:GetGuiInset()
+		return topLeftInset.X, topLeftInset.Y, viewportSize.X - bottomRightInset.X, viewportSize.Y - bottomRightInset.Y
+	end
+
+	local function ConstrainWindowPosition(mainFrame, targetPosition)
+		local left, top, right, bottom = GetSafeViewportBounds()
+		local safeWidth = math.max(right - left, 0)
+		local safeHeight = math.max(bottom - top, 0)
+		local currentPosition = mainFrame.Position
+		local currentAbsolutePosition = mainFrame.AbsolutePosition
+		local targetX = currentAbsolutePosition.X
+			+ (targetPosition.X.Scale - currentPosition.X.Scale) * safeWidth
+			+ targetPosition.X.Offset
+			- currentPosition.X.Offset
+		local targetY = currentAbsolutePosition.Y
+			+ (targetPosition.Y.Scale - currentPosition.Y.Scale) * safeHeight
+			+ targetPosition.Y.Offset
+			- currentPosition.Y.Offset
+		local maxX = math.max(left, right - mainFrame.AbsoluteSize.X)
+		local maxY = math.max(top, bottom - mainFrame.AbsoluteSize.Y)
+		local clampedX = math.clamp(targetX, left, maxX)
+		local clampedY = math.clamp(targetY, top, maxY)
+
+		return UDim2.new(
+			targetPosition.X.Scale,
+			targetPosition.X.Offset + clampedX - targetX,
+			targetPosition.Y.Scale,
+			targetPosition.Y.Offset + clampedY - targetY
+		)
+	end
+
+	local function ClampWindowPosition()
+		local mainFrame = Window.UIElements.Main
+		if IsClampingWindow or not mainFrame or not mainFrame.Parent then
+			return
+		end
+
+		local clampedPosition = ConstrainWindowPosition(mainFrame, mainFrame.Position)
+		if clampedPosition ~= mainFrame.Position then
+			IsClampingWindow = true
+			mainFrame.Position = clampedPosition
+			Window.Position = clampedPosition
+			IsClampingWindow = false
+		end
+	end
+
 	local WindowDragModule = Creator.Drag(
 		Window.UIElements.Main,
 		{ Window.UIElements.Main.Main.Topbar, BottomDragFrame.Frame },
@@ -1141,8 +1193,36 @@ return function(Config)
 					Window.ConfigManager:MarkDirty()
 				end
 			end
-		end
+		end,
+		ConstrainWindowPosition
 	)
+
+	Creator.AddSignal(Window.UIElements.Main:GetPropertyChangedSignal("Position"), ClampWindowPosition)
+	Creator.AddSignal(Window.UIElements.Main:GetPropertyChangedSignal("AbsoluteSize"), ClampWindowPosition)
+
+	local function UpdateWindowViewport()
+		local mainFrame = Window.UIElements.Main
+		local left, top, right, bottom = GetSafeViewportBounds()
+
+		if Window.AutoScale and not Window.IsFullscreen and mainFrame.AbsoluteSize.X > 0 and mainFrame.AbsoluteSize.Y > 0 then
+			local currentScale = math.max(Config.WindUI.UIScaleObj.Scale, 0.01)
+			local baseWidth = mainFrame.AbsoluteSize.X / currentScale
+			local baseHeight = mainFrame.AbsoluteSize.Y / currentScale
+			local fitScale = math.min((right - left) / baseWidth, (bottom - top) / baseHeight, 1)
+			local finalScale = math.clamp(fitScale, 0.3, 1)
+
+			if math.abs(finalScale - currentScale) > 0.01 then
+				Window:SetUIScale(finalScale)
+			end
+		end
+
+		ClampWindowPosition()
+	end
+
+	if CurrentCamera then
+		Creator.AddSignal(CurrentCamera:GetPropertyChangedSignal("ViewportSize"), UpdateWindowViewport)
+	end
+	task.defer(UpdateWindowViewport)
 
 	if not IsVideoBG and Window.Background and typeof(Window.Background) == "table" then
 		local BackgroundGradient = New("UIGradient")
@@ -1651,33 +1731,7 @@ return function(Config)
 		return result
 	end
 
-	do
-		local Margin = 40
-		local ViewportSize = CurrentCamera.ViewportSize
-		local WindowSize = Window.UIElements.Main.AbsoluteSize
-
-		if not Window.IsFullscreen and Window.AutoScale then
-			local AvailableWidth = ViewportSize.X - (Margin * 2)
-			local AvailableHeight = ViewportSize.Y - (Margin * 2)
-
-			local ScaleX = AvailableWidth / WindowSize.X
-			local ScaleY = AvailableHeight / WindowSize.Y
-
-			local RequiredScale = math.min(ScaleX, ScaleY)
-
-			local MinScale = 0.3
-			local MaxScale = 1.0
-
-			local FinalScale = math.clamp(RequiredScale, MinScale, MaxScale)
-
-			local CurrentScale = Window:GetUIScale() or 1
-			local Tolerance = 0.05
-
-			if math.abs(FinalScale - CurrentScale) > Tolerance then
-				Window:SetUIScale(FinalScale)
-			end
-		end
-	end
+	UpdateWindowViewport()
 
 	if Window.OpenButtonMain and Window.OpenButtonMain.Button then
 		Creator.AddSignal(Window.OpenButtonMain.Button.TextButton.MouseButton1Click, function()

@@ -693,7 +693,7 @@ function Creator.SetDraggable(can)
 	Creator.CanDraggable = can
 end
 
-function Creator.Drag(mainFrame, dragFrames, ondrag)
+function Creator.Drag(mainFrame, dragFrames, ondrag, constrainPosition)
 	local currentDragFrame = nil
 	local dragging, dragStart, startPos
 	local DragModule = {
@@ -710,13 +710,18 @@ function Creator.Drag(mainFrame, dragFrames, ondrag)
 		end
 
 		local delta = input.Position - dragStart
+		local targetPosition = UDim2.new(
+			startPos.X.Scale,
+			startPos.X.Offset + delta.X,
+			startPos.Y.Scale,
+			startPos.Y.Offset + delta.Y
+		)
+		if typeof(constrainPosition) == "function" then
+			targetPosition = constrainPosition(mainFrame, targetPosition) or targetPosition
+		end
+
 		Creator.Tween(mainFrame, 0.02, {
-			Position = UDim2.new(
-				startPos.X.Scale,
-				startPos.X.Offset + delta.X,
-				startPos.Y.Scale,
-				startPos.Y.Offset + delta.Y
-			),
+			Position = targetPosition,
 		}):Play()
 	end
 

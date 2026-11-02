@@ -64,9 +64,9 @@ WindUI.UIScaleObj = UIScaleObj
 WindUI.ScreenGui = New("ScreenGui", {
 	Name = "WindUI",
 	Parent = GUIParent,
-	IgnoreGuiInset = true,
-	ScreenInsets = "None",
-	DisplayOrder = -99999,
+	IgnoreGuiInset = false,
+	ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets,
+	DisplayOrder = 1,
 }, {
 
 	New("Folder", {
@@ -92,19 +92,24 @@ WindUI.ScreenGui = New("ScreenGui", {
 WindUI.NotificationGui = New("ScreenGui", {
 	Name = "WindUI/Notifications",
 	Parent = GUIParent,
-	IgnoreGuiInset = true,
-	DisplayOrder = 999999,
+	IgnoreGuiInset = false,
+	ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets,
+	DisplayOrder = 2,
 	ResetOnSpawn = false,
 })
 WindUI.DropdownGui = New("ScreenGui", {
 	Name = "WindUI/Dropdowns",
 	Parent = GUIParent,
-	IgnoreGuiInset = true,
+	IgnoreGuiInset = false,
+	ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets,
+	DisplayOrder = 3,
 })
 WindUI.TooltipGui = New("ScreenGui", {
 	Name = "WindUI/Tooltips",
 	Parent = GUIParent,
-	IgnoreGuiInset = true,
+	IgnoreGuiInset = false,
+	ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets,
+	DisplayOrder = 4,
 })
 ProtectGui(WindUI.ScreenGui)
 ProtectGui(WindUI.NotificationGui)

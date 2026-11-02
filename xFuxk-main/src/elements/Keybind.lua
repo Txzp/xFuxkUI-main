@@ -36,6 +36,8 @@ function Element:New(Config)
         Picking = false,
         UIElements = {},
     }
+    local WindowKeybinds = Config.Window.Keybinds
+    table.insert(WindowKeybinds, Keybind)
     
     local CanCallback = true
     
@@ -90,51 +92,124 @@ function Element:New(Config)
     
     function Keybind:Set(v)
         local normalizedValue = NormalizeKeyCode(v)
+        for _, element in next, WindowKeybinds do
+            if element ~= Keybind and element.__type == "Keybind" and element.Value == normalizedValue then
+                return false
+            end
+        end
+
         Keybind.Value = normalizedValue
         Keybind.UIElements.Keybind.Frame.Frame.TextLabel.Text = normalizedValue
         if Config.Window.ConfigManager then
             Config.Window.ConfigManager:MarkDirty()
         end
+        return true
     end
     
     if Keybind.Locked then
         Keybind:Lock()
     end
 
+    local CaptureInputBegan
+    local CaptureInputEnded
+
+    local function StopPicking()
+        if CaptureInputBegan then
+            CaptureInputBegan:Disconnect()
+            CaptureInputBegan = nil
+        end
+        if CaptureInputEnded then
+            CaptureInputEnded:Disconnect()
+            CaptureInputEnded = nil
+        end
+        Keybind.Picking = false
+        Keybind.UIElements.Keybind.Frame.Frame.TextLabel.Text = Keybind.Value
+    end
+    Keybind.CancelPicking = StopPicking
+
+    local function GetInputKey(input)
+        if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode ~= Enum.KeyCode.Unknown then
+            return input.KeyCode.Name
+        elseif input.UserInputType == Enum.UserInputType.MouseButton1 then
+            return "MouseLeft"
+        elseif input.UserInputType == Enum.UserInputType.MouseButton2 then
+            return "MouseRight"
+        end
+    end
+
+    local function IsDuplicateKey(key)
+        for _, element in next, WindowKeybinds do
+            if element ~= Keybind and element.__type == "Keybind" and element.Value == key then
+                return true
+            end
+        end
+        return false
+    end
+
+    local function IsAnyKeybindPicking()
+        for _, element in next, WindowKeybinds do
+            if element.__type == "Keybind" and element.Picking then
+                return true
+            end
+        end
+        return false
+    end
+
     Creator.AddSignal(Keybind.KeybindFrame.UIElements.Main.MouseButton1Click, function()
         if CanCallback then
             if Keybind.CanChange then
+                if Keybind.Picking then
+                    return
+                end
+
                 Keybind.Picking = true
                 Keybind.UIElements.Keybind.Frame.Frame.TextLabel.Text = "..."
-                
-                task.wait(0.2)
-                
-                local Event
-                Event = UserInputService.InputBegan:Connect(function(Input)
-                    local Key
-                    
-                    if Input.UserInputType == Enum.UserInputType.Keyboard then
-                        Key = Input.KeyCode.Name
-                    elseif Input.UserInputType == Enum.UserInputType.MouseButton1 then
-                        Key = "MouseLeft"
-                    elseif Input.UserInputType == Enum.UserInputType.MouseButton2 then
-                        Key = "MouseRight"
+
+                task.delay(0.2, function()
+                    if not Keybind.Picking or not Keybind.KeybindFrame.UIElements.Main.Parent then
+                        return
                     end
-                    
-                    local EndedEvent
-                    EndedEvent = UserInputService.InputEnded:Connect(function(Input)
-                        if Input.KeyCode.Name == Key or Key == "MouseLeft" and Input.UserInputType == Enum.UserInputType.MouseButton1 or Key == "MouseRight" and Input.UserInputType == Enum.UserInputType.MouseButton2 then
-                            Keybind.Picking = false
-                            
-                            Keybind.UIElements.Keybind.Frame.Frame.TextLabel.Text = Key
-                            Keybind.Value = Key
-                            if Config.Window.ConfigManager then
-                                Config.Window.ConfigManager:MarkDirty()
-                            end
-                            
-                            Event:Disconnect()
-                            EndedEvent:Disconnect()
+
+                    CaptureInputBegan = UserInputService.InputBegan:Connect(function(input)
+                        local key = GetInputKey(input)
+                        if not key then
+                            return
                         end
+
+                        if CaptureInputBegan then
+                            CaptureInputBegan:Disconnect()
+                            CaptureInputBegan = nil
+                        end
+
+                        CaptureInputEnded = UserInputService.InputEnded:Connect(function(endedInput)
+                            if GetInputKey(endedInput) ~= key then
+                                return
+                            end
+
+                            if IsDuplicateKey(key) then
+                                StopPicking()
+                                Config.Window:Dialog({
+                                    Title = "Peakx Warning",
+                                    Content = "No duplicate keys are allowed.",
+                                    Buttons = {
+                                        {
+                                            Title = "Confirm",
+                                            Variant = "Primary",
+                                            Callback = function()
+                                                print("Confirmed")
+                                            end,
+                                        },
+                                    },
+                                })
+                                return
+                            end
+
+                            local wasPicking = Keybind.Picking
+                            StopPicking()
+                            if wasPicking then
+                                Keybind:Set(key)
+                            end
+                        end)
                     end)
                 end)
             end
@@ -146,7 +221,7 @@ function Element:New(Config)
             return 
         end
     
-        if not CanCallback then
+        if not CanCallback or IsAnyKeybindPicking() then
             return
         end
     
