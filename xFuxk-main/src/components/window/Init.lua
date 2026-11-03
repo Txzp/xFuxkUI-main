@@ -730,50 +730,36 @@ return function(Config)
 				CornerRadius = UDim.new(0, Window.UICorner),
 			}),
 			New("Frame", {
-				Name = "GlassSweep",
-				Size = UDim2.new(1, -8, 1, -8),
-				Position = UDim2.new(0, 4, 0, 4),
+				Name = "BorderTrace",
+				Size = UDim2.new(1, 0, 1, 0),
 				BackgroundTransparency = 1,
+				ClipsDescendants = true,
+				ZIndex = 1200,
 				Active = false,
 				Selectable = false,
 			}, {
 				New("UICorner", {
-					CornerRadius = UDim.new(0, math.max(Window.UICorner - 4, 0)),
+					CornerRadius = UDim.new(0, Window.UICorner),
 				}),
-				New("UIStroke", {
-					Name = "BackGlass",
-					Color = Color3.new(1, 1, 1),
-					Thickness = 8,
-					Transparency = 0.7,
+				New("Frame", {
+					Name = "Line",
+					Size = UDim2.new(0, 42, 0, 2),
+					AnchorPoint = Vector2.new(0.5, 0.5),
+					BackgroundColor3 = Color3.fromRGB(190, 194, 202),
+					BackgroundTransparency = 0.12,
+					BorderSizePixel = 0,
+					ZIndex = 1201,
 				}, {
-					New("UIGradient", {
-						Transparency = NumberSequence.new({
-							NumberSequenceKeypoint.new(0, 1),
-							NumberSequenceKeypoint.new(0.4, 1),
-							NumberSequenceKeypoint.new(0.46, 0),
-							NumberSequenceKeypoint.new(0.54, 0),
-							NumberSequenceKeypoint.new(0.6, 1),
-							NumberSequenceKeypoint.new(1, 1),
-						}),
-						Offset = Vector2.new(-1, 0),
+					New("UICorner", {
+						CornerRadius = UDim.new(1, 0),
 					}),
-				}),
-				New("UIStroke", {
-					Name = "FrontGlass",
-					Color = Color3.new(1, 1, 1),
-					Thickness = 3,
-					Transparency = 0.8,
-				}, {
 					New("UIGradient", {
 						Transparency = NumberSequence.new({
 							NumberSequenceKeypoint.new(0, 1),
-							NumberSequenceKeypoint.new(0.45, 1),
-							NumberSequenceKeypoint.new(0.48, 0),
-							NumberSequenceKeypoint.new(0.52, 0),
-							NumberSequenceKeypoint.new(0.55, 1),
+							NumberSequenceKeypoint.new(0.2, 0.15),
+							NumberSequenceKeypoint.new(0.8, 0.15),
 							NumberSequenceKeypoint.new(1, 1),
 						}),
-						Offset = Vector2.new(-1, 0),
 					}),
 				}),
 			}),
@@ -883,25 +869,124 @@ return function(Config)
 				Active = false,
 				Selectable = false,
 			}),
+			New("Frame", {
+				Name = "DragDimmer",
+				Size = UDim2.new(1, 0, 1, 0),
+				BackgroundColor3 = Color3.new(0, 0, 0),
+				BackgroundTransparency = 1,
+				BorderSizePixel = 0,
+				Visible = false,
+				Active = false,
+				Selectable = false,
+				ZIndex = 1100,
+			}, {
+				New("UICorner", {
+					CornerRadius = UDim.new(0, Window.UICorner),
+				}),
+			}),
 		}),
 	})
 
-	Creator.AddSignal(
-		Window.UIElements.Main.Main.GlassSweep.BackGlass.UIGradient:GetPropertyChangedSignal("Offset"),
-		function()
-			Window.UIElements.Main.Main.GlassSweep.FrontGlass.UIGradient.Offset =
-				Window.UIElements.Main.Main.GlassSweep.BackGlass.UIGradient.Offset
-		end
-	)
+	local BorderTrace = Window.UIElements.Main.Main.BorderTrace
+	local BorderLine = BorderTrace.Line
+	task.spawn(function()
+		while BorderTrace.Parent and Window.UIElements.Main.Parent do
+			local left = 2
+			local top = 2
+			local right = BorderTrace.AbsoluteSize.X - 2
+			local bottom = BorderTrace.AbsoluteSize.Y - 2
+			local availableWidth = right - left
+			local availableHeight = bottom - top
+			if availableWidth <= 0 or availableHeight <= 0 then
+				task.wait(0.25)
+				continue
+			end
 
-	Tween(
-		Window.UIElements.Main.Main.GlassSweep.BackGlass.UIGradient,
-		5.5,
-		{ Offset = Vector2.new(1, 0) },
-		Enum.EasingStyle.Sine,
-		Enum.EasingDirection.InOut,
-		-1
-	):Play()
+			local radius = math.min(
+				math.max(Window.UICorner - 2, 1),
+				availableWidth / 2,
+				availableHeight / 2
+			)
+			local path = {}
+			local perimeter = 0
+			local function AddPathPoint(position, rotation, length)
+				if length > 0 then
+					table.insert(path, {
+						Position = position,
+						Rotation = rotation,
+						Length = length,
+					})
+					perimeter += length
+				end
+			end
+			local function AddCorner(centerX, centerY, startAngle, endAngle)
+				local steps = 8
+				for step = 1, steps do
+					local angle = math.rad(startAngle + (endAngle - startAngle) * step / steps)
+					AddPathPoint(
+						Vector2.new(centerX + radius * math.cos(angle), centerY + radius * math.sin(angle)),
+						startAngle + (endAngle - startAngle) * step / steps + 90,
+						radius * math.rad((endAngle - startAngle) / steps)
+					)
+				end
+			end
+
+			BorderLine.Position = UDim2.fromOffset(left + radius, top)
+			AddPathPoint(
+				Vector2.new(right - radius, top),
+				0,
+				right - left - 2 * radius
+			)
+			AddCorner(right - radius, top + radius, -90, 0)
+			AddPathPoint(
+				Vector2.new(right, bottom - radius),
+				90,
+				bottom - top - 2 * radius
+			)
+			AddCorner(right - radius, bottom - radius, 0, 90)
+			AddPathPoint(
+				Vector2.new(left + radius, bottom),
+				180,
+				right - left - 2 * radius
+			)
+			AddCorner(left + radius, bottom - radius, 90, 180)
+			AddPathPoint(
+				Vector2.new(left, top + radius),
+				270,
+				bottom - top - 2 * radius
+			)
+			AddCorner(left + radius, top + radius, 180, 270)
+
+			BorderLine.Visible = true
+			BorderLine.Rotation = 0
+			BorderLine.Size = UDim2.new(0, 42, 0, 2)
+			local completed = true
+
+			for _ = 1, 2 do
+				for _, point in ipairs(path) do
+					local duration = 3 * point.Length / perimeter
+					local tween = Tween(BorderLine, duration, {
+						Position = UDim2.fromOffset(point.Position.X, point.Position.Y),
+						Rotation = point.Rotation,
+					}, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+					tween:Play()
+					if tween.Completed:Wait() ~= Enum.PlaybackState.Completed then
+						completed = false
+						break
+					end
+				end
+				if not completed then
+					break
+				end
+			end
+
+			BorderLine.Visible = false
+			if not completed or not BorderTrace.Parent or not Window.UIElements.Main.Parent then
+				break
+			end
+			task.wait(3)
+		end
+	end)
 
 	Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Left:GetPropertyChangedSignal("AbsoluteSize"), function()
 		local LeftWidth = 0
@@ -1182,13 +1267,51 @@ return function(Config)
 		{ Window.UIElements.Main.Main.Topbar, BottomDragFrame.Frame },
 		function(dragging, frame) -- On drag
 			if not Window.Closed then
+				Window.Dragging = dragging
 				if dragging and frame == BottomDragFrame.Frame then
 					Tween(BottomDragFrame, 0.1, { ImageTransparency = 0.35 }):Play()
 				else
 					Tween(BottomDragFrame, 0.2, { ImageTransparency = 0.8 }):Play()
 				end
 				Window.Position = Window.UIElements.Main.Position
-				Window.Dragging = dragging
+				local dimmer = Window.UIElements.Main.Main.DragDimmer
+				if dragging then
+					dimmer.Visible = true
+					Tween(dimmer, 0.08, { BackgroundTransparency = 0.64 }):Play()
+				else
+					local fadeOut = Tween(dimmer, 0.12, { BackgroundTransparency = 1 }, Enum.EasingStyle.Quad)
+					fadeOut:Play()
+					local fadeConnection
+					fadeConnection = fadeOut.Completed:Connect(function()
+						fadeConnection:Disconnect()
+						if not Window.Dragging and dimmer.Parent then
+							dimmer.Visible = false
+						end
+					end)
+
+					local mainFrame = Window.UIElements.Main
+					local settledPosition = ConstrainWindowPosition(mainFrame, mainFrame.Position)
+					local releasePosition = UDim2.new(
+						settledPosition.X.Scale,
+						settledPosition.X.Offset,
+						settledPosition.Y.Scale,
+						settledPosition.Y.Offset + 3
+					)
+					releasePosition = ConstrainWindowPosition(mainFrame, releasePosition)
+					local settleIn = Tween(mainFrame, 0.1, {
+						Position = releasePosition,
+					}, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+					settleIn:Play()
+					local settleConnection
+					settleConnection = settleIn.Completed:Connect(function()
+						settleConnection:Disconnect()
+						if not Window.Dragging and not Window.Closed and mainFrame.Parent then
+							Tween(mainFrame, 0.2, {
+								Position = settledPosition,
+							}, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
+						end
+					end)
+				end
 				if Window.ConfigManager then
 					Window.ConfigManager:MarkDirty()
 				end
@@ -1436,6 +1559,11 @@ return function(Config)
 
 	function Window:Open()
 		task.spawn(function()
+			local dimmer = Window.UIElements.Main.Main.DragDimmer
+			dimmer.BackgroundTransparency = 1
+			dimmer.Visible = false
+			Window.Dragging = false
+
 			if not Window.UIElements.RevealScale then
 				Window.UIElements.RevealScale = New("UIScale", {
 					Scale = 0.96,
@@ -1543,6 +1671,10 @@ return function(Config)
 
 		Window.CanDropdown = false
 		Window.Closed = true
+		Window.Dragging = false
+		local dragDimmer = Window.UIElements.Main.Main.DragDimmer
+		dragDimmer.BackgroundTransparency = 1
+		dragDimmer.Visible = false
 
 		if Window.UIElements.RevealScale then
 			Tween(Window.UIElements.RevealScale, 0.32, {

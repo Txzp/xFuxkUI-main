@@ -28,7 +28,7 @@ function Element:New(Config)
         IsFocusing = false,
         
         Width = Config.Width or 130,
-        TextBoxWidth = Config.Window.NewElements and 40 or 30,
+        TextBoxWidth = Config.Window.NewElements and 52 or 46,
         ThumbSize = 13,
         IconSize = 26,
     }
@@ -165,19 +165,31 @@ function Element:New(Config)
         Slider.UIElements.SliderIcon,
         IconTo,
         New("TextBox", {
-            Size = UDim2.new(0,Slider.TextBoxWidth,0,0),
-            TextXAlignment = "Left",
+            Name = "TextBox",
+            Size = UDim2.new(0, Slider.TextBoxWidth, 0, 24),
+            TextXAlignment = "Center",
             Text = FormatValue(Value),
             ThemeTag = {
                 TextColor3 = "Text"
             },
-            TextTransparency = .4,
-            AutomaticSize = "Y",
-            TextSize = 15,
+            TextTransparency = .2,
+            BackgroundColor3 = Color3.fromRGB(28, 28, 28),
+            BackgroundTransparency = .2,
+            BorderSizePixel = 0,
+            TextSize = 14,
             FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
-            BackgroundTransparency = 1,
+            ClearTextOnFocus = false,
             LayoutOrder = -1,
             Visible = Slider.IsTextbox,
+        }, {
+            New("UICorner", {
+                CornerRadius = UDim.new(0, 7),
+            }),
+            New("UIStroke", {
+                Color = Color3.fromRGB(185, 190, 200),
+                Thickness = 1,
+                Transparency = 0.78,
+            }),
         })
     })
     
@@ -310,15 +322,13 @@ function Element:New(Config)
         end
     end
     
-    Creator.AddSignal(Slider.UIElements.SliderContainer.TextBox.FocusLost, function(enterPressed)
-        if enterPressed then
-            local newValue = tonumber(Slider.UIElements.SliderContainer.TextBox.Text)
-            if newValue then
-                Slider:Set(newValue)
-            else
-                Slider.UIElements.SliderContainer.TextBox.Text = FormatValue(LastValue)
-                if Tooltip then Tooltip.TitleFrame.Text = FormatValue(LastValue) end
-            end
+    Creator.AddSignal(Slider.UIElements.SliderContainer.TextBox.FocusLost, function()
+        local newValue = tonumber(Slider.UIElements.SliderContainer.TextBox.Text)
+        if newValue then
+            Slider:Set(newValue)
+        else
+            Slider.UIElements.SliderContainer.TextBox.Text = FormatValue(LastValue)
+            if Tooltip then Tooltip.TitleFrame.Text = FormatValue(LastValue) end
         end
     end)
     

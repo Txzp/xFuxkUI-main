@@ -2,12 +2,12 @@
 
 return [[
 {
-    "name": "windui",
-    "version": "1.6.64",
+    "name": "PeakxHub",
+    "version": "2.0.2",
     "main": "./dist/main.lua",
-    "repository": "https://github.com/Footagesus/WindUI",
-    "discord": "https://discord.gg/ftgs-development-hub-1300692552005189632",
-    "author": "Footagesus",
+    "repository": "https://github.com/Txzp/xFuxkUI-main",
+    "discord": "https://discord.gg/NtaW8MjZfX",
+    "author": "Pkx",
     "description": "Roblox UI Library for scripts",
     "license": "MIT",
     "scripts": {
