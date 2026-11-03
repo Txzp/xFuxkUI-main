@@ -695,7 +695,11 @@ end
 
 function Creator.Drag(mainFrame, dragFrames, ondrag, constrainPosition)
 	local currentDragFrame = nil
-	local dragging, dragStart, startPos
+	local currentInput = nil
+	local dragging = false
+	local dragStart
+	local startPos
+	local dragThreshold = 4
 	local DragModule = {
 		CanDraggable = true,
 	}
@@ -705,11 +709,21 @@ function Creator.Drag(mainFrame, dragFrames, ondrag, constrainPosition)
 	end
 
 	local function update(input)
-		if not dragging or not DragModule.CanDraggable then
+		if not currentDragFrame or not DragModule.CanDraggable then
 			return
 		end
 
 		local delta = input.Position - dragStart
+		if not dragging then
+			if delta.Magnitude < dragThreshold then
+				return
+			end
+			dragging = true
+			if ondrag and typeof(ondrag) == "function" then
+				ondrag(true, currentDragFrame)
+			end
+		end
+
 		local targetPosition = UDim2.new(
 			startPos.X.Scale,
 			startPos.X.Offset + delta.X,
@@ -735,20 +749,19 @@ function Creator.Drag(mainFrame, dragFrames, ondrag, constrainPosition)
 			then
 				if currentDragFrame == nil then
 					currentDragFrame = dragFrame
-					dragging = true
+					currentInput = input
+					dragging = false
 					dragStart = input.Position
 					startPos = mainFrame.Position
 
-					if ondrag and typeof(ondrag) == "function" then
-						ondrag(true, currentDragFrame)
-					end
-
 					input.Changed:Connect(function()
-						if input.UserInputState == Enum.UserInputState.End then
+						if currentInput == input and input.UserInputState == Enum.UserInputState.End then
+							local wasDragging = dragging
 							dragging = false
 							currentDragFrame = nil
+							currentInput = nil
 
-							if ondrag and typeof(ondrag) == "function" then
+							if wasDragging and ondrag and typeof(ondrag) == "function" then
 								ondrag(false, nil)
 							end
 						end
@@ -756,21 +769,10 @@ function Creator.Drag(mainFrame, dragFrames, ondrag, constrainPosition)
 				end
 			end
 		end)
-
-		dragFrame.InputChanged:Connect(function(input)
-			if dragging and currentDragFrame == dragFrame then
-				if
-					input.UserInputType == Enum.UserInputType.MouseMovement
-					or input.UserInputType == Enum.UserInputType.Touch
-				then
-					update(input)
-				end
-			end
-		end)
 	end
 
 	UserInputService.InputChanged:Connect(function(input)
-		if dragging and currentDragFrame ~= nil then
+		if currentDragFrame ~= nil then
 			if
 				input.UserInputType == Enum.UserInputType.MouseMovement
 				or input.UserInputType == Enum.UserInputType.Touch

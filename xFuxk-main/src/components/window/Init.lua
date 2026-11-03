@@ -731,35 +731,32 @@ return function(Config)
 			}),
 			New("Frame", {
 				Name = "BorderTrace",
-				Size = UDim2.new(1, 0, 1, 0),
+				Size = UDim2.new(1, 8, 1, 8),
+				Position = UDim2.new(0, -4, 0, -4),
 				BackgroundTransparency = 1,
-				ClipsDescendants = true,
 				ZIndex = 1200,
 				Active = false,
 				Selectable = false,
 			}, {
 				New("UICorner", {
-					CornerRadius = UDim.new(0, Window.UICorner),
+					CornerRadius = UDim.new(0, Window.UICorner + 4),
 				}),
-				New("Frame", {
-					Name = "Line",
-					Size = UDim2.new(0, 42, 0, 2),
-					AnchorPoint = Vector2.new(0.5, 0.5),
-					BackgroundColor3 = Color3.fromRGB(190, 194, 202),
-					BackgroundTransparency = 0.12,
-					BorderSizePixel = 0,
-					ZIndex = 1201,
+				New("UIStroke", {
+					Name = "BorderStroke",
+					Color = Color3.fromRGB(190, 194, 202),
+					Thickness = 2,
+					Transparency = 0.2,
 				}, {
-					New("UICorner", {
-						CornerRadius = UDim.new(1, 0),
-					}),
 					New("UIGradient", {
 						Transparency = NumberSequence.new({
 							NumberSequenceKeypoint.new(0, 1),
-							NumberSequenceKeypoint.new(0.2, 0.15),
-							NumberSequenceKeypoint.new(0.8, 0.15),
+							NumberSequenceKeypoint.new(0.43, 1),
+							NumberSequenceKeypoint.new(0.48, 0),
+							NumberSequenceKeypoint.new(0.52, 0),
+							NumberSequenceKeypoint.new(0.57, 1),
 							NumberSequenceKeypoint.new(1, 1),
 						}),
+						Offset = Vector2.new(-1, 0),
 					}),
 				}),
 			}),
@@ -887,101 +884,25 @@ return function(Config)
 		}),
 	})
 
-	local BorderTrace = Window.UIElements.Main.Main.BorderTrace
-	local BorderLine = BorderTrace.Line
+	local BorderGradient = Window.UIElements.Main.Main.BorderTrace.BorderStroke.UIGradient
 	task.spawn(function()
-		while BorderTrace.Parent and Window.UIElements.Main.Parent do
-			local left = 2
-			local top = 2
-			local right = BorderTrace.AbsoluteSize.X - 2
-			local bottom = BorderTrace.AbsoluteSize.Y - 2
-			local availableWidth = right - left
-			local availableHeight = bottom - top
-			if availableWidth <= 0 or availableHeight <= 0 then
-				task.wait(0.25)
-				continue
-			end
-
-			local radius = math.min(
-				math.max(Window.UICorner - 2, 1),
-				availableWidth / 2,
-				availableHeight / 2
-			)
-			local path = {}
-			local perimeter = 0
-			local function AddPathPoint(position, rotation, length)
-				if length > 0 then
-					table.insert(path, {
-						Position = position,
-						Rotation = rotation,
-						Length = length,
-					})
-					perimeter += length
-				end
-			end
-			local function AddCorner(centerX, centerY, startAngle, endAngle)
-				local steps = 8
-				for step = 1, steps do
-					local angle = math.rad(startAngle + (endAngle - startAngle) * step / steps)
-					AddPathPoint(
-						Vector2.new(centerX + radius * math.cos(angle), centerY + radius * math.sin(angle)),
-						startAngle + (endAngle - startAngle) * step / steps + 90,
-						radius * math.rad((endAngle - startAngle) / steps)
-					)
-				end
-			end
-
-			BorderLine.Position = UDim2.fromOffset(left + radius, top)
-			AddPathPoint(
-				Vector2.new(right - radius, top),
-				0,
-				right - left - 2 * radius
-			)
-			AddCorner(right - radius, top + radius, -90, 0)
-			AddPathPoint(
-				Vector2.new(right, bottom - radius),
-				90,
-				bottom - top - 2 * radius
-			)
-			AddCorner(right - radius, bottom - radius, 0, 90)
-			AddPathPoint(
-				Vector2.new(left + radius, bottom),
-				180,
-				right - left - 2 * radius
-			)
-			AddCorner(left + radius, bottom - radius, 90, 180)
-			AddPathPoint(
-				Vector2.new(left, top + radius),
-				270,
-				bottom - top - 2 * radius
-			)
-			AddCorner(left + radius, top + radius, 180, 270)
-
-			BorderLine.Visible = true
-			BorderLine.Rotation = 0
-			BorderLine.Size = UDim2.new(0, 42, 0, 2)
-			local completed = true
-
+		while BorderGradient.Parent and Window.UIElements.Main.Parent do
 			for _ = 1, 2 do
-				for _, point in ipairs(path) do
-					local duration = 3 * point.Length / perimeter
-					local tween = Tween(BorderLine, duration, {
-						Position = UDim2.fromOffset(point.Position.X, point.Position.Y),
-						Rotation = point.Rotation,
-					}, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
-					tween:Play()
-					if tween.Completed:Wait() ~= Enum.PlaybackState.Completed then
-						completed = false
-						break
-					end
+				local sweep = Tween(
+					BorderGradient,
+					3,
+					{ Offset = Vector2.new(1, 0) },
+					Enum.EasingStyle.Sine,
+					Enum.EasingDirection.InOut
+				)
+				sweep:Play()
+				if sweep.Completed:Wait() ~= Enum.PlaybackState.Completed then
+					return
 				end
-				if not completed then
-					break
-				end
+				BorderGradient.Offset = Vector2.new(-1, 0)
 			end
 
-			BorderLine.Visible = false
-			if not completed or not BorderTrace.Parent or not Window.UIElements.Main.Parent then
+			if not BorderGradient.Parent or not Window.UIElements.Main.Parent then
 				break
 			end
 			task.wait(3)
