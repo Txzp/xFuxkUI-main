@@ -2233,7 +2233,7 @@ New=a.load'i'.New
 return[[
 {
     "name": "PeakxHub",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "main": "./dist/main.lua",
     "repository": "https://github.com/Txzp/xFuxkUI-main",
     "discord": "https://discord.gg/NtaW8MjZfX",
@@ -11958,10 +11958,6 @@ HideSearchBar=at.HideSearchBar~=false,
 ScrollBarEnabled=at.ScrollBarEnabled or false,
 SideBarWidth=at.SideBarWidth or 200,
 Acrylic=at.Acrylic or false,
-Glass=at.Glass~=false,
-GlassTransparency=type(at.GlassTransparency)=="number"
-and math.clamp(at.GlassTransparency,0,1)
-or 0.28,
 NewElements=at.NewElements or false,
 IgnoreAlerts=at.IgnoreAlerts or false,
 HidePanelBackground=at.HidePanelBackground or false,
@@ -12012,16 +12008,6 @@ IsToggleDragging=false,
 }
 
 au.UICorner=au.Radius
-
-local function GetWindowBackgroundTransparency()
-if au.BackgroundTransparencyOverride~=nil then
-return au.BackgroundTransparencyOverride
-end
-if au.Transparent then
-return at.WindUI.TransparencyValue
-end
-return au.Glass and au.GlassTransparency or 0
-end
 
 au.TopBarButtonIconSize=au.TopBarButtonIconSize or(au.Topbar.ButtonsType=="Mac"and 11 or 16)
 
@@ -12623,20 +12609,6 @@ ImageColor3="WindowBackground",
 g,
 l,
 ax,
-au.Glass and am("UIGradient",{
-Rotation=90,
-Color=ColorSequence.new(Color3.new(1,1,1)),
-Transparency=NumberSequence.new{
-NumberSequenceKeypoint.new(0,0.84),
-NumberSequenceKeypoint.new(0.35,0.94),
-NumberSequenceKeypoint.new(1,1),
-},
-})or nil,
-au.Glass and am("UIStroke",{
-Color=Color3.fromRGB(255,255,255),
-Thickness=1,
-Transparency=0.82,
-})or nil,
 
 
 
@@ -13204,7 +13176,7 @@ end
 au.UIElements.BackgroundGradient=al.NewRoundFrame(au.UICorner,"Squircle",{
 Size=UDim2.new(1,0,1,0),
 Parent=au.UIElements.Main.Background,
-ImageTransparency=GetWindowBackgroundTransparency(),
+ImageTransparency=au.Transparent and at.WindUI.TransparencyValue or 0,
 },{
 z,
 })
@@ -13305,10 +13277,7 @@ end
 function au.SetBackgroundTransparency(z,A)
 local B=math.floor(tonumber(A)*10+0.5)/10
 at.WindUI.TransparencyValue=B
-au.Transparent=B>0
-at.WindUI.Transparent=au.Transparent
-au.BackgroundTransparencyOverride=B
-au.UIElements.Main.Background.ImageTransparency=B
+au:ToggleTransparency(B>0)
 end
 
 local z
@@ -13435,7 +13404,7 @@ task.wait(0.06)
 au.Closed=false
 
 an(au.UIElements.Main.Background,0.2,{
-ImageTransparency=GetWindowBackgroundTransparency(),
+ImageTransparency=au.Transparent and at.WindUI.TransparencyValue or 0,
 },Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 
 if au.UIElements.BackgroundGradient then
@@ -13628,9 +13597,8 @@ function au.ToggleTransparency(B,C)
 
 au.Transparent=C
 at.WindUI.Transparent=C
-au.BackgroundTransparencyOverride=nil
 
-au.UIElements.Main.Background.ImageTransparency=GetWindowBackgroundTransparency()
+au.UIElements.Main.Background.ImageTransparency=C and at.WindUI.TransparencyValue or 0
 
 
 end
