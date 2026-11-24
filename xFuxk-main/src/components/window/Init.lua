@@ -59,6 +59,10 @@ return function(Config)
 		ScrollBarEnabled = Config.ScrollBarEnabled or false,
 		SideBarWidth = Config.SideBarWidth or 200,
 		Acrylic = Config.Acrylic or false,
+		Glass = Config.Glass ~= false,
+		GlassTransparency = type(Config.GlassTransparency) == "number"
+				and math.clamp(Config.GlassTransparency, 0, 1)
+			or 0.28,
 		NewElements = Config.NewElements or false,
 		IgnoreAlerts = Config.IgnoreAlerts or false,
 		HidePanelBackground = Config.HidePanelBackground or false,
@@ -109,6 +113,16 @@ return function(Config)
 	}
 
 	Window.UICorner = Window.Radius
+
+	local function GetWindowBackgroundTransparency()
+		if Window.BackgroundTransparencyOverride ~= nil then
+			return Window.BackgroundTransparencyOverride
+		end
+		if Window.Transparent then
+			return Config.WindUI.TransparencyValue
+		end
+		return Window.Glass and Window.GlassTransparency or 0
+	end
 
 	Window.TopBarButtonIconSize = Window.TopBarButtonIconSize or (Window.Topbar.ButtonsType == "Mac" and 11 or 16)
 
@@ -710,6 +724,20 @@ return function(Config)
 			BGImage,
 			BottomDragFrame,
 			ResizeHandle,
+			Window.Glass and New("UIGradient", {
+				Rotation = 90,
+				Color = ColorSequence.new(Color3.new(1, 1, 1)),
+				Transparency = NumberSequence.new({
+					NumberSequenceKeypoint.new(0, 0.84),
+					NumberSequenceKeypoint.new(0.35, 0.94),
+					NumberSequenceKeypoint.new(1, 1),
+				}),
+			}) or nil,
+			Window.Glass and New("UIStroke", {
+				Color = Color3.fromRGB(255, 255, 255),
+				Thickness = 1,
+				Transparency = 0.82,
+			}) or nil,
 			-- New("UIScale", {
 			--     Scale = 0.95,
 			-- }),
@@ -1277,7 +1305,7 @@ return function(Config)
 		Window.UIElements.BackgroundGradient = Creator.NewRoundFrame(Window.UICorner, "Squircle", {
 			Size = UDim2.new(1, 0, 1, 0),
 			Parent = Window.UIElements.Main.Background,
-			ImageTransparency = Window.Transparent and Config.WindUI.TransparencyValue or 0,
+			ImageTransparency = GetWindowBackgroundTransparency(),
 		}, {
 			BackgroundGradient,
 		})
@@ -1378,7 +1406,10 @@ return function(Config)
 	function Window:SetBackgroundTransparency(v)
 		local rounded = math.floor(tonumber(v) * 10 + 0.5) / 10
 		Config.WindUI.TransparencyValue = rounded
-		Window:ToggleTransparency(rounded > 0)
+		Window.Transparent = rounded > 0
+		Config.WindUI.Transparent = Window.Transparent
+		Window.BackgroundTransparencyOverride = rounded
+		Window.UIElements.Main.Background.ImageTransparency = rounded
 	end
 
 	local CurrentPos
@@ -1505,7 +1536,7 @@ return function(Config)
 			Window.Closed = false
 
 			Tween(Window.UIElements.Main.Background, 0.2, {
-				ImageTransparency = Window.Transparent and Config.WindUI.TransparencyValue or 0,
+				ImageTransparency = GetWindowBackgroundTransparency(),
 			}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 
 			if Window.UIElements.BackgroundGradient then
@@ -1698,8 +1729,9 @@ return function(Config)
 		-- Config.Transparent = Value
 		Window.Transparent = Value
 		Config.WindUI.Transparent = Value
+		Window.BackgroundTransparencyOverride = nil
 
-		Window.UIElements.Main.Background.ImageTransparency = Value and Config.WindUI.TransparencyValue or 0
+		Window.UIElements.Main.Background.ImageTransparency = GetWindowBackgroundTransparency()
 		-- Window.UIElements.Main.Background.ImageLabel.ImageTransparency = Value and Config.WindUI.TransparencyValue or 0
 		--Window.UIElements.MainBar.Background.ImageTransparency = Value and 0.97 or 0.95
 	end
